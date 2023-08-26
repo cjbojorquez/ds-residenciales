@@ -16,37 +16,7 @@ public class TicketServiceImpl implements TicketService{
 
     @Autowired
     private TicketDao ticketDao;
-    /*
-    @Override
-    @Transactional(readOnly = true)
-    public List<Rol> listarRoles(Long estado) {
-        
-        return (List<Rol>)ticketDao.buscarPorEstado(estado);
-    }
-
-    @Override
-    @Transactional
-    public void guardar(Ticket ticket) {
-        ticketDao.save(rol);
-    }
-
-    @Override
-    @Transactional
-    public void eliminar(Ticket ticket) {
-        ticketDao.delete(rol);
-    }
-
     
-    @Override
-    public List<Rol> listarRoles() {
-        return (List<Rol>)ticketDao.findAll();
-    }
-
-    @Override
-    public Rol encontrarRol(Ticket ticket) {
-        return ticketDao.findById(rol.getIdRol()).orElse(null);
-    }*/
-
     @Override
     public List<Ticket> ticketsPorTipo(Long idTipo, Long idResidencial) {
         return (List<Ticket>)ticketDao.buscarPorTipo(idTipo,idResidencial);

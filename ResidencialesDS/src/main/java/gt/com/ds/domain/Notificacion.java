@@ -12,7 +12,7 @@ import lombok.Data;
 @Data
 @Entity
 @Table(name = "message")
-public class Message implements Serializable {
+public class Notificacion implements Serializable {
     
     private static final long serialVerionUID = 1L;
     

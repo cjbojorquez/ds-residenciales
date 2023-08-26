@@ -24,18 +24,18 @@ public class NotificacionServiceImpl implements NotificacionService{
     }
 
     @Override
-    public List<Notificacion> notificacionPorEstado(Long idEstado, Long idResidencial) {
-        return (List<Notificacion>)notificacionDao.buscarPorEstado(idEstado,idResidencial);
+    public List<Notificacion> notificacionPorEstado(String tipo,Long idEstado, Long idResidencial) {
+        return (List<Notificacion>)notificacionDao.buscarPorEstado(tipo,idEstado,idResidencial);
     }
 
     @Override
-    public List<Notificacion> notificacionPorUsuario(Long idUsuario) {
-        return (List<Notificacion>)notificacionDao.buscarPorUsuario(idUsuario);
+    public List<Notificacion> notificacionPorUsuario(String tipo,Long idUsuario) {
+        return (List<Notificacion>)notificacionDao.buscarPorUsuario(tipo,idUsuario);
     }
 
     @Override
-    public List<Notificacion> listarNotificacionesAbiertas(Long idResidencial) {
-        return (List<Notificacion>)notificacionDao.buscarActivos(idResidencial);
+    public List<Notificacion> listarNotificacionesAbiertas(String tipo,Long idResidencial) {
+        return (List<Notificacion>)notificacionDao.buscarActivos(tipo,idResidencial);
     }
 
     @Override
@@ -52,6 +52,5 @@ public class NotificacionServiceImpl implements NotificacionService{
     public Notificacion encontrarNotificacion(Notificacion notificacion) {
         return notificacionDao.findById(notificacion.getIdNotificacion()).orElse(null);
     }
-
     
 }
