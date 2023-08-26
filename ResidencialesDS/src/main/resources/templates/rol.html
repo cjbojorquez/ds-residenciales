@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <title>Dashboard - Rol</title>
+        <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min1.css" rel="stylesheet" />
+        <link href="css/styles.css" rel="stylesheet" />
+        <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+    </head>
+    <body class="sb-nav-fixed">
+        <!--header th:replace="layout/plantilla :: header"></header-->
+    <th:block th:replace="~{layout/plantilla :: header}"></th:block>
+    <!-- barra vertical -->
+    <div id="layoutSidenav">
+        <!--div th:replace="layout/plantilla :: menu" id="layoutSidenav_nav"></div-->
+        <th:block th:replace="~{layout/plantilla :: menu}"></th:block>
+        <div id="layoutSidenav_content">
+            <main>
+                <div class="container-fluid px-4">
+                    <h1 class="mt-4">Dashboard</h1>
+                    <ol class="breadcrumb mb-4">
+                        <li class="breadcrumb-item active">Rol</li>
+                    </ol>
+
+                    <nav class="navbar navbar-light bg-light">
+                        <form class="container-fluid justify-content-start">
+                            <a class="btn btn-outline-success me-2" role="button" th:href="@{/agregarrol}">Crear Rol        <i class="fa-solid fa-user-plus"></i></a>
+                        </form>
+                    </nav>
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <i class="fas fa-table me-1"></i>
+                            Roles
+                        </div>
+
+                        <div class="card-body">
+                            <div th:if="${roles != null and !roles.empty}">
+                                <table id="datatablesSimple">
+                                    <thead>
+                                        <tr>
+                                            <th>Nombre</th>
+                                            <th>Estado</th>
+                                            <th>Fecha Creaci&oacute;n</th>
+                                            <th>Usuario Crea</th>
+                                            <th>Fecha Modifica</th>
+                                            <th>Usuario Modifica</th>
+                                            <th>Modificar</th>
+                                            <th>Eliminar</th>
+                                        </tr>
+                                    </thead>
+                                    <tfoot>
+                                        <tr>
+                                            <th>Nombre</th>
+                                            <th>Estado</th>
+                                            <th>Fecha Creaci&oacute;n</th>
+                                            <th>Usuario Crea</th>
+                                            <th>Fecha Modifica</th>
+                                            <th>Usuario Modifica</th>
+                                            <th>Modificar</th>
+                                            <th>Eliminar</th>
+                                        </tr>
+                                    </tfoot>
+                                    <tbody>
+                                        <tr th:each="rol : ${roles}">
+                                            <td th:text="${rol.nombre}">Mostrar Nombre</td>
+                                            
+                                            <td th:text="${rol.estado}">Mostrar Estado</td>
+                                            <td th:text="${rol.fechaCrea}">Mostrar fecha de creacion</td>
+                                            <td th:text="${rol.usuarioCrea}">Mostrar quien ingreso el registro</td>
+                                            <td th:text="${rol.fechaModifica}">Mostrar fecha de modificacion</td>
+                                            <td th:text="${rol.usuarioModifica}">Mostrar quien modifico el registro</td>
+                                            <td><a class="btn btn-info" role="button"  th:href="@{/editarrol(idRol=${rol.idRol})}" th:text="Editar"/></td>
+                                            <td><a class="btn btn-danger" role="button"  th:href="@{/eliminarrol(idRol=${rol.idRol})}" th:text="Eliminar"/></td>
+                                        </tr>
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+            <!--footer th:replace="layout/plantilla :: footer"></footer-->  
+            <th:block th:replace="~{layout/plantilla :: footer}"></th:block>
+        </div>
+    </div>
+    <script src="js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+    <script src="js/scripts.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
+    <script src="assets/demo/chart-area-demo.js"></script>
+    <script src="assets/demo/chart-bar-demo.js"></script>
+    <script src="js/simple-datatables.min.js" crossorigin="anonymous"></script>
+    <script src="js/datatables-simple-demo.js"></script>
+</body>
+</html>
