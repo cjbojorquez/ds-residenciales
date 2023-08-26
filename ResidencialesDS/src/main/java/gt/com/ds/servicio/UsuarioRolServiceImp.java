@@ -24,6 +24,7 @@ public class UsuarioRolServiceImp implements UsuarioRolService{
             UsuarioRol usuarioRol = new UsuarioRol();
             usuarioRol.setUsuario(usuario);
 
+            
             for (RolUsuario rolUsuario : rolesUsuario) {
                 // Comprueba si el usuario tiene un rol asignado
                 Rol rol=rolUsuario.getRolUsuario().getRol();
@@ -31,6 +32,14 @@ public class UsuarioRolServiceImp implements UsuarioRolService{
                     usuarioRol.setRol(rol); // Establece el código del rol
                     break; // Puedes salir del bucle una vez que se haya encontrado el rol
                 }
+                
+            }
+            
+            if(usuarioRol.getRol()==null){
+                Rol rol = new Rol();
+                rol.setIdRol(null);
+                rol.setNombre("");
+                usuarioRol.setRol(rol);
             }
 
             usuariosRoles.add(usuarioRol);
