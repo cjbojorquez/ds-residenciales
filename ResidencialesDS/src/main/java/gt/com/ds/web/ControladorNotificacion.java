@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import gt.com.ds.servicio.UsuarioService;
+import gt.com.ds.util.Tools;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -66,14 +67,7 @@ public class ControladorNotificacion {
 
     @PostMapping("/guardargeneral")
     public String guardarGeneral(@Valid Notificacion notificacion, @RequestParam("file") MultipartFile imagen, Errors errors) {
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
-        Date date = new Date();
-        Date fecha = null;
-        try {
-            fecha = formatter.parse(date.toString());
-        } catch (ParseException ex) {
-            log.info("error en get fecha");
-        }
+        
         if (errors.hasErrors()) {
             return "modificargeneral";
         }
@@ -89,13 +83,13 @@ public class ControladorNotificacion {
             us = usuarioService.encontrarUsuario(us);
             notificacion.setUsuario(us);
 
-            notificacion.setFechaCrea(date);
+            notificacion.setFechaCrea(Tools.now());
             notificacion.setUsuarioCrea(1L);
             notificacion.setIdResidencial(1L);
             notificacion.setEstado(estadoTicketService.encontrarEstado(1L));
         } else {
             log.info("else de validar " + notificacion.getIdNotificacion());
-            notificacion.setFechaModifica(date);
+            notificacion.setFechaModifica(Tools.now());
             notificacion.setUsuarioModifica(1L);
         }
 
@@ -168,20 +162,12 @@ public class ControladorNotificacion {
     public String agregarEspecifica(Notificacion notificacion, Model model) {
         var usuarios = usuarioService.listarUsuarios();
         model.addAttribute("usuarios", usuarios);
-        log.info(" -------------------------" + usuarios.toString());
         return "modificarespecifica";
     }
 
     @PostMapping("/guardarespecifica")
     public String guardarEspecifica(@Valid Notificacion notificacion, @RequestParam("file") MultipartFile imagen, Errors errors) {
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
-        Date date = new Date();
-        Date fecha = null;
-        try {
-            fecha = formatter.parse(date.toString());
-        } catch (ParseException ex) {
-            log.info("error en get fecha");
-        }
+        
         if (errors.hasErrors()) {
             return "modificarespecifica";
         }
@@ -190,20 +176,19 @@ public class ControladorNotificacion {
         log.info("antes de validar " + notificacion.getIdNotificacion());
 
         if (notificacion.getIdNotificacion() == null) {
-            log.info("\n\n--------------------dentro de validar " + notificacion.getIdNotificacion());
 
             Usuario us = new Usuario();
             us.setIdUsuario(1L);
             us = usuarioService.encontrarUsuario(us);
             notificacion.setUsuario(us);
 
-            notificacion.setFechaCrea(date);
+            notificacion.setFechaCrea(Tools.now());
             notificacion.setUsuarioCrea(1L);
             notificacion.setIdResidencial(1L);
             notificacion.setEstado(estadoTicketService.encontrarEstado(1L));
         } else {
             log.info("else de validar " + notificacion.getIdNotificacion());
-            notificacion.setFechaModifica(date);
+            notificacion.setFechaModifica(Tools.now());
             notificacion.setUsuarioModifica(1L);
         }
 
@@ -212,10 +197,11 @@ public class ControladorNotificacion {
 
             String rutaAbsoluta = directorioImagenes.toFile().getAbsolutePath();
             log.info("Ruta absoluta " + rutaAbsoluta + " " + directorioImagenes.toString());
+            String nombreArchivo = Tools.newName(imagen.getOriginalFilename(), 1L);//agregar usuario dinamico
             try {
                 byte[] byteImg = imagen.getBytes();
-                Path rutaCompleta = Paths.get(rutaAbsoluta + "/" + imagen.getOriginalFilename());
-                notificacion.setAdjunto("adjunto/" + imagen.getOriginalFilename());
+                Path rutaCompleta = Paths.get(rutaAbsoluta + "/" + nombreArchivo);
+                notificacion.setAdjunto("adjunto/" + nombreArchivo);
                 log.info("Se intenta guardar imagen " + rutaCompleta.toString());
                 Files.write(rutaCompleta, byteImg);
             } catch (IOException ex) {
@@ -247,8 +233,6 @@ public class ControladorNotificacion {
     @GetMapping("/cerrarespecifica")
     public String eliminarEspecifica(Notificacion notificacion, Model model) {
         //ticket = notificacionService.encontrarTicket(ticket);
-        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-        Date date = new Date();
         notificacion.setEstado(estadoTicketService.encontrarEstado(4L));
 
         //log.info("Eliminando gestion " + rol);

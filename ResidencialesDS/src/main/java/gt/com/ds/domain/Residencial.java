@@ -4,7 +4,9 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import java.io.Serializable;
+import java.util.Date;
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
 
 /**
@@ -26,19 +28,33 @@ public class Residencial implements Serializable {
     
     @NotEmpty
     private String name;
+    
     @NotEmpty
     private String address;
+    
     @NotEmpty
     private String phone;
+    
     @NotEmpty
     @Email
     private String email;
+    
     private String nit;
+    
     private String logo;
+    
     private Long status;
-    private String create_time;
+    
+    @Temporal(TemporalType.TIMESTAMP)
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+    private Date create_time;
+    
     private Long create_user;
-    private String modify_time;
+    
+    @Temporal(TemporalType.TIMESTAMP)
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+    private Date modify_time;
+    
     private Long modify_user;
     
     

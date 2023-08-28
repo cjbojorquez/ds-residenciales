@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import gt.com.ds.servicio.RolService;
+import gt.com.ds.util.Tools;
 
 /**
  *
@@ -53,10 +54,10 @@ public class ControladorRol {
         }
         rol.setEstado(1L);
         if (rol.getIdRol() == null) {
-            rol.setFechaCrea(formatter.format(date));
+            rol.setFechaCrea(Tools.now());
             rol.setUsuarioCrea(1L);
         } else {
-            rol.setFechaModifica(formatter.format(date));
+            rol.setFechaModifica(Tools.now());
             rol.setUsuarioModifica(1L);
         }
         log.info("Se actualiza rol " + rol);
@@ -78,7 +79,7 @@ public class ControladorRol {
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
         Date date = new Date();
         rol.setEstado(0L);
-        rol.setFechaModifica(formatter.format(date));
+        rol.setFechaModifica(Tools.now());
         rol.setUsuarioModifica(1L);
         log.info("Eliminando rol " + rol);
         rolService.guardar(rol);

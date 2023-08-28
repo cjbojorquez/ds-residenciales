@@ -3,7 +3,9 @@ package gt.com.ds.domain;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import java.io.Serializable;
+import java.util.Date;
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 /**
  *
  * @author cjbojorquez
@@ -30,8 +32,10 @@ public class Ticket implements Serializable {
     private String descripcion;
     
     @NotEmpty
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name="creation_date")
-    private String fecha;
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+    private Date fecha;
     
     @ManyToOne
     @JoinColumn(name = "iduser")

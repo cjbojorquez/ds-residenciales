@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import gt.com.ds.servicio.ServicioService;
 import gt.com.ds.servicio.UsuarioService;
+import gt.com.ds.util.Tools;
 
 /**
  *
@@ -68,11 +69,11 @@ public class ControladorServicio {
         }
         servicio.setEstado(1L);
         if (servicio.getIdServicio() == null) {
-            servicio.setFechaCrea(formatter.format(date));
+            servicio.setFechaCrea(Tools.now());
             servicio.setUsuarioCrea(1L);
             servicio.setResidencial(residencial);
         } else {
-            servicio.setFechaModifica(formatter.format(date));
+            servicio.setFechaModifica(Tools.now());
             servicio.setUsuarioModifica(1L);
         }
         log.info("Se actualiza servicio " + servicio);
@@ -96,7 +97,7 @@ public class ControladorServicio {
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
         Date date = new Date();
         servicio.setEstado(0L);
-        servicio.setFechaModifica(formatter.format(date));
+        servicio.setFechaModifica(Tools.now());
         servicio.setUsuarioModifica(1L);
         log.info("Eliminando servicio " + servicio);
         servicioService.guardar(servicio);

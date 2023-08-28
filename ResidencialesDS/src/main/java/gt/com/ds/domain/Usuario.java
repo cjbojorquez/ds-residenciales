@@ -4,7 +4,9 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import java.io.Serializable;
+import java.util.Date;
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 /**
  *
  * @author cjbojorquez
@@ -63,14 +65,18 @@ public class Usuario implements Serializable {
     @Column(name="status")
     private Long estado;
     
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name="create_time")
-    private String fechaCrea;
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+    private Date fechaCrea;
     
     @Column(name="create_user")
     private Long usuarioCrea;
     
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name="modify_time")
-    private String fechaModifica;
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+    private Date fechaModifica;
     
     @Column(name="modify_user")
     private Long usuarioModifica;

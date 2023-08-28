@@ -9,6 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import gt.com.ds.servicio.ResidencialService;
+import gt.com.ds.util.Tools;
 import jakarta.validation.Valid;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -37,6 +38,8 @@ public class ControladorResidencial {
     @Autowired
     private ResidencialService residencialService;
 
+    Tools tool = new Tools();
+    
     @GetMapping("/residencial")
     public String Inicio(Model model) {
         var residenciales = residencialService.listarRecidencialesActivas();
@@ -70,8 +73,9 @@ public class ControladorResidencial {
             log.info("Ruta absoluta "+rutaAbsoluta + " " + directorioImagenes.toString());
             try {
                 byte[] byteImg = imagen.getBytes();
-                Path rutaCompleta = Paths.get(rutaAbsoluta + "/" + imagen.getOriginalFilename());
-                residencial.setLogo("images/logos/" + imagen.getOriginalFilename());
+                String nombreArchivo = tool.newName(imagen.getOriginalFilename(), 1L); //cambiar por dinamico
+                Path rutaCompleta = Paths.get(rutaAbsoluta + "/" + nombreArchivo);
+                residencial.setLogo("images/logos/" + nombreArchivo);
                 log.info("Se intenta guardar imagen "+rutaCompleta.toString());
                 Files.write(rutaCompleta,byteImg);
             } catch (IOException ex) {
@@ -82,10 +86,10 @@ public class ControladorResidencial {
         
         residencial.setStatus(1L);
         if (residencial.getIdResidential() == null) {
-            residencial.setCreate_time(formatter.format(date));
+            residencial.setCreate_time(Tools.now());
             residencial.setCreate_user(1L);
         } else {
-            residencial.setModify_time(formatter.format(date));
+            residencial.setModify_time(Tools.now());
             residencial.setModify_user(1L);
         }
         log.info("Se actualiza Residencial " + residencial);
@@ -106,7 +110,7 @@ public class ControladorResidencial {
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");  
         Date date = new Date();
         residencial.setStatus(0L);
-        residencial.setModify_time(formatter.format(date));
+        residencial.setModify_time(Tools.now());
             residencial.setModify_user(1L);
         residencialService.guardar(residencial);
         return "redirect:/residencial";

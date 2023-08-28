@@ -11,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import gt.com.ds.servicio.UsuarioService;
+import gt.com.ds.util.Tools;
 import jakarta.validation.Valid;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -42,6 +43,7 @@ public class ControladorUsuario {
     
     private Residencial residencial;
     
+    
     @GetMapping("/usuario")
     public String Inicio(Model model) {
         var usuarios = usuarioService.listarUsuarios(1L);
@@ -62,8 +64,6 @@ public class ControladorUsuario {
 
     @PostMapping("/guardarus")
     public String guardar(@Valid Usuario usuario, @RequestParam("file") MultipartFile imagen, Errors errors) {
-        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-        Date date = new Date();
         if (errors.hasErrors()) {
             return "modificarus";
         }
@@ -74,8 +74,9 @@ public class ControladorUsuario {
             log.info("Ruta absoluta " + rutaAbsoluta + " " + directorioImagenes.toString());
             try {
                 byte[] byteImg = imagen.getBytes();
-                Path rutaCompleta = Paths.get(rutaAbsoluta + "/" + imagen.getOriginalFilename());
-                usuario.setFoto("images/perfil/" + imagen.getOriginalFilename());
+                String nombreArchivo = Tools.newName(imagen.getOriginalFilename(), 1L); //cambiar por dinamico
+                Path rutaCompleta = Paths.get(rutaAbsoluta + "/" + nombreArchivo);
+                usuario.setFoto("images/perfil/" + nombreArchivo);
                 log.info("Se intenta guardar imagen " + rutaCompleta.toString());
                 Files.write(rutaCompleta, byteImg);
             } catch (IOException ex) {
@@ -85,13 +86,16 @@ public class ControladorUsuario {
         }
         usuario.setEsEmpleado(0L);
         usuario.setEstado(1L);
-        
+        log.info("Guarda usuario " + Tools.now() + " " + usuario.getIdUsuario());
         if (usuario.getIdUsuario() == null) {
-            usuario.setFechaCrea(formatter.format(date));
+            usuario.setFechaCrea(Tools.now());
             usuario.setUsuarioCrea(1L);
             usuario.setResidencial(residencialService.encontrarPorId(1L));
         } else {
-            usuario.setFechaModifica(formatter.format(date));
+            
+            usuario.setFechaModifica(Tools.now());
+            log.info("Modifica Usuario " + usuario + " fecha " + Tools.now());
+            
             usuario.setUsuarioModifica(1L);
         }
         log.info("Se actualiza usuario " + usuario);
@@ -115,7 +119,7 @@ public class ControladorUsuario {
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
         Date date = new Date();
         usuario.setEstado(0L);
-        usuario.setFechaModifica(formatter.format(date));
+        usuario.setFechaModifica(Tools.now());
         usuario.setUsuarioModifica(1L);
         usuarioService.guardar(usuario);
         return "redirect:/usuario";
@@ -144,8 +148,6 @@ public class ControladorUsuario {
 
     @PostMapping("/guardaremp")
     public String guardarEmpleado(@Valid Usuario usuario, @RequestParam("file") MultipartFile imagen, Errors errors) {
-        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-        Date date = new Date();
         if (errors.hasErrors()) {
             return "modificaremp";
         }
@@ -156,8 +158,9 @@ public class ControladorUsuario {
             log.info("Ruta absoluta " + rutaAbsoluta + " " + directorioImagenes.toString());
             try {
                 byte[] byteImg = imagen.getBytes();
-                Path rutaCompleta = Paths.get(rutaAbsoluta + "/" + imagen.getOriginalFilename());
-                usuario.setFoto("images/perfil/" + imagen.getOriginalFilename());
+                String nombreArchivo = Tools.newName(imagen.getOriginalFilename(), 1L); //cambiar por dinamico
+                Path rutaCompleta = Paths.get(rutaAbsoluta + "/" + nombreArchivo);
+                usuario.setFoto("images/perfil/" + nombreArchivo);
                 log.info("Se intenta guardar imagen " + rutaCompleta.toString());
                 Files.write(rutaCompleta, byteImg);
             } catch (IOException ex) {
@@ -165,16 +168,16 @@ public class ControladorUsuario {
             }
 
         }
-        usuario.setEsEmpleado(0L);
+        usuario.setEsEmpleado(1L);
         usuario.setEstado(1L);
         
         if (usuario.getIdUsuario() == null) {
-            usuario.setFechaCrea(formatter.format(date));
+            usuario.setFechaCrea(Tools.now());
             usuario.setUsuarioCrea(1L);
             
             usuario.setResidencial(residencialService.encontrarPorId(1L));
         } else {
-            usuario.setFechaModifica(formatter.format(date));
+            usuario.setFechaModifica(Tools.now());
             usuario.setUsuarioModifica(1L);
         }
         log.info("Se actualiza usuario " + usuario);
@@ -195,10 +198,8 @@ public class ControladorUsuario {
     @GetMapping("/eliminaremp")
     public String eliminarEmpleado(Usuario usuario, Model model) {
         usuario = usuarioService.encontrarUsuario(usuario);
-        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-        Date date = new Date();
         usuario.setEstado(0L);
-        usuario.setFechaModifica(formatter.format(date));
+        usuario.setFechaModifica(Tools.now());
         usuario.setUsuarioModifica(1L);
         usuarioService.guardar(usuario);
         return "redirect:/empleado";
