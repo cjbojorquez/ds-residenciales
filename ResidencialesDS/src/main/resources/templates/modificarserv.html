@@ -39,11 +39,16 @@
                                                 <span th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}">Error en nombre</span>
                                             </div>
                                             <div class="form-floating mb-3">
+                                                <input class="form-control is-invalid" id="nombre" type="text" placeholder="Descripci&oacute;n" th:field="*{descripcion}" required/>
+                                                <label for="inputFirstName">Descripci&oacute;n</label>
+                                                <span th:if="${#fields.hasErrors('descripcion')}" th:errors="*{nombre}">Error en descripcion</span>
+                                            </div>
+                                            <!--div class="form-floating mb-3">
                                                 <select class="form-control" aria-label="Asigne un empleado" th:field="*{empleado}" required>
                                                 <option value="">--- Seleccione un empleado ---</option>
                                                 <option th:each="emp : ${empleados}" th:value="${emp.idUsuario}" th:text="${emp.nombre}">
                                                 </option>
-                                            </select>
+                                            </select-->
                                             <input class="form-control" id="residencial" type="hidden" th:field="*{residencial}"/>
                                             <input class="form-control" id="status" type="hidden" th:field="*{estado}"/>
                                             <input class="form-control" id="fecha_crea" type="hidden" th:field="*{fechaCrea}"/>

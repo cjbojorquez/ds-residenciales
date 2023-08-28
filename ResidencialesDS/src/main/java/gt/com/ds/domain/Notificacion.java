@@ -2,8 +2,11 @@ package gt.com.ds.domain;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.util.Date;
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 /**
  *
  * @author cjbojorquez
@@ -29,14 +32,15 @@ public class Notificacion implements Serializable {
     @Column(name="description")
     private String descripcion;
     
-    @Column(name="from")
+    @Column(name="start_date")
     private String desde;
     
-    @Column(name="to")
+    @Column(name="final_date")
     private String hasta;
     
     @Column(name="idresidential")
     private Long idResidencial;
+    
     
     @ManyToOne
     @JoinColumn(name = "idstatus")
@@ -47,24 +51,26 @@ public class Notificacion implements Serializable {
     private Usuario usuario;
     
     @Column(name="attachment")
-    private String adjutno;
+    private String adjunto;
     
     @Column(name="type")
     private String tipo;
     
-    @NotEmpty
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name="create_time")
-    private String fecha_crea;
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+    private Date fechaCrea;
     
     @Column(name="create_user")
-    private Long usuario_crea;
+    private Long usuarioCrea;
     
-    @NotEmpty
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name="modify_time")
-    private String fecha_modifica;
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+    private Date fechaModifica;
     
     @Column(name="modify_user")
-    private Long usuario_modifica;
+    private Long usuarioModifica;
     
         
 }

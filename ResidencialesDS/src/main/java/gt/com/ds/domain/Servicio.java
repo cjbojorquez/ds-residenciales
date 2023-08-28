@@ -25,9 +25,8 @@ public class Servicio implements Serializable {
     @Column(name="name")
     private String nombre;
     
-    @ManyToOne
-    @JoinColumn(name = "employee")
-    private Usuario empleado;
+    @Column(name="description")
+    private String descripcion;
     
     @ManyToOne
     @JoinColumn(name = "idresidential")

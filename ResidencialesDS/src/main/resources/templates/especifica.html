@@ -23,46 +23,54 @@
                 <div class="container-fluid px-4">
                     <h1 class="mt-4">Dashboard</h1>
                     <ol class="breadcrumb mb-4">
-                        <li class="breadcrumb-item active">Servicio</li>
+                        <li class="breadcrumb-item active">Notificaci&oacute;n Espec&iacute;fica</li>
                     </ol>
 
                     <nav class="navbar navbar-light bg-light">
                         <form class="container-fluid justify-content-start">
-                            <a class="btn btn-outline-success me-2" role="button" th:href="@{/agregarserv}">Crear Servicio        <i class="fa-solid fa-person-circle-plus"></i></a>
+                            <a class="btn btn-outline-success me-2" role="button" th:href="@{/agregarespecifica}">Crear Notificaci&oacute;n Espec&iacute;fica       <i class="fa-solid fa-person-circle-plus"></i></a>
                         </form>
                     </nav>
                     <div class="card mb-4">
                         <div class="card-header">
                             <i class="fas fa-table me-1"></i>
-                            Servicio
+                            Notificaci&oacute;n Espec&iacute;fica
                         </div>
 
                         <div class="card-body">
-                            <div th:if="${servicios != null and !servicios.empty}">
+                            <div th:if="${notificaciones != null and !notificaciones.empty}">
                                 <table id="datatablesSimple">
                                     <thead>
                                         <tr>
+                                            <th>Asunto</th>
                                             <th>Descripcion</th>
-                                            <th>Encargado</th>
+                                            
+                                            <th>Adjunto</th>
+                                            <th>Usuario</th>
                                             <th>Modificar</th>
                                             <th>Eliminar</th>
                                         </tr>
                                     </thead>
                                     <tfoot>
                                         <tr>
+                                            <th>Asunto</th>
                                             <th>Descripcion</th>
-                                            <th>Encargado</th>
+                                            
+                                            <th>Adjunto</th>
+                                            <th>Usuario</th>
                                             <th>Modificar</th>
                                             <th>Eliminar</th>
                                         </tr>
                                     </tfoot>
                                     <tbody>
-                                        <tr th:each="servicio : ${servicios}">
-                                            <td th:text="${servicio.nombre}">Mostrar Nombre</td>
-                                            <td th:text="${servicio.empleado.nombre}">Mostrar Empleado</td>
-                                            
-                                            <td><a class="btn btn-info" role="button"  th:href="@{/editarserv(idServicio=${servicio.idServicio})}" th:text="Editar"/></td>
-                                            <td><a class="btn btn-danger" role="button"  th:href="@{/eliminarserv(idServicio=${servicio.idServicio})}" th:text="Eliminar"/></td>
+                                        <tr th:each="notificacion : ${notificaciones}">
+                                            <td th:text="${notificacion.asunto}"></td>
+                                            <td th:text="${notificacion.descripcion}"></td>
+                                           
+                                            <td th:text="${notificacion.adjunto}"></td>
+                                            <td th:text="${notificacion.usuario.nombre}"></td>
+                                            <td><a class="btn btn-info" role="button"  th:href="@{/modificarespecifica(idNotificacion=${notificacion.idNotificacion})}" th:text="Editar"/></td>
+                                            <td><a class="btn btn-danger" role="button"  th:href="@{/cerrarespecifica(idNotificacion=${notificacion.idNotificacion})}" th:text="Eliminar"/></td>
                                         </tr>
 
                                     </tbody>
