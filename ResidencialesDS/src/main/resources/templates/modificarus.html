@@ -39,12 +39,12 @@
                                                 <span th:if="${#fields.hasErrors('nombre')}" th:errors="*{name}">Error en nombre</span>
                                             </div>
                                             <div class="form-floating mb-3">
-                                                <input class="form-control is-invalid" id="usuario" type="text" placeholder="Ingrese el nombre" th:field="*{nombreUsuario}" />
+                                                <input class="form-control is-invalid" id="usuario" type="text" placeholder="Ingrese el nombre" th:field="*{nombreUsuario}" required/>
                                                 <label for="inputFirstName">Usuario</label>
                                                 <span th:if="${#fields.hasErrors('nombreUsuario')}" th:errors="*{nombreUsuario}">Error en usuario</span>
                                             </div>
                                             <div class="form-floating mb-3">
-                                                <input class="form-control is-invalid" id="password" type="password" placeholder="Ingrese el nombre" th:field="*{password}" />
+                                                <input class="form-control is-invalid" id="password" type="password" placeholder="Ingrese el nombre" th:field="*{password}" required/>
                                                 <label for="inputFirstName">Password</label>
 
                                             </div>

@@ -100,7 +100,7 @@ public class ControladorNotificacion {
         }
 
         if (!imagen.isEmpty()) {
-            Path directorioImagenes = Paths.get("src//main//resources//static//images//perfil");
+            Path directorioImagenes = Paths.get("src//main//resources//static//images//adjunto");
 
             String rutaAbsoluta = directorioImagenes.toFile().getAbsolutePath();
             log.info("Ruta absoluta " + rutaAbsoluta + " " + directorioImagenes.toString());
