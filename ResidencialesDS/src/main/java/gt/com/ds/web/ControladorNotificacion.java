@@ -28,6 +28,7 @@ import java.nio.file.Paths;
 import java.text.ParseException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.springframework.validation.BindingResult;
 
 /**
  *
@@ -66,17 +67,36 @@ public class ControladorNotificacion {
     }
 
     @PostMapping("/guardargeneral")
-    public String guardarGeneral(@Valid Notificacion notificacion, @RequestParam("file") MultipartFile imagen, Errors errors) {
+    public String guardarGeneral(@Valid Notificacion notificacion, @RequestParam("file") MultipartFile imagen
+            , @RequestParam("desdeFecha") String desdeFecha, @Valid @RequestParam("desdeHora") String desdeHora
+            , @RequestParam("hastaFecha") String hastaFecha, @Valid @RequestParam("hastaHora") String hastaHora
+            , BindingResult bindingResult
+            ,  Errors errors) {
         
+        log.info("\n\nNo hay errores " + errors.toString());
+        
+        if (notificacion.getAsunto() == null || notificacion.getAsunto().trim().isEmpty()) {
+            // Agrega un error personalizado al objeto BindingResult
+            bindingResult.rejectValue("asunto", "error.asunto", "El campo asunto no puede estar vacío.");
+        }
+        if (!Tools.cumplePatron("\\d{2}:\\d{2}",desdeHora)) {
+            // Agrega un error personalizado al objeto BindingResult
+            bindingResult.rejectValue("desde", "error.desde", "Se debe colocar una hora valida.");
+        }
+        if (!Tools.cumplePatron("\\d{2}:\\d{2}",hastaHora)) {
+            // Agrega un error personalizado al objeto BindingResult
+            bindingResult.rejectValue("hasta", "error.hasta", "Se debe colocar una hora valida.");
+        }
         if (errors.hasErrors()) {
+            log.info("Error en guardar ");
             return "modificargeneral";
         }
 
         notificacion.setTipo(varNotiGeneral);
-        log.info("antes de validar " + notificacion.getIdNotificacion());
-
+        notificacion.setDesde(Tools.getFecha(desdeFecha, desdeHora));
+        notificacion.setHasta(Tools.getFecha(hastaFecha, hastaHora));
+                
         if (notificacion.getIdNotificacion() == null) {
-            log.info("\n\n--------------------dentro de validar " + notificacion.getIdNotificacion());
 
             Usuario us = new Usuario();
             us.setIdUsuario(1L);
@@ -87,8 +107,9 @@ public class ControladorNotificacion {
             notificacion.setUsuarioCrea(1L);
             notificacion.setIdResidencial(1L);
             notificacion.setEstado(estadoTicketService.encontrarEstado(1L));
+            
+            
         } else {
-            log.info("else de validar " + notificacion.getIdNotificacion());
             notificacion.setFechaModifica(Tools.now());
             notificacion.setUsuarioModifica(1L);
         }

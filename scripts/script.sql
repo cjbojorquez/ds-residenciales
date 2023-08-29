@@ -281,7 +281,7 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `residencialesdb`.`message` (
   `idmessage` INT NOT NULL AUTO_INCREMENT,
-  `subject` VARCHAR(100) NULL,
+  `subject` VARCHAR(100) NOT NULL,
   `description` VARCHAR(1000) NULL,
   `start_date` DATETIME NULL,
   `final_date` DATETIME NULL,

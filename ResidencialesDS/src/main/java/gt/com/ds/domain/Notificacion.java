@@ -1,8 +1,7 @@
 package gt.com.ds.domain;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotBlank;
 import java.io.Serializable;
 import java.util.Date;
 import lombok.Data;
@@ -24,19 +23,23 @@ public class Notificacion implements Serializable {
     @Column(name="idmessage")
     private Long idNotificacion;
     
-    @NotEmpty
+    @NotBlank
     @Column(name="subject")
     private String asunto;
     
-    @NotEmpty
+    @NotBlank
     @Column(name="description")
     private String descripcion;
     
+    @Temporal(TemporalType.TIMESTAMP)
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     @Column(name="start_date")
-    private String desde;
+    private Date desde;
     
+    @Temporal(TemporalType.TIMESTAMP)
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     @Column(name="final_date")
-    private String hasta;
+    private Date hasta;
     
     @Column(name="idresidential")
     private Long idResidencial;
