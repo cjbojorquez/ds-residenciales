@@ -36,7 +36,7 @@
                             <li><a class="dropdown-item" href="#!">Perfil</a></li>
                             <li><a class="dropdown-item" href="#!"></a></li>
                             <li><hr class="dropdown-divider" /></li>
-                            <li><a class="dropdown-item" href="#!">Logout</a></li>
+                            <li><form method="POST" th:action="@{/logout}"><a class="dropdown-item" onclick="this.parentNode.submit();" href="#!">Logout</a></form></li>
                         </ul>
                     </li>
                 </ul>
