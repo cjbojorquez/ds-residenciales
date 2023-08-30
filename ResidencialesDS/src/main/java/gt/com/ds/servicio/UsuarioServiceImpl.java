@@ -61,5 +61,11 @@ public class UsuarioServiceImpl implements UsuarioService{
     public List<Usuario> listarUsuarios() {
         return usuarioDao.listarUsuarios();
     }
+
+    @Override
+    public Usuario encontrarUsuario(String nombreUsuario, Long idResidencial) {
+        
+        return usuarioDao.buscarUsuario(nombreUsuario, idResidencial);
+    }
     
 }

@@ -73,7 +73,7 @@ public class ControladorResidencial {
             log.info("Ruta absoluta "+rutaAbsoluta + " " + directorioImagenes.toString());
             try {
                 byte[] byteImg = imagen.getBytes();
-                String nombreArchivo = tool.newName(imagen.getOriginalFilename(), 1L); //cambiar por dinamico
+                String nombreArchivo = tool.newName(imagen.getOriginalFilename()); 
                 Path rutaCompleta = Paths.get(rutaAbsoluta + "/" + nombreArchivo);
                 residencial.setLogo("images/logos/" + nombreArchivo);
                 log.info("Se intenta guardar imagen "+rutaCompleta.toString());

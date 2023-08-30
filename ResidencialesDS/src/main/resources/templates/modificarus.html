@@ -24,11 +24,15 @@
                         <div class="row justify-content-center">
                             <div class="col-lg-7">
                                 <div class="card shadow-lg border-0 rounded-lg mt-5">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title"></h5>
-                                        <a class="btn-close" th:href="@{/usuario}"></a>
+                                    
+                                    <div class="card-header">
+                                        <div class="row">
+                                            <a class="btn-close" th:href="@{/usuario}"></a>
+                                        </div>
+                                        <div class="row">
+                                            <h3 class="text-center font-weight-light my-4">Usuario</h3>
+                                        </div>
                                     </div>
-                                    <div class="card-header"><h3 class="text-center font-weight-light my-4">Usuario</h3></div>
 
                                     <div class="card-body">
                                         <form class="was-validated" th:action="@{guardarus}" method="post" enctype="multipart/form-data" th:object="${usuario}">
@@ -38,16 +42,9 @@
                                                 <label for="inputFirstName">Nombre</label>
                                                 <span th:if="${#fields.hasErrors('nombre')}" th:errors="*{name}">Error en nombre</span>
                                             </div>
-                                            <div class="form-floating mb-3">
-                                                <input class="form-control is-invalid" id="usuario" type="text" placeholder="Ingrese el nombre" th:field="*{nombreUsuario}" required/>
-                                                <label for="inputFirstName">Usuario</label>
-                                                <span th:if="${#fields.hasErrors('nombreUsuario')}" th:errors="*{nombreUsuario}">Error en usuario</span>
-                                            </div>
-                                            <div class="form-floating mb-3">
-                                                <input class="form-control is-invalid" id="password" type="password" placeholder="Ingrese el nombre" th:field="*{password}" required/>
-                                                <label for="inputFirstName">Password</label>
 
-                                            </div>
+                                            <input class="form-control" id="nombreUsuario" type="hidden" th:field="*{nombreUsuario}"/>
+                                            <input class="form-control" id="password" type="hidden" th:field="*{password}"/>
                                             <div class="form-floating mb-3">
                                                 <input class="form-control" id="email" type="email" placeholder="nombre@ejemplo.com" th:field="*{email}" required />
                                                 <label for="inputEmail">e-mail</label>
@@ -64,13 +61,6 @@
                                                 <input class="form-control" id="direccion" type="text" placeholder="Ingrese direccion" th:field="*{direccion}" required/>
                                                 <label for="inputLastName">Direcci&oacute;n</label>
                                             </div>
-
-
-                                            <div class="form-floating mb-3">
-                                                <input class="form-control" id="puesto" type="text" placeholder="Ingrese Puesto" th:field="*{cargo}"/>
-                                                <label for="inputEmail">Puesto</label>
-                                            </div>
-
                                             <div class="custom-file mb-3">
                                                 <label class="custom-file-label" for="customFile">Seleccionar Foto</label>
                                                 <input type="file" class="form-control border border-primary" id="customFile" name="file" accept="image/">
@@ -78,10 +68,10 @@
                                             </div>
                                             <div class="form-floating mb-3">
                                                 <select class="form-control" aria-label="Seleccione una residencial" th:field="*{residencial}" required>
-                                                <option value="">--- Seleccione una residencial ---</option>
-                                                <option th:each="res : ${residenciales}" th:value="${res.idResidential}" th:text="${res.name}">
-                                                </option>
-                                            </select>
+                                                    <option value="">--- Seleccione una residencial ---</option>
+                                                    <option th:each="res : ${residenciales}" th:value="${res.idResidential}" th:text="${res.name}">
+                                                    </option>
+                                                </select>
                                             </div>
                                             <input class="form-control" id="status" type="hidden" value="1"/>
                                             <input class="form-control" id="esEmpleado" type="hidden" th:field="*{esEmpleado}"/>

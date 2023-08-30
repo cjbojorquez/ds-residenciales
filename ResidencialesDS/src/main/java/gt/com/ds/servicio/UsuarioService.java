@@ -20,6 +20,7 @@ public interface UsuarioService {
     
     public Usuario encontrarUsuario(Usuario usuario);
     public Usuario encontrarUsuario(Long idUsuario);
+    public Usuario encontrarUsuario(String nombreUsuario, Long idResidencial);
     
     public List<Usuario> listarUsuarios();
 }

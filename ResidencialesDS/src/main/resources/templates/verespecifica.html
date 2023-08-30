@@ -25,36 +25,43 @@
                             <div class="col-lg-7">
                                 <div class="card shadow-lg border-0 rounded-lg mt-5">
                                     
+                                    <div th:object="${notificacion}"></div>
                                     <div class="card-header">
                                         <div class="row">
-                                            <a class="btn-close" th:href="@{/rol}"></a>
+                                            <a class="btn-close" th:href="@{/especifica}"></a>
                                         </div>
                                         <div class="row">
-                                        <h3 class="text-center font-weight-light my-4">Rol</h3>
+                                            <h3 class="text-center font-weight-light my-4" th:text="${notificacion.asunto}"></h3>
                                         </div>
                                     </div>
-
                                     <div class="card-body">
-                                        <form class="was-validated" th:action="@{guardarrol}" method="post" th:object="${rol}">
-                                            <input class="form-control" id="id" type="hidden" th:field="*{idRol}"/>
-                                            <div class="form-floating mb-3">
-                                                <input class="form-control is-invalid" id="nombre" type="text" placeholder="Ingrese el nombre" th:field="*{nombre}" required/>
-                                                <label for="inputFirstName">Nombre</label>
-                                                <span th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}">Error en nombre</span>
+                                        <div class="form-floating mb-3">
+                                            <span th:if="${notificacion.adjunto != null and not #strings.isEmpty(notificacion.adjunto)}">
+                                                <img th:src="${notificacion.adjunto}" alt="archivo adjunto">
+                                            </span>
+                                        </div>
+                                        <div class="form-floating mb-3">
+                                            <h4><span  th:text="${notificacion.descripcion}"></span></h4>
+                                        </div>
+                                        <div class="mt-4 mb-0">
+
+                                            <div class="container text-center">
+                                                <div class="row">
+                                                    <div class="col">
+                                                        <div class="d-grid"><a type="button" class="btn btn-dark"  >Enviar         <i class="fa-solid fa-paper-plane"></i></a></div>
+                                                    </div>
+                                                    <div class="col">
+
+                                                    </div>
+                                                    <div class="col">
+                                                        <div class="d-grid"><a  class="btn btn-dark" th:href="@{/modificarespecifica(idNotificacion=${notificacion.idNotificacion})}" >Editar       <i class="fa-regular fa-pen-to-square"></i></a></div>
+                                                    </div>
+                                                </div>
                                             </div>
-                                            
-                                            <input class="form-control" id="status" type="hidden" value="1"/>
-                                            <input class="form-control" id="fecha_crea" type="hidden" th:field="*{fechaCrea}"/>
-                                            <input class="form-control" id="usuario_crea" type="hidden" th:field="*{usuarioCrea}"/>
-                                            <input class="form-control" id="fecha_modifica" type="hidden" th:field="*{fechaModifica}"/>
-                                            <input class="form-control" id="usuario_modifica" type="hidden" th:field="*{usuarioModifica}"/>
-
-                                            <div class="mt-4 mb-0">
-                                                <div class="d-grid"><input type="submit" class="btn btn-primary" value="Guardar"></div>
-                                            </div>
+                                        </div>
 
 
-                                        </form>
+
                                     </div>
                                     <div class="card-footer text-center py-3">
                                         <div class="small"></div>

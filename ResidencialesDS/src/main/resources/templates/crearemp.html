@@ -27,7 +27,7 @@
 
 
                                 <div class="card shadow-lg border-0 rounded-lg mt-5">
-                                    
+
                                     <div class="card-header">
                                         <div class="row">
                                             <a class="btn-close" th:href="@{/empleado}"></a>
@@ -43,19 +43,18 @@
                                             <div class="form-floating mb-3">
                                                 <input class="form-control is-invalid" id="nombre" type="text" placeholder="Ingrese el nombre" th:field="*{nombre}" required/>
                                                 <label for="inputFirstName">Nombre</label>
-                                                <span th:if="${#fields.hasErrors('nombre')}" th:errors="*{name}">Error en nombre</span>
+                                                <span th:if="${#fields.hasErrors('nombre')}" th:errors="*{name}" style="color:red">Error en nombre</span>
                                             </div>
-                                            <!--div class="form-floating mb-3">
+                                            <div class="form-floating mb-3">
                                                 <input class="form-control is-invalid" id="usuario" type="text" placeholder="Ingrese el nombre" th:field="*{nombreUsuario}" />
                                                 <label for="inputFirstName">Usuario</label>
-                                                <span th:if="${#fields.hasErrors('nombreUsuario')}" th:errors="*{nombreUsuario}">Error en usuario</span>
+                                                <span th:if="${#fields.hasErrors('nombreUsuario')}" th:errors="*{nombreUsuario}" style="color:red">Error en usuario</span>
                                             </div>
                                             <div class="form-floating mb-3">
                                                 <input class="form-control is-invalid" id="password" type="password" placeholder="Ingrese el nombre" th:field="*{password}" />
                                                 <label for="inputFirstName">Password</label>
-                                            </div-->
-                                            <input class="form-control" id="nombreUsuario" type="hidden" th:field="*{nombreUsuario}"/>
-                                            <input class="form-control" id="password" type="hidden" th:field="*{password}"/>
+
+                                            </div>
                                             <div class="form-floating mb-3">
                                                 <input class="form-control" id="email" type="email" placeholder="nombre@ejemplo.com" th:field="*{email}" required />
                                                 <label for="inputEmail">e-mail</label>

@@ -22,6 +22,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.springframework.validation.BindingResult;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -40,32 +41,37 @@ public class ControladorUsuario {
 
     @Autowired
     private ResidencialService residencialService;
-    
+
     private Residencial residencial;
-    
-    
+
     @GetMapping("/usuario")
     public String Inicio(Model model) {
         var usuarios = usuarioService.listarUsuarios(1L);
-        
+
         log.info("ejecutando controlador usuario " + usuarios);
         model.addAttribute("usuarios", usuarios);
         return "usuario";
     }
-    
-        
+
     @GetMapping("/agregarus")
     public String agregar(Usuario Usuario, Model model) {
         var residenciales = residencialService.listarRecidencialesActivas();
-        log.info("Res desde user "+residenciales);
         model.addAttribute("residenciales", residenciales);
-        return "modificarus";
+        return "crearus";
     }
 
     @PostMapping("/guardarus")
-    public String guardar(@Valid Usuario usuario, @RequestParam("file") MultipartFile imagen, Errors errors) {
+    public String guardar(@Valid Usuario usuario, BindingResult bindingResult, @RequestParam("file") MultipartFile imagen, Model model, Errors errors) {
+
+        if (usuarioService.encontrarUsuario(usuario.getNombreUsuario(), usuario.getResidencial().getIdResidential()) != null && usuario.getIdUsuario() == null) {
+            // Agrega un error personalizado al objeto BindingResult
+            log.info("Existe usuario");
+            bindingResult.rejectValue("nombreUsuario", "error.nombreUsuario", "El nombre de usuairo ya existe!");
+        }
         if (errors.hasErrors()) {
-            return "modificarus";
+            var residenciales = residencialService.listarRecidencialesActivas();
+            model.addAttribute("residenciales", residenciales);
+            return "crearus";
         }
         if (!imagen.isEmpty()) {
             Path directorioImagenes = Paths.get("src//main//resources//static//images//perfil");
@@ -74,7 +80,7 @@ public class ControladorUsuario {
             log.info("Ruta absoluta " + rutaAbsoluta + " " + directorioImagenes.toString());
             try {
                 byte[] byteImg = imagen.getBytes();
-                String nombreArchivo = Tools.newName(imagen.getOriginalFilename(), 1L); //cambiar por dinamico
+                String nombreArchivo = Tools.newName(imagen.getOriginalFilename()); //cambiar por dinamico
                 Path rutaCompleta = Paths.get(rutaAbsoluta + "/" + nombreArchivo);
                 usuario.setFoto("images/perfil/" + nombreArchivo);
                 log.info("Se intenta guardar imagen " + rutaCompleta.toString());
@@ -92,10 +98,10 @@ public class ControladorUsuario {
             usuario.setUsuarioCrea(1L);
             usuario.setResidencial(residencialService.encontrarPorId(1L));
         } else {
-            
+
             usuario.setFechaModifica(Tools.now());
             log.info("Modifica Usuario " + usuario + " fecha " + Tools.now());
-            
+
             usuario.setUsuarioModifica(1L);
         }
         log.info("Se actualiza usuario " + usuario);
@@ -108,7 +114,7 @@ public class ControladorUsuario {
         usuario = usuarioService.encontrarUsuario(usuario);
         model.addAttribute("usuario", usuario);
         var residenciales = residencialService.listarRecidencialesActivas();
-        log.info("Res desde user "+residenciales);
+        log.info("Res desde user " + residenciales);
         model.addAttribute("residenciales", residenciales);
         return "modificarus";
     }
@@ -133,23 +139,30 @@ public class ControladorUsuario {
         var usuarios = usuarioService.listarEmpleados(1L);
         var mensaje = "Hola mundo con Thymeleaf para el home";
         log.info("ejecutando controlador empleado spring mvc " + usuarios);
-        
+
         model.addAttribute("usuarios", usuarios);
         return "empleado";
     }
-    
+
     @GetMapping("/agregaremp")
     public String agregarEmpleado(Usuario Usuario, Model model) {
         var residenciales = residencialService.listarRecidencialesActivas();
-        log.info("Res desde user "+residenciales);
+        log.info("Res desde user " + residenciales);
         model.addAttribute("residenciales", residenciales);
-        return "modificaremp";
+        return "crearemp";
     }
 
     @PostMapping("/guardaremp")
-    public String guardarEmpleado(@Valid Usuario usuario, @RequestParam("file") MultipartFile imagen, Errors errors) {
+    public String guardarEmpleado(@Valid Usuario usuario, BindingResult bindingResult, @RequestParam("file") MultipartFile imagen, Model model, Errors errors) {
+        if (usuarioService.encontrarUsuario(usuario.getNombreUsuario(), usuario.getResidencial().getIdResidential()) != null && usuario.getIdUsuario() == null) {
+            // Agrega un error personalizado al objeto BindingResult
+            log.info("Existe usuario");
+            bindingResult.rejectValue("nombreUsuario", "error.nombreUsuario", "El nombre de usuairo ya existe!");
+        }
         if (errors.hasErrors()) {
-            return "modificaremp";
+            var residenciales = residencialService.listarRecidencialesActivas();
+            model.addAttribute("residenciales", residenciales);
+            return "crearemp";
         }
         if (!imagen.isEmpty()) {
             Path directorioImagenes = Paths.get("src//main//resources//static//images//perfil");
@@ -158,7 +171,7 @@ public class ControladorUsuario {
             log.info("Ruta absoluta " + rutaAbsoluta + " " + directorioImagenes.toString());
             try {
                 byte[] byteImg = imagen.getBytes();
-                String nombreArchivo = Tools.newName(imagen.getOriginalFilename(), 1L); //cambiar por dinamico
+                String nombreArchivo = Tools.newName(imagen.getOriginalFilename()); //cambiar por dinamico
                 Path rutaCompleta = Paths.get(rutaAbsoluta + "/" + nombreArchivo);
                 usuario.setFoto("images/perfil/" + nombreArchivo);
                 log.info("Se intenta guardar imagen " + rutaCompleta.toString());
@@ -170,12 +183,12 @@ public class ControladorUsuario {
         }
         usuario.setEsEmpleado(1L);
         usuario.setEstado(1L);
-        
+
         if (usuario.getIdUsuario() == null) {
             usuario.setFechaCrea(Tools.now());
             usuario.setUsuarioCrea(1L);
-            
-            usuario.setResidencial(residencialService.encontrarPorId(1L));
+
+            //usuario.setResidencial(residencialService.encontrarPorId(1L));
         } else {
             usuario.setFechaModifica(Tools.now());
             usuario.setUsuarioModifica(1L);
@@ -190,7 +203,7 @@ public class ControladorUsuario {
         usuario = usuarioService.encontrarUsuario(usuario);
         model.addAttribute("usuario", usuario);
         var residenciales = residencialService.listarRecidencialesActivas();
-        log.info("Res desde user "+residenciales);
+        log.info("Res desde user " + residenciales);
         model.addAttribute("residenciales", residenciales);
         return "modificaremp";
     }

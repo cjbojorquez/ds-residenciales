@@ -7,6 +7,7 @@ package gt.com.ds.util;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import lombok.extern.slf4j.Slf4j;
@@ -18,10 +19,14 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class Tools {
     
-    public static String newName(String nombre,Long idUsuario){
+    public static String newName(String nombre){
         SimpleDateFormat formatter = new SimpleDateFormat("ddMMyyyyHHmmss");
         Date date = new Date();
-        String nuevoNombre=formatter.format(date)+"_"+nombre+"_"+idUsuario;
+        
+        Random random = new Random();
+        int numeroRandom = random.nextInt(100) + 1; // Esto generará números entre 1 y 100
+        
+        String nuevoNombre=formatter.format(date)+"_"+numeroRandom+"_"+nombre;
         return nuevoNombre;
     }
     

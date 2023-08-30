@@ -48,15 +48,16 @@
                                             <th>Password</th>
                                             <th>Email</th>
                                             <th>Tel&eacute;fono</th>
-                                            <th>C&eacute;digo</th>
+                                            <th>C&oacute;digo</th>
                                             <th>Direcci&oacute;n</th>
-
+                                            <th>Residencial</th>
                                             <th>Foto</th>
                                             <th>Estado</th>
                                             <th>Fecha Creaci&oacute;n</th>
                                             <th>Usuario Crea</th>
                                             <th>Fecha Modifica</th>
                                             <th>Usuario Modifica</th>
+                                            
                                             <th></th>
                                             <th></th>
                                         </tr>
@@ -68,9 +69,9 @@
                                             <th>Password</th>
                                             <th>Email</th>
                                             <th>Tel&eacute;fono</th>
-                                            <th>C&eacute;digo</th>
+                                            <th>C&oacute;digo</th>
                                             <th>Direcci&oacute;n</th>
-
+                                            <th>Residencial</th>
                                             <th>Foto</th>
                                             <th>Estado</th>
                                             <th>Fecha Creaci&oacute;n</th>
@@ -90,7 +91,7 @@
                                             <td th:text="${usuario.telefono}">Mostrar Telefono</td>
                                             <td th:text="${usuario.codigo}">Mostrar C&oacute;digo</td>
                                             <td th:text="${usuario.direccion}">Mostrar Direcci&oacute;n</td>
-
+                                            <td th:text="${usuario.residencial.name}"></td>
                                             <td>
                                                 <span th:if="${usuario.foto != null and not #strings.isEmpty(usuario.foto)}">
                                                     <img th:src="${usuario.foto}" alt="Foto de Perfil" height="100">

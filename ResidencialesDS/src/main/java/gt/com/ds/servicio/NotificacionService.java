@@ -17,7 +17,7 @@ public interface NotificacionService {
     
     public List<Notificacion> listarNotificacionesAbiertas(String tipo,Long idResidencial);
     
-    public void guardar(Notificacion notificacion);
+    public Notificacion guardar(Notificacion notificacion);
     
     public void eliminar(Notificacion notificacion);
     

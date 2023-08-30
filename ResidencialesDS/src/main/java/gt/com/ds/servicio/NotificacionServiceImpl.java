@@ -39,8 +39,8 @@ public class NotificacionServiceImpl implements NotificacionService{
     }
 
     @Override
-    public void guardar(Notificacion notificacion) {
-        notificacionDao.save(notificacion);
+    public Notificacion guardar(Notificacion notificacion) {
+        return notificacionDao.save(notificacion);
     }
 
     @Override

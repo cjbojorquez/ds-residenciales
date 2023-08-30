@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <title>DS-Residenciales</title>
+        <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
+        <link href="css/styles.css" rel="stylesheet" />
+        <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+        <!-- jQuery CDN -->
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+        <!-- jQuery UI CSS -->
+        <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
+        <!-- jQuery UI Datepicker CSS -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-timepicker/1.13.18/jquery.timepicker.min.css">
+
+        <!-- jQuery UI JavaScript -->
+        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+        <!-- jQuery Timepicker JavaScript -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-timepicker/1.13.18/jquery.timepicker.min.js"></script>
+        <script src="js/util.js"></script>
+    </head>
+    <body class="sb-nav-fixed">
+    <th:block th:replace="~{layout/plantilla :: header}"></th:block>
+    <!-- barra vertical -->
+    <div id="layoutSidenav">
+        <th:block th:replace="~{layout/plantilla :: menu}"></th:block>
+        <div id="layoutSidenav_content">
+            <main>
+                <div class="container">
+                    <div class="row justify-content-center">
+                        <div class="col-lg-7">
+                            <div class="card shadow-lg border-0 rounded-lg mt-5">
+
+                                <div class="card-header">
+                                    <div class="row">
+                                        <a class="btn-close" th:href="@{/general}"></a>
+                                    </div>
+                                    <div class="row">
+                                        <h3 class="text-center font-weight-light my-4" th:text="${notificacion.asunto}"></h3>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <div class="form-floating mb-3">
+                                        <span th:if="${notificacion.adjunto != null and not #strings.isEmpty(notificacion.adjunto)}">
+                                            <img th:src="${notificacion.adjunto}" alt="archivo adjunto">
+                                        </span>
+                                    </div>
+                                    <div class="form-floating mb-3">
+                                        <h4><span  th:text="${notificacion.descripcion}"></span></h4>
+                                    </div>
+                                    <div class="form-floating mb-3">
+                                        <div class="row">
+                                            <div class="col"><h5>Desde:<span th:text="${#dates.format(notificacion.desde, 'dd/MM/yyyy HH:mm')}"></span></h5></div>
+                                            <div class="col"><h5>Hasta:<span th:text="${#dates.format(notificacion.hasta, 'dd/MM/yyyy HH:mm')}"></span></h5></div>
+                                        </div>
+
+                                    </div>
+                                    <div class="form-floating mb-3">
+
+
+                                    </div>
+                                    <div class="mt-4 mb-0">
+
+                                        <div class="container text-center">
+                                            <div class="row">
+                                                <div class="col">
+                                                    <div class="d-grid"><a type="button" class="btn btn-dark"  >Enviar         <i class="fa-solid fa-paper-plane"></i></a></div>
+                                                </div>
+                                                <div class="col">
+
+                                                </div>
+                                                <div class="col">
+                                                    <div class="d-grid"><a  class="btn btn-dark" th:href="@{/modificargeneral(idNotificacion=${notificacion.idNotificacion})}" >Editar       <i class="fa-regular fa-pen-to-square"></i></a></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-footer text-center py-3">
+                                    <div class="small"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+            <th:block th:replace="~{layout/plantilla :: footer}"></th:block>
+        </div>
+
+    </div>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+    <script src="js/scripts.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
+    <script src="assets/demo/chart-area-demo.js"></script>
+    <script src="assets/demo/chart-bar-demo.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>
+    <script src="js/datatables-simple-demo.js"></script>
+</body>
+</html>

@@ -71,6 +71,7 @@ public class ControladorNotificacion {
             , @RequestParam("desdeFecha") String desdeFecha, @Valid @RequestParam("desdeHora") String desdeHora
             , @RequestParam("hastaFecha") String hastaFecha, @Valid @RequestParam("hastaHora") String hastaHora
             , BindingResult bindingResult
+            , Model model
             ,  Errors errors) {
         
         log.info("\n\nNo hay errores " + errors.toString());
@@ -115,14 +116,15 @@ public class ControladorNotificacion {
         }
 
         if (!imagen.isEmpty()) {
-            Path directorioImagenes = Paths.get("src//main//resources//static//images//adjunto");
+            Path directorioImagenes = Paths.get("src//main//resources//static//adjunto");
 
             String rutaAbsoluta = directorioImagenes.toFile().getAbsolutePath();
             log.info("Ruta absoluta " + rutaAbsoluta + " " + directorioImagenes.toString());
             try {
                 byte[] byteImg = imagen.getBytes();
-                Path rutaCompleta = Paths.get(rutaAbsoluta + "/" + imagen.getOriginalFilename());
-                notificacion.setAdjunto("adjunto/" + imagen.getOriginalFilename());
+                String nombreArchivo = Tools.newName(imagen.getOriginalFilename()); // cambiar por dinamica
+                Path rutaCompleta = Paths.get(rutaAbsoluta + "/" + nombreArchivo);
+                notificacion.setAdjunto("adjunto/" + nombreArchivo);
                 log.info("Se intenta guardar imagen " + rutaCompleta.toString());
                 Files.write(rutaCompleta, byteImg);
             } catch (IOException ex) {
@@ -132,22 +134,37 @@ public class ControladorNotificacion {
         }
 
         log.info("Se crea gestion " + notificacion);
-        notificacionService.guardar(notificacion);
-        return "redirect:/general";
+        Notificacion newNoti=notificacionService.guardar(notificacion);
+        model.addAttribute("notificacion", newNoti);
+        return "redirect:/vergeneral?idNotificacion="+newNoti.getIdNotificacion();
     }
 
     @GetMapping("/modificargeneral")
     public String editarGeneral(Notificacion notificacion, Model model) {
         notificacion = notificacionService.encontrarNotificacion(notificacion);
         var estadosTicket = estadoTicketService.listarEstadoTicket();
-        if (notificacion.getEstado().getIdEstado() == 1L) {
+        /*if (notificacion.getEstado().getIdEstado() == 1L) {
             EstadoTicket estadoTicket = estadoTicketService.encontrarEstado(2L);
             notificacion.setEstado(estadoTicket);
-        }
+        }*/
         model.addAttribute("estadosTicket", estadosTicket);
         model.addAttribute("notificacion", notificacion);
         log.info("se envia ticket " + notificacion.toString());
         return "modificargeneral";
+    }
+    
+    @GetMapping("/vergeneral")
+    public String verGeneral(Notificacion notificacion, Model model) {
+        notificacion = notificacionService.encontrarNotificacion(notificacion);
+        var estadosTicket = estadoTicketService.listarEstadoTicket();
+        /*if (notificacion.getEstado().getIdEstado() == 1L) {
+            EstadoTicket estadoTicket = estadoTicketService.encontrarEstado(2L);
+            notificacion.setEstado(estadoTicket);
+        }*/
+        model.addAttribute("estadosTicket", estadosTicket);
+        model.addAttribute("notificacion", notificacion);
+        log.info("se envia ticket " + notificacion.toString());
+        return "vergeneral";
     }
 
     @GetMapping("/cerrargeneral")
@@ -187,7 +204,7 @@ public class ControladorNotificacion {
     }
 
     @PostMapping("/guardarespecifica")
-    public String guardarEspecifica(@Valid Notificacion notificacion, @RequestParam("file") MultipartFile imagen, Errors errors) {
+    public String guardarEspecifica(@Valid Notificacion notificacion, @RequestParam("file") MultipartFile imagen,Model model, Errors errors) {
         
         if (errors.hasErrors()) {
             return "modificarespecifica";
@@ -214,11 +231,11 @@ public class ControladorNotificacion {
         }
 
         if (!imagen.isEmpty()) {
-            Path directorioImagenes = Paths.get("src//main//resources//static//images//perfil");
+            Path directorioImagenes = Paths.get("src//main//resources//static//adjunto");
 
             String rutaAbsoluta = directorioImagenes.toFile().getAbsolutePath();
             log.info("Ruta absoluta " + rutaAbsoluta + " " + directorioImagenes.toString());
-            String nombreArchivo = Tools.newName(imagen.getOriginalFilename(), 1L);//agregar usuario dinamico
+            String nombreArchivo = Tools.newName(imagen.getOriginalFilename());//agregar usuario dinamico
             try {
                 byte[] byteImg = imagen.getBytes();
                 Path rutaCompleta = Paths.get(rutaAbsoluta + "/" + nombreArchivo);
@@ -231,9 +248,11 @@ public class ControladorNotificacion {
 
         }
 
-        log.info("Se crea gestion " + notificacion);
-        notificacionService.guardar(notificacion);
-        return "redirect:/especifica";
+        log.info("Se crea gestion " + notificacion);   
+        Notificacion newNoti=notificacionService.guardar(notificacion);
+        log.info(" --------- \n \n valor de save + " + newNoti);
+        model.addAttribute("notificacion", newNoti);
+        return "redirect:/verespecifica?idNotificacion="+newNoti.getIdNotificacion();
     }
 
     @GetMapping("/modificarespecifica")
@@ -249,6 +268,21 @@ public class ControladorNotificacion {
         model.addAttribute("notificacion", notificacion);
         log.info("se envia ticket " + notificacion.toString());
         return "modificarespecifica";
+    }
+    
+    @GetMapping("/verespecifica")
+    public String verEspecifica(Notificacion notificacion, Model model) {
+        notificacion = notificacionService.encontrarNotificacion(notificacion);
+        var estadosTicket = estadoTicketService.listarEstadoTicket();
+        var usuarios = usuarioService.listarUsuarios();
+        /*if (notificacion.getEstado().getIdEstado() == 1L) {
+            EstadoTicket estadoTicket = estadoTicketService.encontrarEstado(2L);
+            notificacion.setEstado(estadoTicket);
+        }*/
+        model.addAttribute("usuarios", usuarios);
+        model.addAttribute("notificacion", notificacion);
+        log.info("se envia ticket " + notificacion.toString());
+        return "verespecifica";
     }
 
     @GetMapping("/cerrarespecifica")
