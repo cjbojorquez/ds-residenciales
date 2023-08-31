@@ -51,7 +51,7 @@ public class SecurityConfig {// extends WebSecurityConfigurerAdapter{
         return http.build();
     }
 
-    @Bean
+    /*@Bean
     public InMemoryUserDetailsManager userDetailsService() {
         UserDetails user = User.withDefaultPasswordEncoder()
                 .username("user")
@@ -59,5 +59,5 @@ public class SecurityConfig {// extends WebSecurityConfigurerAdapter{
                 .roles("USER")
                 .build();
         return new InMemoryUserDetailsManager(user);
-    }
+    }*/
 }
