@@ -16,13 +16,16 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 
 import java.util.Date;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
@@ -104,16 +107,19 @@ public class ControladorResidencial {
         return "modificarres";
     }
 
-    @GetMapping("/eliminarres")
-    public String eliminar(Residencial residencial, Model model) {
-        residencial = residencialService.encontrarResidencial(residencial);
-        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");  
-        Date date = new Date();
-        residencial.setStatus(0L);
-        residencial.setModify_time(Tools.now());
-            residencial.setModify_user(1L);
-        residencialService.guardar(residencial);
-        return "redirect:/residencial";
+    @GetMapping("/getresidenciales")
+    @ResponseBody
+    public List<Residencial> getResidenciales(Residencial residencial, Model model) {
+        var residenciales = residencialService.listarRecidencialesActivas();
+        List <Residencial> rs= new ArrayList<>();
+        
+        for(Residencial res:residenciales){
+            Residencial newResidencial=new Residencial();
+            newResidencial.setIdResidential(res.getIdResidential());
+            newResidencial.setName(res.getName());
+            rs.add(newResidencial);
+        }
+        return rs;
     }
 
 }

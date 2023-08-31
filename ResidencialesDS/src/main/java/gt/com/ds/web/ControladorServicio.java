@@ -104,12 +104,5 @@ public class ControladorServicio {
         return "redirect:/servicio";
     }
 
-//    @GetMapping("/error")
-//    public String error(Model model,Errors errors) {
-//        log.info("los errores son:" + errors);
-//        model.addAttribute("errors", errors);
-//        
-//        return "servicio";
-//    }
 
 }

@@ -12,7 +12,7 @@
         <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
     </head>
     <body class="sb-nav-fixed">
-       <div th:if="${param.error}">
+        <div th:if="${param.error}">
             Invalid username and password.
         </div>
         <div th:if="${param.logout}">
@@ -22,7 +22,31 @@
             <div><label> User Name : <input type="text" name="username"/> </label></div>
             <div><label> Password: <input type="password" name="password"/> </label></div>
             <div><input type="submit" value="Sign In"/></div>
+            <select id="empresasSelect"></select>
         </form>
-    
-</body>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script>
+            $(document).ready(function () {
+                // Asegúrese de que el usuario esté autenticado antes de cargar los datos
+                // Aquí puede verificar si el usuario está autenticado o realizar una redirección a una página de inicio de sesión si es necesario.
+
+                // Luego, realice una llamada AJAX para obtener los datos de la base de datos
+                $.ajax({
+                    url: '/getresidenciales', // Ruta para obtener datos de empresas (debe ser manejada en su controlador Spring)
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function (data) {
+                        // Llene el select con los datos obtenidos
+                        var select = $('#empresasSelect');
+                        $.each(data, function (index, empresa) {
+                            select.append($('<option>').val(empresa.idResidential).text(empresa.name));
+                        });
+                    },
+                    error: function () {
+                        alert('Error al cargar las empresas.');
+                    },
+                });
+            });
+        </script>
+    </body>
 </html>

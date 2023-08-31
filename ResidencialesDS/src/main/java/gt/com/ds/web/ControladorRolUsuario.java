@@ -108,22 +108,5 @@ public class ControladorRolUsuario {
         return "redirect:/listaUsuarios";
     }
 
-//    @GetMapping("/agregarrolus")
-//    public String agregar(Usuario Usuario, Model model) {
-//        var residenciales = residencialService.listarRecidencialesActivas();
-//        log.info("Res desde user " + residenciales);
-//        model.addAttribute("residenciales", residenciales);
-//        return "modificarus";
-//    }
-//
-//    @GetMapping("/editarrous")
-//    public String editar(Usuario usuario, Model model) {
-//        usuario = usuarioService.encontrarUsuario(usuario);
-//        model.addAttribute("usuario", usuario);
-//        var residenciales = residencialService.listarRecidencialesActivas();
-//        log.info("Res desde user " + residenciales);
-//        model.addAttribute("residenciales", residenciales);
-//        return "modificarus";
-//    }
 
 }

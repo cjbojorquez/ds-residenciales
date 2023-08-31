@@ -15,4 +15,5 @@ public interface RolUsuarioDao extends JpaRepository<RolUsuario,Long>{
     @Query("SELECT r FROM RolUsuario r WHERE r.rolUsuario.usuario.idUsuario = :idUsuario")
     List<RolUsuario> buscarPorUsuario(@Param("idUsuario") Long idUsuario);
 
+    //RolUsuario findByUsername();
 }
