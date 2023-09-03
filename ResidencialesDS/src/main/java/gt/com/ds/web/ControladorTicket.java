@@ -42,7 +42,7 @@ public class ControladorTicket {
     public String Inicio(Model model) {
         // Tipo de ticket 1 = Gestion ; 2 = Anomalias
         Long tipoTicket = 1L;
-        var gestiones = ticketService.listarTicketsAbiertos(tipoTicket);
+        var gestiones = ticketService.listarTicketsAbiertos(tipoTicket,1L);//residencial dinamica
         model.addAttribute("gestiones", gestiones);
         return "gestion";
     }
@@ -114,7 +114,7 @@ public class ControladorTicket {
     public String InicioAnomalia(Model model) {
         // Tipo de ticket 1 = Gestion ; 2 = Anomalias
         Long tipoTicket = 2L;
-        var anomalias = ticketService.listarTicketsAbiertos(tipoTicket);
+        var anomalias = ticketService.listarTicketsAbiertos(tipoTicket,1L);//residencial
         model.addAttribute("anomalias", anomalias);
         return "anomalia";
     }
@@ -137,7 +137,7 @@ public class ControladorTicket {
             EstadoTicket estadoTicket = estadoTicketService.encontrarEstado(1L);
             ticket.setEstado(estadoTicket);
             ticket.setIdResidencial(1L);//cambiar a dinamico
-            ticket.setIdTipo(1L);
+            ticket.setIdTipo(2L);
             
             Usuario us = new Usuario();
             us.setIdUsuario(1L);

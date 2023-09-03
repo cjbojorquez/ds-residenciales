@@ -28,14 +28,16 @@ public class UserService implements UserDetailsService{
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         RolUsuario rolUsuario = rolUsuarioDao.findByUsername(username);
-        
+        log.info("usuario:"+username+" rol "+rolUsuario);
         if(rolUsuario == null){
+            log.info("Error no se encuentra el usuario: " + username);
             throw new UsernameNotFoundException(username);
         }
         
         var roles = new ArrayList<GrantedAuthority>();
         roles.add(new SimpleGrantedAuthority(rolUsuario.getRolUsuario().getRol().getNombre()));
-        return new User(rolUsuario.getRolUsuario().getUsuario().getNombreUsuario(),rolUsuario.getRolUsuario().getUsuario().getPassword(),roles);
+        String nombreUsuario=rolUsuario.getRolUsuario().getUsuario().getNombreUsuario();//+rolUsuario.getRolUsuario().getUsuario().getResidencial().getIdResidential();
+        return new User(nombreUsuario,rolUsuario.getRolUsuario().getUsuario().getPassword(),roles);
     }
     
     

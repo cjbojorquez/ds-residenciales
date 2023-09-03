@@ -28,7 +28,7 @@
 
                     <nav class="navbar navbar-light bg-light">
                         <form class="container-fluid justify-content-start">
-                            <a class="btn btn-outline-success me-2" role="button" th:href="@{/agregargestion}">Crear Anomalia        <i class="fa-solid fa-person-circle-plus"></i></a>
+                            <a class="btn btn-outline-success me-2" role="button" th:href="@{/agregaranomalia}">Crear Anomalia        <i class="fa-solid fa-person-circle-plus"></i></a>
                         </form>
                     </nav>
                     <div class="card mb-4">
@@ -38,7 +38,7 @@
                         </div>
 
                         <div class="card-body">
-                            <div th:if="${gestiones != null and !gestiones.empty}">
+                            <div th:if="${anomalias != null and !anomalias.empty}">
                                 <table id="datatablesSimple">
                                     <thead>
                                         <tr>
@@ -59,14 +59,14 @@
                                         </tr>
                                     </tfoot>
                                     <tbody>
-                                        <tr th:each="gestion : ${gestiones}">
+                                        <tr th:each="anomalia : ${anomalias}">
 
-                                            <td th:text="${gestion.asunto}"></td>
-                                            <td th:text="${gestion.usuario.nombre}">Mostrar Usuario</td>
+                                            <td th:text="${anomalia.asunto}"></td>
+                                            <td th:text="${anomalia.usuario.nombre}">Mostrar Usuario</td>
 
-                                            <td th:text="${gestion.estado.nombre}">Mostrar Estado</td>
+                                            <td th:text="${anomalia.estado.nombre}">Mostrar Estado</td>
                                             
-                                            <td><a class="btn btn-success" role="button"  th:href="@{/editargestion(idTicket=${gestion.idTicket})}">Leer     <i class="fa-regular fa-eye"></i></a></td>
+                                            <td><a class="btn btn-success" role="button"  th:href="@{/editaranomalia(idTicket=${anomalia.idTicket})}">Leer     <i class="fa-regular fa-eye"></i></a></td>
                                         </tr>
 
                                     </tbody>

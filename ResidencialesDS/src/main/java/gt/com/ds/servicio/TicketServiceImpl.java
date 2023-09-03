@@ -33,8 +33,8 @@ public class TicketServiceImpl implements TicketService{
     }
 
     @Override
-    public List<Ticket> listarTicketsAbiertos(Long idResidencial) {
-        return (List<Ticket>)ticketDao.buscarActivos(idResidencial);
+    public List<Ticket> listarTicketsAbiertos(Long tipoTicket,Long idResidencial) {
+        return (List<Ticket>)ticketDao.buscarPorTipo(tipoTicket,idResidencial);
     }
 
     @Override

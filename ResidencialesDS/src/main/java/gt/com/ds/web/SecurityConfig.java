@@ -4,11 +4,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.ExceptionHandlingConfigurer;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
@@ -22,7 +25,18 @@ import org.springframework.security.web.authentication.LoginUrlAuthenticationEnt
 @EnableWebSecurity
 public class SecurityConfig {// extends WebSecurityConfigurerAdapter{
 
+    //@Autowired
+    private UserDetailsService userDetailsService;
     
+    @Bean 
+    public BCryptPasswordEncoder passwordEncoder(){
+        return new BCryptPasswordEncoder();
+    }
+    
+    //@Autowired
+    public void configurerGlobal(AuthenticationManagerBuilder build) throws Exception{
+        build.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
+    }
 
     @Bean
     public AuthenticationEntryPoint authenticationEntryPoint() {
@@ -33,8 +47,12 @@ public class SecurityConfig {// extends WebSecurityConfigurerAdapter{
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests((requests) -> requests
-                .requestMatchers("/usuario", "/empleado").hasRole("ADMIN")
-                .requestMatchers("/", "/home").hasAnyRole("ADMIN", "USER")
+                .requestMatchers("/usuario", "/empleado","/modificarus","/modificaremp","/crearus","/crearemp","/listaUsuarios","/rol","/modificarrol","/asignarol"
+                ,"/residencial","/modificarres").hasRole("ADMIN")
+                .requestMatchers("/usuario", "/empleado","/modificarus","/modificaremp","/crearus","/crearemp","/anomalia","/crearnotificacion","/especifica","/general"
+                ,"/modificarespecifica","/modificargeneral","/modificargerstion","/modificarserv","/servicio","/verespecifica","/vergeneral","/anomalia","/crearanomalia","/modificaranomalia").hasAnyRole("ADMIN","EMPLOYEE")
+                .requestMatchers("/anomalia","/crearanomalia","/modificaranomalia","/modificargestion","/creargestion","/gestion").hasAnyRole("ADMIN", "USER")
+                .requestMatchers("/").hasAnyRole("ADMIN","EMPLOYEE","USER")
                 .requestMatchers("/css/**", "/js/**", "/images/**", "/adjunto/**").permitAll()
                 .requestMatchers("/getresidenciales").permitAll()
                 .anyRequest().authenticated()

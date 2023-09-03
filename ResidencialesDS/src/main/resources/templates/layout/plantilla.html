@@ -54,11 +54,11 @@
                     <div class="sb-sidenav-menu">
                         <div class="nav">
                             <div class="sb-sidenav-menu-heading">Cat&aacute;logos</div>
-                            <a class="nav-link" href="/residencial">
+                            <a sec:authorize="hasRole('ROLE_ADMIN')" class="nav-link" href="/residencial">
                                 <div class="sb-nav-link-icon"><i class="fas fa-city fa-xl"></i></div>
                                 <span class="text-success">Residenciales</span>
                             </a>
-                            <a class="nav-link" href="/usuario">
+                            <a sec:authorize="hasRole('ROLE_ADMIN')" class="nav-link" href="/usuario">
                                 <div class="sb-nav-link-icon"><i class="fas fa-users fa-xl"></i></div>
                                 <span class="text-success">Usuarios</span>
                             </a>
@@ -66,32 +66,32 @@
                                 <div class="sb-nav-link-icon"><i class="fas fa-building-user fa-xl"></i></div>
                                 <span class="text-success">Empleados</span>
                             </a>
-                            <a class="nav-link" href="/rol">
+                            <a sec:authorize="hasRole('ROLE_ADMIN')" class="nav-link" href="/rol">
                                 <div class="sb-nav-link-icon"><i class="fa-solid fa-users-gear fa-xl"></i></div>
                                 <span class="text-success">Rol</span>
                             </a>
-                            <a class="nav-link" href="/listaUsuarios">
+                            <a sec:authorize="hasRole('ROLE_ADMIN')" class="nav-link" href="/listaUsuarios">
                                 <div class="sb-nav-link-icon"><i class="fa-solid fa-clipboard-user fa-xl"></i></div>
                                 <span class="text-success">Asignar Rol</span>
                             </a>
-                            <a class="nav-link" href="/servicio">
+                            <a sec:authorize="hasRole('ROLE_EMPLOYEE')" class="nav-link" href="/servicio">
                                 <div class="sb-nav-link-icon"><i class="fa-solid fa-screwdriver-wrench fa-xl"></i></div>
                                 <span class="text-success">Servicios</span>
                             </a>
-                            <div class="sb-sidenav-menu-heading">Operaciones</div>
-                            <a class="nav-link" href="/gestion">
+                            <div  class="sb-sidenav-menu-heading">Operaciones</div>
+                            <a sec:authorize="hasRole('ROLE_USER')" class="nav-link" href="/gestion">
                                 <div class="sb-nav-link-icon"><i class="fa-solid fa-clipboard fa-xl"></i></div>
                                 <span class="text-success">Solicitar Gesti&oacute;n</span>
                             </a>
-                            <a class="nav-link" href="/anomalia">
+                            <a sec:authorize="hasAnyRole('ROLE_USER','ROLE_EMPLOYEE')" class="nav-link" href="/anomalia">
                                 <div class="sb-nav-link-icon"><i class="fa-solid fa-pen-clip fa-xl"></i></div>
                                 <span class="text-success">Ingresar Anomalia</span>
                             </a>
-                            <a class="nav-link" href="/general">
+                            <a sec:authorize="hasRole('ROLE_EMPLOYEE')" class="nav-link" href="/general">
                                 <div class="sb-nav-link-icon"><i class="fa-solid fa-envelopes-bulk fa-xl"></i></div>
                                 <span class="text-success">Notificaci&oacute;n General</span>
                             </a>
-                            <a class="nav-link" href="/especifica">
+                            <a sec:authorize="hasRole('ROLE_EMPLOYEE')" class="nav-link" href="/especifica">
                                 <div class="sb-nav-link-icon"><i class="fa-solid fa-envelope-open-text fa-xl"></i></div>
                                 <span class="text-success">Notificaci&oacute;n Espec&iacute;fica</span>
                             </a>

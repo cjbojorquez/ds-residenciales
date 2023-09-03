@@ -21,6 +21,8 @@ public interface UsuarioDao extends JpaRepository<Usuario,Long>{
     @Query("SELECT r FROM Usuario r WHERE r.nombreUsuario <> '' AND r.nombreUsuario IS NOT NULL")
     List<Usuario> listarUsuarios();
     
-    @Query("SELECT u FROM Usuario u WHERE u.nombreUsuario = :nombreUsuario and u.residencial.idResidential=:idResidencial")
-    Usuario buscarUsuario(@Param("nombreUsuario") String nombreUsuario,@Param("idResidencial") Long idResidencial);
+    //@Query("SELECT u FROM Usuario u WHERE u.nombreUsuario = :nombreUsuario and u.residencial.idResidential=:idResidencial")
+    //Usuario buscarUsuario(@Param("nombreUsuario") String nombreUsuario,@Param("idResidencial") Long idResidencial);
+    @Query("SELECT u FROM Usuario u WHERE u.nombreUsuario = :nombreUsuario")
+    Usuario buscarUsuario(@Param("nombreUsuario") String nombreUsuario);
 }

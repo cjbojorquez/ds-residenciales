@@ -74,4 +74,6 @@ public class Tools {
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         return encoder.encode(password);
     }
+    
+    
 }

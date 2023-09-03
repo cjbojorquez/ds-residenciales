@@ -15,7 +15,7 @@ public interface TicketService {
     
     public List<Ticket> ticketPorUsuario(Long idUsuario);
     
-    public List<Ticket> listarTicketsAbiertos(Long idResidencial);
+    public List<Ticket> listarTicketsAbiertos(Long tipoTicket,Long idResidencial);
     
     public void guardar(Ticket ticket);
     

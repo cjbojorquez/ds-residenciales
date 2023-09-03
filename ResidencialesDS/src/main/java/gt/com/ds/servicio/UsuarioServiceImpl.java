@@ -65,7 +65,8 @@ public class UsuarioServiceImpl implements UsuarioService{
     @Override
     public Usuario encontrarUsuario(String nombreUsuario, Long idResidencial) {
         
-        return usuarioDao.buscarUsuario(nombreUsuario, idResidencial);
+        //return usuarioDao.buscarUsuario(nombreUsuario, idResidencial);
+        return usuarioDao.buscarUsuario(nombreUsuario);
     }
     
 }

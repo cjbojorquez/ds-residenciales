@@ -49,7 +49,7 @@
                                             </div>
                                             <input class="form-control" id="status" type="hidden" value="1"/>
                                             <div class="form-floating mb-3">
-                                                <select class="form-control" aria-label="Cambiar estado" >
+                                                <select class="form-control" aria-label="Cambiar estado"  th:field="*{estado}">
                                                     <option th:each="estado : ${estadosTicket}" th:value="${estado.idEstado}" th:text="${estado.nombre}">
                                                     </option>
                                                 </select>
