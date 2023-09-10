@@ -49,12 +49,13 @@ public class SecurityConfig {// extends WebSecurityConfigurerAdapter{
                 .authorizeHttpRequests((requests) -> requests
                 .requestMatchers("/usuario", "/empleado","/modificarus","/modificaremp","/crearus","/crearemp","/listaUsuarios","/rol","/modificarrol","/asignarol"
                 ,"/residencial","/modificarres").hasRole("ADMIN")
-                .requestMatchers("/usuario", "/empleado","/modificarus","/modificaremp","/crearus","/crearemp","/anomalia","/crearnotificacion","/especifica","/general"
-                ,"/modificarespecifica","/modificargeneral","/modificargerstion","/modificarserv","/servicio","/verespecifica","/vergeneral","/anomalia","/crearanomalia","/modificaranomalia").hasAnyRole("ADMIN","EMPLOYEE")
+                .requestMatchers("/usuariores", "/empleado","/modificarusres","/modificaremp","/crearusres","/crearemp","/anomalia","/crearnotificacion","/especifica","/general"
+                ,"/modificarespecifica","/modificargeneral","/modificargerstion","/modificarserv","/servicio","/verespecifica","/vergeneral","/anomalia","/crearanomalia"
+                        ,"/modificaranomalia","/enviageneral").hasAnyRole("ADMIN","EMPLOYEE")
                 .requestMatchers("/anomalia","/crearanomalia","/modificaranomalia","/modificargestion","/creargestion","/gestion").hasAnyRole("ADMIN", "USER")
-                .requestMatchers("/").hasAnyRole("ADMIN","EMPLOYEE","USER")
-                .requestMatchers("/css/**", "/js/**", "/images/**", "/adjunto/**").permitAll()
-                .requestMatchers("/getresidenciales").permitAll()
+                .requestMatchers("/","/perfil","/userconfigauth").hasAnyRole("ADMIN","EMPLOYEE","USER")
+                .requestMatchers("/css/**", "/js/**", "/images/**", "/adjunto/**", "/assets/**").permitAll()
+                .requestMatchers("/getresidenciales","/registro","/userconfig","/guardarcontrasena","/recupera","/recuperacontrasena").permitAll()
                 .anyRequest().authenticated()
                 )
                 .formLogin((form) -> form

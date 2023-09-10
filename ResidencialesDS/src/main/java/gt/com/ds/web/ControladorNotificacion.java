@@ -28,6 +28,8 @@ import java.nio.file.Paths;
 import java.text.ParseException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.BindingResult;
 
 /**
@@ -54,7 +56,8 @@ public class ControladorNotificacion {
     public String InicioGeneral(Model model) {
         // Tipo de ticket 1 = Gestion ; 2 = Anomalias
         //  G = Notificacion General
-        var notificaciones = notificacionService.notificacionPorTipo(varNotiGeneral, 1L);//agregar residencial
+        Usuario usuarioLogueado=getUsuarioLogueado();
+        var notificaciones = notificacionService.notificacionPorTipo(varNotiGeneral, usuarioLogueado.getResidencial().getIdResidential());//agregar residencial
         log.info("estas son las notificaciones " + notificaciones.toString());
         model.addAttribute("notificaciones", notificaciones);
         return "general";
@@ -67,24 +70,24 @@ public class ControladorNotificacion {
     }
 
     @PostMapping("/guardargeneral")
-    public String guardarGeneral(@Valid Notificacion notificacion, @RequestParam("file") MultipartFile imagen
-            , @RequestParam("desdeFecha") String desdeFecha, @Valid @RequestParam("desdeHora") String desdeHora
-            , @RequestParam("hastaFecha") String hastaFecha, @Valid @RequestParam("hastaHora") String hastaHora
-            , BindingResult bindingResult
-            , Model model
-            ,  Errors errors) {
-        
+    public String guardarGeneral(@Valid Notificacion notificacion, @RequestParam("file") MultipartFile imagen,
+            @RequestParam("desdeFecha") String desdeFecha, @Valid @RequestParam("desdeHora") String desdeHora,
+            @RequestParam("hastaFecha") String hastaFecha, @Valid @RequestParam("hastaHora") String hastaHora,
+            BindingResult bindingResult,
+            Model model,
+            Errors errors) {
+
         log.info("\n\nNo hay errores " + errors.toString());
-        
+
         if (notificacion.getAsunto() == null || notificacion.getAsunto().trim().isEmpty()) {
             // Agrega un error personalizado al objeto BindingResult
             bindingResult.rejectValue("asunto", "error.asunto", "El campo asunto no puede estar vacío.");
         }
-        if (!Tools.cumplePatron("\\d{2}:\\d{2}",desdeHora)) {
+        if (!Tools.cumplePatron("\\d{2}:\\d{2}", desdeHora)) {
             // Agrega un error personalizado al objeto BindingResult
             bindingResult.rejectValue("desde", "error.desde", "Se debe colocar una hora valida.");
         }
-        if (!Tools.cumplePatron("\\d{2}:\\d{2}",hastaHora)) {
+        if (!Tools.cumplePatron("\\d{2}:\\d{2}", hastaHora)) {
             // Agrega un error personalizado al objeto BindingResult
             bindingResult.rejectValue("hasta", "error.hasta", "Se debe colocar una hora valida.");
         }
@@ -96,7 +99,7 @@ public class ControladorNotificacion {
         notificacion.setTipo(varNotiGeneral);
         notificacion.setDesde(Tools.getFecha(desdeFecha, desdeHora));
         notificacion.setHasta(Tools.getFecha(hastaFecha, hastaHora));
-                
+
         if (notificacion.getIdNotificacion() == null) {
 
             Usuario us = new Usuario();
@@ -108,8 +111,7 @@ public class ControladorNotificacion {
             notificacion.setUsuarioCrea(1L);
             notificacion.setIdResidencial(1L);
             notificacion.setEstado(estadoTicketService.encontrarEstado(1L));
-            
-            
+
         } else {
             notificacion.setFechaModifica(Tools.now());
             notificacion.setUsuarioModifica(1L);
@@ -134,9 +136,9 @@ public class ControladorNotificacion {
         }
 
         log.info("Se crea gestion " + notificacion);
-        Notificacion newNoti=notificacionService.guardar(notificacion);
+        Notificacion newNoti = notificacionService.guardar(notificacion);
         model.addAttribute("notificacion", newNoti);
-        return "redirect:/vergeneral?idNotificacion="+newNoti.getIdNotificacion();
+        return "redirect:/vergeneral?idNotificacion=" + newNoti.getIdNotificacion();
     }
 
     @GetMapping("/modificargeneral")
@@ -152,7 +154,7 @@ public class ControladorNotificacion {
         log.info("se envia ticket " + notificacion.toString());
         return "modificargeneral";
     }
-    
+
     @GetMapping("/vergeneral")
     public String verGeneral(Notificacion notificacion, Model model) {
         notificacion = notificacionService.encontrarNotificacion(notificacion);
@@ -165,6 +167,32 @@ public class ControladorNotificacion {
         model.addAttribute("notificacion", notificacion);
         log.info("se envia ticket " + notificacion.toString());
         return "vergeneral";
+    }
+
+    @GetMapping("/enviageneral")
+    public String enviaGeneral(Notificacion notificacion, Model model) {
+        Long usuarioActivo = 1L;
+        Usuario usuarioLogueado=getUsuarioLogueado();
+        notificacion = notificacionService.encontrarNotificacion(notificacion);
+        var usuarios = usuarioService.listarUsuariosResidencial(usuarioActivo, usuarioLogueado.getResidencial().getIdResidential());
+        String[] correos = new String[usuarios.size()];
+        
+        String mensaje=creaMensaje(notificacion);
+        String mails="";
+        int index = 0;
+        for (Usuario us : usuarios) {
+            correos[index] = us.getEmail();
+            mails=mails+"|"+us.getEmail();
+            index++;
+        }
+        model.addAttribute("notificacion", notificacion);
+        log.info("se envia ticket " + notificacion.toString());
+        notificacion.setEstado(estadoTicketService.encontrarEstado(3L));//cerrar notificacion
+        
+        log.info("Se envia correo con los siguientes datos: Mensaje="+mensaje+" destinatarios=" + mails + " notificacion="+notificacion);
+        var notificaciones = notificacionService.notificacionPorTipo(varNotiGeneral, usuarioLogueado.getResidencial().getIdResidential());//agregar residencial
+        model.addAttribute("notificaciones", notificaciones);
+        return "general";
     }
 
     @GetMapping("/cerrargeneral")
@@ -204,11 +232,13 @@ public class ControladorNotificacion {
     }
 
     @PostMapping("/guardarespecifica")
-    public String guardarEspecifica(@Valid Notificacion notificacion, @RequestParam("file") MultipartFile imagen,Model model, Errors errors) {
-        
+    public String guardarEspecifica(@Valid Notificacion notificacion, @RequestParam("file") MultipartFile imagen, Model model, Errors errors) {
+
         if (errors.hasErrors()) {
             return "modificarespecifica";
         }
+
+        Usuario usuarioLogueado = getUsuarioLogueado();
 
         notificacion.setTipo(varNotiEspecifica);
         log.info("antes de validar " + notificacion.getIdNotificacion());
@@ -221,8 +251,8 @@ public class ControladorNotificacion {
             notificacion.setUsuario(us);
 
             notificacion.setFechaCrea(Tools.now());
-            notificacion.setUsuarioCrea(1L);
-            notificacion.setIdResidencial(1L);
+            notificacion.setUsuarioCrea(usuarioLogueado.getIdUsuario());
+            notificacion.setIdResidencial(usuarioLogueado.getResidencial().getIdResidential());
             notificacion.setEstado(estadoTicketService.encontrarEstado(1L));
         } else {
             log.info("else de validar " + notificacion.getIdNotificacion());
@@ -248,11 +278,11 @@ public class ControladorNotificacion {
 
         }
 
-        log.info("Se crea gestion " + notificacion);   
-        Notificacion newNoti=notificacionService.guardar(notificacion);
+        log.info("Se crea gestion " + notificacion);
+        Notificacion newNoti = notificacionService.guardar(notificacion);
         log.info(" --------- \n \n valor de save + " + newNoti);
         model.addAttribute("notificacion", newNoti);
-        return "redirect:/verespecifica?idNotificacion="+newNoti.getIdNotificacion();
+        return "redirect:/verespecifica?idNotificacion=" + newNoti.getIdNotificacion();
     }
 
     @GetMapping("/modificarespecifica")
@@ -269,7 +299,7 @@ public class ControladorNotificacion {
         log.info("se envia ticket " + notificacion.toString());
         return "modificarespecifica";
     }
-    
+
     @GetMapping("/verespecifica")
     public String verEspecifica(Notificacion notificacion, Model model) {
         notificacion = notificacionService.encontrarNotificacion(notificacion);
@@ -295,4 +325,46 @@ public class ControladorNotificacion {
         return "redirect:/especifica";
     }
 
+    public Usuario getUsuarioLogueado() {
+        // Obtén el objeto Authentication del contexto de seguridad actual
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        log.info("solicita usuario logueado:" + authentication);
+        // Verifica si el usuario está autenticado
+        if (authentication != null && authentication.isAuthenticated()) {
+            String username = authentication.getName();
+            Usuario usuario = usuarioService.encontrarUsuario(username);
+            System.out.println("Nombre de usuario: " + username);
+            return usuario;
+        } else {
+            // El usuario no está autenticado
+            System.out.println("Usuario no autenticado");
+            return null;
+        }
+
+    }
+
+    public String creaMensaje(Notificacion notificacion) {
+
+        String mensaje="";
+        if (notificacion.getTipo().equals(varNotiEspecifica)) {
+
+        } else if (notificacion.getTipo().equals(varNotiGeneral)) {
+            mensaje = "<h3>" + notificacion.getAsunto() + "</h3><br>";
+            boolean isImage = notificacion.getAdjunto().matches(".*\\.(jpg|jpeg|png|gif|bmp|webp)$");
+            if (isImage) {
+                mensaje = mensaje + "<img src=\"cid:imagen\" alt=\"imagen\"><br>";
+            }
+            mensaje = mensaje + notificacion.getDescripcion() + "<br>";
+            mensaje = mensaje + "<table><tr>";
+            if (!notificacion.getDesde().toString().equals("")) {
+                mensaje = mensaje + "<td>Inicia:" + Tools.formateaFecha(notificacion.getDesde()) + "</td>";
+            }
+            if (!notificacion.getHasta().toString().equals("")) {
+                mensaje = mensaje + "<td>Finaliza:" + Tools.formateaFecha(notificacion.getHasta()) + "</td>";
+            }
+            mensaje = mensaje + "</tr></table>";
+        }
+
+        return mensaje;
+    }
 }

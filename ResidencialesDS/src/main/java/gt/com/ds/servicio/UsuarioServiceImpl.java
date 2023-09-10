@@ -25,8 +25,8 @@ public class UsuarioServiceImpl implements UsuarioService{
 
     @Override
     @Transactional
-    public void guardar(Usuario residencial) {
-        usuarioDao.save(residencial);
+    public Long guardar(Usuario residencial) {
+        return usuarioDao.save(residencial).getIdUsuario();
     }
 
     @Override
@@ -63,10 +63,20 @@ public class UsuarioServiceImpl implements UsuarioService{
     }
 
     @Override
-    public Usuario encontrarUsuario(String nombreUsuario, Long idResidencial) {
+    public Usuario encontrarUsuario(String nombreUsuario) {
         
         //return usuarioDao.buscarUsuario(nombreUsuario, idResidencial);
         return usuarioDao.buscarUsuario(nombreUsuario);
+    }
+
+    @Override
+    public List<Usuario> listarEmpleadosResidencial(Long estado, Long idResidencial) {
+        return (List<Usuario>)usuarioDao.buscaUsuariosResidencial(1L,estado,idResidencial);
+    }
+
+    @Override
+    public List<Usuario> listarUsuariosResidencial(Long estado, Long idResidencial) {
+        return (List<Usuario>)usuarioDao.buscaUsuariosResidencial(0L,estado,idResidencial);
     }
     
 }

@@ -6,6 +6,17 @@
   cursor: not-allowed;
 }
 
+.notification-dot {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background-color: red;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+
 .fc-unselectable {
   -webkit-user-select: none;
      -moz-user-select: none;

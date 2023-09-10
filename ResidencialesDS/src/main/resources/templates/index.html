@@ -12,19 +12,20 @@
         <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
     </head>
     <body class="sb-nav-fixed">
-        <header th:replace="layout/plantilla :: header"></header>
+        <th:block th:replace="~{layout/plantilla :: header}"></th:block>
         <!-- barra vertical -->
         <div id="layoutSidenav">
-            <div th:replace="layout/plantilla :: menu" id="layoutSidenav_nav"></div>  
+            <th:block th:replace="~{layout/plantilla :: menu}"></th:block>
 
             <div id="layoutSidenav_content">
                 <!-- contenido -->
                 <div class="container">
-                    <div class="text-center container-fluid">
-                        <img src="images/logo4.jpeg" class="img-fluid border rounded" alt="Logo" />
+                    <div class="d-flex justify-content-center align-items-center vh-100">
+                        <img src="images/logo4.jpeg" class="img-fluid border-0" alt="Logo" />
                     </div>
                 </div>
-                <footer th:replace="layout/plantilla :: footer"></footer>     
+                
+                <th:block th:replace="~{layout/plantilla :: footer}" class="py-4 bg-light"></th:block> 
             </div>
 
         </div>

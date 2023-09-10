@@ -41,7 +41,7 @@ public class ControladorResidencial {
     @Autowired
     private ResidencialService residencialService;
 
-    Tools tool = new Tools();
+    //Tools tool = new Tools();
     
     @GetMapping("/residencial")
     public String Inicio(Model model) {
@@ -76,7 +76,7 @@ public class ControladorResidencial {
             log.info("Ruta absoluta "+rutaAbsoluta + " " + directorioImagenes.toString());
             try {
                 byte[] byteImg = imagen.getBytes();
-                String nombreArchivo = tool.newName(imagen.getOriginalFilename()); 
+                String nombreArchivo = Tools.newName(imagen.getOriginalFilename()); 
                 Path rutaCompleta = Paths.get(rutaAbsoluta + "/" + nombreArchivo);
                 residencial.setLogo("images/logos/" + nombreArchivo);
                 log.info("Se intenta guardar imagen "+rutaCompleta.toString());

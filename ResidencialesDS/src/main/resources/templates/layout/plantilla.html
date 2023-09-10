@@ -17,18 +17,30 @@
             <nav class="sb-topnav navbar navbar-expand navbar-light" style="background-color: #e3f2fd;">
                 <!-- Navbar Brand  e3f2fd -->
 
-                <div class="card bd-light" style="width: 14rem; height:3rem; background-color: #e3f2fd;" >
+                <!--div class="card bd-light" style="width: 14rem; height:3rem; background-color: #e3f2fd;" >
                     <div class="card-body">
                         <h5 class="card-title " style="align-content: center"><p class="text-success"></p></h5>
                     </div>
-                </div>
+                </div-->
 
 
                 <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i class="fas fa-bars"></i></button>
 
                 <!-- Navbar-->
-                <ul class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0">
+                <ul class="d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0">
 
+                </ul>
+                <ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-bell fa-fw" th:if="1==1"></i>
+                            <i class="fa-solid fa-bell fa-shake" th:if="1==0"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="#!">Notificaciones</a></li>
+                            
+                            </ul>
+                    </li>
                 </ul>
                 <ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
                     <li class="nav-item dropdown">
@@ -36,6 +48,7 @@
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                             <li><a class="dropdown-item" href="#!"><b>Usuario</b> <span sec:authentication="name"></span></a></li>
                             <li><a class="dropdown-item" href="#!">Perfil</a></li>
+                            <li><a class="dropdown-item" th:href="@{/cambiapass}">Cambiar contrase&ntilde;a</a></li>
                             <li><a class="dropdown-item" href="#!"></a></li>
                             <li><hr class="dropdown-divider" /></li>
                             <li><form method="POST" th:action="@{/logout}"><a class="dropdown-item" onclick="this.parentNode.submit();" href="#!">Logout</a></form></li>
@@ -59,6 +72,10 @@
                                 <span class="text-success">Residenciales</span>
                             </a>
                             <a sec:authorize="hasRole('ROLE_ADMIN')" class="nav-link" href="/usuario">
+                                <div class="sb-nav-link-icon"><i class="fas fa-users fa-xl"></i></div>
+                                <span class="text-success">Usuarios</span>
+                            </a>
+                            <a sec:authorize="hasRole('ROLE_EMPLOYEE')" class="nav-link" href="/usuariores">
                                 <div class="sb-nav-link-icon"><i class="fas fa-users fa-xl"></i></div>
                                 <span class="text-success">Usuarios</span>
                             </a>

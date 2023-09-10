@@ -329,11 +329,11 @@ INSERT INTO residential (name,address,phone,email,nit,logo,status,create_time,cr
 
 INSERT INTO `user` (name,username,password,email,phone,code,address,`position`,photo,employee,status,create_time,create_user,modify_time,modify_user,idresidential) VALUES
 	 ('Cesar Joel Bojorquez','usuario1','$2a$10$B2CgcKhdQ3SDevqKqNgc7eNa3.d8J.rfys5IOgqFbRact26jb/vk2','cesar970@gmail.com','','','gau','','',0,1,NOW(),1,NULL,NULL,1),
-	 ('Juan ','usuario2','$2a$10$B2CgcKhdQ3SDevqKqNgc7eNa3.d8J.rfys5IOgqFbRact26jb/vk2','cesar970@gmail.com','30391123','','villa nueva','Jardinero','',0,1,NOW(),1,NULL,NULL,1),
+	 ('Juan ','usuario2','$2a$10$B2CgcKhdQ3SDevqKqNgc7eNa3.d8J.rfys5IOgqFbRact26jb/vk2','cesar970@gmail.com','30391123','','villa nueva','Jardinero','',0,1,NOW(),1,NULL,NULL,2),
 	 ('miguel','usuario3','$2a$10$B2CgcKhdQ3SDevqKqNgc7eNa3.d8J.rfys5IOgqFbRact26jb/vk2','cesar970@gmail.com','30391123',NULL,'villa nueva',NULL,'',0,1,NOW(),1,NULL,NULL,2);
 
 INSERT INTO `residencialesdb`.`role` (`idrole`,`name`, `status`, `create_time`, `create_user`) VALUES ('1','ROLE_ADMIN', '1', NOW(), '1');
-INSERT INTO `residencialesdb`.`role` (`idrole`, `name`, `status`, `create_time`, `create_user`) VALUES ('2', 'ROLE_EPMLOYEE', '1', NOW(), '1');
+INSERT INTO `residencialesdb`.`role` (`idrole`, `name`, `status`, `create_time`, `create_user`) VALUES ('2', 'ROLE_EMPLOYEE', '1', NOW(), '1');
 INSERT INTO `residencialesdb`.`role` (`idrole`, `name`, `status`, `create_time`, `create_user`) VALUES ('3', 'ROLE_USER', '1', NOW(), '1');
 
 INSERT INTO `residencialesdb`.`role_user` (`iduser`, `idrole`) VALUES ('1', '1');
