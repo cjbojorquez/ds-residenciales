@@ -13,10 +13,10 @@
     </head>
     <body class="sb-nav-fixed">
 
-        <header th:replace="layout/plantilla :: header"></header>
+        <th:block th:replace="~{layout/plantilla :: header}"></th:block>
         <!-- barra vertical -->
         <div id="layoutSidenav">
-            <div th:replace="layout/plantilla :: menu" id="layoutSidenav_nav"></div>  
+            <th:block th:replace="~{layout/plantilla :: menu}"></th:block>
 
             <div id="layoutSidenav_content">
                 <main>
@@ -84,7 +84,7 @@
                                 </div>
                             </div>
                             </main>
-                            <footer th:replace="layout/plantilla :: footer"></footer>     
+                            <th:block th:replace="~{layout/plantilla :: footer}"></th:block> 
                         </div>
 
                     </div>

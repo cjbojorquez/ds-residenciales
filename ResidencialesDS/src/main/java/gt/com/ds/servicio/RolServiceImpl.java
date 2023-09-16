@@ -38,11 +38,13 @@ public class RolServiceImpl implements RolService{
 
     
     @Override
+    @Transactional(readOnly = true)
     public List<Rol> listarRoles() {
         return (List<Rol>)rolDao.findAll();
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Rol encontrarRol(Rol rol) {
         return rolDao.findById(rol.getIdRol()).orElse(null);
     }

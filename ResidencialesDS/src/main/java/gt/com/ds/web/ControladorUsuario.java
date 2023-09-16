@@ -11,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import gt.com.ds.servicio.UsuarioService;
+import gt.com.ds.servicio.Varios;
 import gt.com.ds.util.EmailService;
 import gt.com.ds.util.Tools;
 import jakarta.validation.Valid;
@@ -52,8 +53,8 @@ public class ControladorUsuario {
     private Residencial residencial;
 
     @Autowired
-    private EmailService emailService;
-
+    private Varios varios;
+    
     @Value("${host.name}")
     String dominio;
 
@@ -82,7 +83,7 @@ public class ControladorUsuario {
 
     @GetMapping("/cambiapass")
     public String cambiaContrasena(Model model) {
-        Usuario usuarioLogueado = getUsuarioLogueado();
+        Usuario usuarioLogueado = varios.getUsuarioLogueado();
         System.out.println("Usuario cambia contraseña = ");
         Usuario us = usuarioService.encontrarUsuario(usuarioLogueado.getIdUsuario());
         System.out.println("us = " + us);
@@ -193,7 +194,7 @@ public class ControladorUsuario {
 
     @PostMapping("/guardarus")
     public String guardar(@Valid Usuario usuario, BindingResult bindingResult, @RequestParam("file") MultipartFile imagen, Model model, Errors errors) {
-        Usuario usuarioLogueado = getUsuarioLogueado();
+        Usuario usuarioLogueado = varios.getUsuarioLogueado();
         if (usuarioService.encontrarUsuario(usuario.getNombreUsuario()) != null && usuario.getIdUsuario() == null) {
             // Agrega un error personalizado al objeto BindingResult
             log.info("Existe usuario");
@@ -367,7 +368,7 @@ public class ControladorUsuario {
 
     @PostMapping("/guardarusres")
     public String guardarusres(@Valid Usuario usuario, BindingResult bindingResult, Model model, Errors errors) {
-        Usuario usuarioLogueado = getUsuarioLogueado();
+        Usuario usuarioLogueado = varios.getUsuarioLogueado();
         int nuevo = 0;
         if (usuarioService.encontrarUsuario(usuario.getNombreUsuario()) != null && usuario.getIdUsuario() == null) {
             // Agrega un error personalizado al objeto BindingResult
@@ -437,8 +438,7 @@ public class ControladorUsuario {
                 + "<p>Te enviamos este link para que puedas finalizar la configuracion de tu usuario:<br> "
                 + url + "</p>"
                 + "<p>Atte. " + usuario.getResidencial().getName() + "</p>";
-        String[] to = {usuario.getEmail()};
-        sendEmail(to, "Resgitro de usuario", mensaje, usuario.getResidencial().getEmail());
+        varios.sendEmail(usuario.getEmail(), "Resgitro de usuario", mensaje, usuario.getResidencial().getEmail());
         redirectAttributes.addFlashAttribute("mensajeExito", "La invitación se ha enviado exitosamente.");
 
         return "redirect:/usuariores";
@@ -457,8 +457,7 @@ public class ControladorUsuario {
                     + "<p>Te enviamos este link para que puedas recuperar tu contraseña: <br> "
                     + url + "</p>"
                     + "<p>Atte. " + usuario.getResidencial().getName() + "</p>";
-            String[] to = {usuario.getEmail()};
-            sendEmail(to, "Resgitro de usuario", mensaje, usuario.getResidencial().getEmail());
+            varios.sendEmail(usuario.getEmail(), "Resgitro de usuario", mensaje, usuario.getResidencial().getEmail());
             redirectAttributes.addFlashAttribute("mensajeExito", "Te enviamos un link a tu correo.");
         } else {
             redirectAttributes.addFlashAttribute("mensajeError", "¡Ocurrio un error intente mas tarde!");
@@ -485,24 +484,9 @@ public class ControladorUsuario {
         }
     }
 
-    public Usuario getUsuarioLogueado() {
-        // Obtén el objeto Authentication del contexto de seguridad actual
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        log.info("solicita usuario logueado:" + authentication);
-        // Verifica si el usuario está autenticado
-        if (authentication != null && authentication.isAuthenticated()) {
-            String username = authentication.getName();
-            Usuario usuario = usuarioService.encontrarUsuario(username);
-            System.out.println("Nombre de usuario: " + username);
-            return usuario;
-        } else {
-            // El usuario no está autenticado
-            System.out.println("Usuario no autenticado");
-            return null;
-        }
-    }
+    
 
-    public ResponseEntity<?> sendEmail(String[] to, String asunto, String mensaje, String origen) {
+    /*public ResponseEntity<?> sendEmail(String[] to, String asunto, String mensaje, String origen) {
         try {
 
             emailService.sendSimpleMessage(to, asunto, mensaje, origen);
@@ -511,7 +495,7 @@ public class ControladorUsuario {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al enviar el correo electrónico.");
         }
-    }
+    }*/
 
     public void logoff() {
         // Invalida la sesión actual

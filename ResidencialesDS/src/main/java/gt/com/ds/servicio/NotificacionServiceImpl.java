@@ -19,36 +19,43 @@ public class NotificacionServiceImpl implements NotificacionService{
     private NotificacionDao notificacionDao;
     
     @Override
+    @Transactional(readOnly = true)
     public List<Notificacion> notificacionPorTipo(String tipo, Long idResidencial) {
         return (List<Notificacion>)notificacionDao.buscarPorTipo(tipo,idResidencial);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<Notificacion> notificacionPorEstado(String tipo,Long idEstado, Long idResidencial) {
         return (List<Notificacion>)notificacionDao.buscarPorEstado(tipo,idEstado,idResidencial);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<Notificacion> notificacionPorUsuario(String tipo,Long idUsuario) {
         return (List<Notificacion>)notificacionDao.buscarPorUsuario(tipo,idUsuario);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<Notificacion> listarNotificacionesAbiertas(String tipo,Long idResidencial) {
         return (List<Notificacion>)notificacionDao.buscarActivos(tipo,idResidencial);
     }
 
     @Override
+    @Transactional
     public Notificacion guardar(Notificacion notificacion) {
         return notificacionDao.save(notificacion);
     }
 
     @Override
+    @Transactional
     public void eliminar(Notificacion notificacion) {
         notificacionDao.delete(notificacion);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Notificacion encontrarNotificacion(Notificacion notificacion) {
         return notificacionDao.findById(notificacion.getIdNotificacion()).orElse(null);
     }

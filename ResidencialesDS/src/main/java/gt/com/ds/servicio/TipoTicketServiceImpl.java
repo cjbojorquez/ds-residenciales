@@ -32,11 +32,13 @@ public class TipoTicketServiceImpl implements TipoTicketService{
 
     
     @Override
+    @Transactional(readOnly = true)
     public List<TipoTicket> listarTipoTicket() {
         return (List<TipoTicket>)tipoTicketDao.findAll();
     }
 
     @Override
+    @Transactional(readOnly = true)
     public TipoTicket encontrarRol(TipoTicket tipoTicket) {
         return tipoTicketDao.findById(tipoTicket.getIdTipo()).orElse(null);
     }

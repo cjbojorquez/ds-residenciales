@@ -48,6 +48,7 @@ public class ResidencialServiceImpl implements ResidencialService{
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Residencial encontrarPorId(Long id) {
         return residencialDao.buscarPorId(id);
     }

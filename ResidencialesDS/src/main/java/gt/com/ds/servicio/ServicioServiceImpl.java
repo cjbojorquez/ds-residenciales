@@ -38,11 +38,13 @@ public class ServicioServiceImpl implements ServicioService{
 
     
     @Override
+    @Transactional(readOnly = true)
     public List<Servicio> listarServicios() {
         return (List<Servicio>)servicioDao.findAll();
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Servicio encontrarServicio(Servicio servicio) {
         return servicioDao.findById(servicio.getIdServicio()).orElse(null);
     }

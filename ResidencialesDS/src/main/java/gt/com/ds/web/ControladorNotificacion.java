@@ -1,8 +1,10 @@
 package gt.com.ds.web;
 
+import gt.com.ds.domain.Buzon;
 import gt.com.ds.domain.EstadoTicket;
 import gt.com.ds.domain.Notificacion;
 import gt.com.ds.domain.Usuario;
+import gt.com.ds.servicio.BuzonService;
 import gt.com.ds.servicio.EstadoTicketService;
 import gt.com.ds.servicio.NotificacionService;
 import lombok.extern.slf4j.Slf4j;
@@ -20,14 +22,19 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import gt.com.ds.servicio.UsuarioService;
+import gt.com.ds.servicio.Varios;
 import gt.com.ds.util.Tools;
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.BindingResult;
@@ -47,7 +54,13 @@ public class ControladorNotificacion {
     private EstadoTicketService estadoTicketService;
 
     @Autowired
+    private BuzonService buzonService;
+
+    @Autowired
     private UsuarioService usuarioService;
+
+    @Autowired
+    private Varios varios;
 
     private String varNotiGeneral = "G";
     private String varNotiEspecifica = "E";
@@ -56,10 +69,11 @@ public class ControladorNotificacion {
     public String InicioGeneral(Model model) {
         // Tipo de ticket 1 = Gestion ; 2 = Anomalias
         //  G = Notificacion General
-        Usuario usuarioLogueado=getUsuarioLogueado();
+        Usuario usuarioLogueado = varios.getUsuarioLogueado();
         var notificaciones = notificacionService.notificacionPorTipo(varNotiGeneral, usuarioLogueado.getResidencial().getIdResidential());//agregar residencial
         log.info("estas son las notificaciones " + notificaciones.toString());
         model.addAttribute("notificaciones", notificaciones);
+
         return "general";
     }
 
@@ -76,7 +90,7 @@ public class ControladorNotificacion {
             BindingResult bindingResult,
             Model model,
             Errors errors) {
-
+        Usuario usuarioLogueado = varios.getUsuarioLogueado();
         log.info("\n\nNo hay errores " + errors.toString());
 
         if (notificacion.getAsunto() == null || notificacion.getAsunto().trim().isEmpty()) {
@@ -108,8 +122,8 @@ public class ControladorNotificacion {
             notificacion.setUsuario(us);
 
             notificacion.setFechaCrea(Tools.now());
-            notificacion.setUsuarioCrea(1L);
-            notificacion.setIdResidencial(1L);
+            notificacion.setUsuarioCrea(usuarioLogueado.getIdUsuario());
+            notificacion.setIdResidencial(usuarioLogueado.getResidencial().getIdResidential());
             notificacion.setEstado(estadoTicketService.encontrarEstado(1L));
 
         } else {
@@ -162,34 +176,54 @@ public class ControladorNotificacion {
         /*if (notificacion.getEstado().getIdEstado() == 1L) {
             EstadoTicket estadoTicket = estadoTicketService.encontrarEstado(2L);
             notificacion.setEstado(estadoTicket);
-        }*/
+        }*///                                                                                      una vez enviado cambiar el estado 
         model.addAttribute("estadosTicket", estadosTicket);
         model.addAttribute("notificacion", notificacion);
-        log.info("se envia ticket " + notificacion.toString());
+        //log.info("se envia ticket " + notificacion.toString());
         return "vergeneral";
     }
 
     @GetMapping("/enviageneral")
     public String enviaGeneral(Notificacion notificacion, Model model) {
-        Long usuarioActivo = 1L;
-        Usuario usuarioLogueado=getUsuarioLogueado();
+        Long estdoActivoUs = 1L;
+        Usuario usuarioLogueado = varios.getUsuarioLogueado();
         notificacion = notificacionService.encontrarNotificacion(notificacion);
-        var usuarios = usuarioService.listarUsuariosResidencial(usuarioActivo, usuarioLogueado.getResidencial().getIdResidential());
-        String[] correos = new String[usuarios.size()];
-        
-        String mensaje=creaMensaje(notificacion);
-        String mails="";
+        var usuarios = usuarioService.listarUsuariosResidencial(estdoActivoUs, usuarioLogueado.getResidencial().getIdResidential());
+
+        String nombreArchivo = notificacion.getAdjunto();
+        ClassPathResource resource = new ClassPathResource("static/" + nombreArchivo);
+        System.out.println("resource = " + resource);
+        File file = null;
+        try {
+
+            file = resource.getFile();
+        } catch (IOException ex) {
+
+            Logger.getLogger(ControladorNotificacion.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        var mensaje = creaMensaje(notificacion);
+        String mails = "";
         int index = 0;
         for (Usuario us : usuarios) {
-            correos[index] = us.getEmail();
-            mails=mails+"|"+us.getEmail();
-            index++;
+            if (!us.getNombreUsuario().equals(usuarioLogueado.getNombreUsuario())) {
+                Buzon buzon = new Buzon();
+                buzon.setAsunto(notificacion.getAsunto());
+                buzon.setDescripcion(mensaje.get(1));
+                buzon.setAdjunto(notificacion.getAdjunto());
+                buzon.setEstado(1L);
+                buzon.setUsuario(us);
+                buzon.setFechaCrea(Tools.now());
+                buzon.setUsuarioCrea(usuarioLogueado.getIdUsuario());
+                varios.sendEmail(us.getEmail(), notificacion.getAsunto(), mensaje.get(0), file, "no-replay@residencial.com");
+                //buzonService.guardar(buzon);
+            }
         }
         model.addAttribute("notificacion", notificacion);
-        log.info("se envia ticket " + notificacion.toString());
+        log.info("se envia ticket a: " + mails);
         notificacion.setEstado(estadoTicketService.encontrarEstado(3L));//cerrar notificacion
-        
-        log.info("Se envia correo con los siguientes datos: Mensaje="+mensaje+" destinatarios=" + mails + " notificacion="+notificacion);
+
+        log.info("Se envio correo con los siguientes datos: Mensaje=" + mensaje + " destinatarios=" + mails + " notificacion=" + notificacion);
+
         var notificaciones = notificacionService.notificacionPorTipo(varNotiGeneral, usuarioLogueado.getResidencial().getIdResidential());//agregar residencial
         model.addAttribute("notificaciones", notificaciones);
         return "general";
@@ -238,7 +272,7 @@ public class ControladorNotificacion {
             return "modificarespecifica";
         }
 
-        Usuario usuarioLogueado = getUsuarioLogueado();
+        Usuario usuarioLogueado = varios.getUsuarioLogueado();
 
         notificacion.setTipo(varNotiEspecifica);
         log.info("antes de validar " + notificacion.getIdNotificacion());
@@ -315,6 +349,56 @@ public class ControladorNotificacion {
         return "verespecifica";
     }
 
+    @GetMapping("/enviaespecifica")
+    public String enviaEspecifica(Notificacion notificacion, Model model) {
+        Long estadoActivoUs = 1L;
+        Usuario usuarioLogueado = varios.getUsuarioLogueado();
+        notificacion = notificacionService.encontrarNotificacion(notificacion);
+        var us = usuarioService.encontrarUsuario(notificacion.getUsuario());
+
+        String nombreArchivo = notificacion.getAdjunto();
+        ClassPathResource resource = null;
+        if (!"".equals(nombreArchivo)) {
+            resource = new ClassPathResource("static/" + nombreArchivo);
+        }
+        System.out.println("resource = " + resource);
+        File file = null;
+        if (resource != null) {
+            try {
+
+                file = resource.getFile();
+            } catch (IOException ex) {
+
+                Logger.getLogger(ControladorNotificacion.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+
+        var mensaje = creaMensaje(notificacion);
+        String mails = "";
+
+        Buzon buzon = new Buzon();
+        buzon.setAsunto(notificacion.getAsunto());
+        buzon.setDescripcion(mensaje.get(1));
+        buzon.setAdjunto(notificacion.getAdjunto());
+        buzon.setEstado(1L);
+        buzon.setUsuario(us);
+        buzon.setFechaCrea(Tools.now());
+        buzon.setUsuarioCrea(usuarioLogueado.getIdUsuario());
+        System.out.println("mensaje.get(0) = " + mensaje.get(0));
+        varios.sendEmail(us.getEmail(), notificacion.getAsunto(), mensaje.get(0), file, "no-replay@residencial.com");
+        buzonService.guardar(buzon);
+
+        model.addAttribute("notificacion", notificacion);
+        log.info("se envia ticket a: " + mails);
+        notificacion.setEstado(estadoTicketService.encontrarEstado(3L));//cerrar notificacion
+
+        log.info("Se envio correo con los siguientes datos: Mensaje=" + mensaje + " destinatarios=" + mails + " notificacion=" + notificacion);
+
+        var notificaciones = notificacionService.notificacionPorTipo(varNotiEspecifica, usuarioLogueado.getResidencial().getIdResidential());//agregar residencial
+        model.addAttribute("notificaciones", notificaciones);
+        return "especifica";
+    }
+
     @GetMapping("/cerrarespecifica")
     public String eliminarEspecifica(Notificacion notificacion, Model model) {
         //ticket = notificacionService.encontrarTicket(ticket);
@@ -325,46 +409,48 @@ public class ControladorNotificacion {
         return "redirect:/especifica";
     }
 
-    public Usuario getUsuarioLogueado() {
-        // Obtén el objeto Authentication del contexto de seguridad actual
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        log.info("solicita usuario logueado:" + authentication);
-        // Verifica si el usuario está autenticado
-        if (authentication != null && authentication.isAuthenticated()) {
-            String username = authentication.getName();
-            Usuario usuario = usuarioService.encontrarUsuario(username);
-            System.out.println("Nombre de usuario: " + username);
-            return usuario;
-        } else {
-            // El usuario no está autenticado
-            System.out.println("Usuario no autenticado");
-            return null;
-        }
+    public List<String> creaMensaje(Notificacion notificacion) {
 
-    }
-
-    public String creaMensaje(Notificacion notificacion) {
-
-        String mensaje="";
+        ArrayList mensaje = new ArrayList();
+        String msg = "";
+        String mensajeHTML = "";
         if (notificacion.getTipo().equals(varNotiEspecifica)) {
-
+            msg = "<h3>" + notificacion.getAsunto() + "</h3><br>";
+            msg = msg + "<table>";
+            if (notificacion.getAdjunto().length() > 0) {
+                boolean isImage = notificacion.getAdjunto().matches(".*\\.(jpg|jpeg|png|gif|bmp|webp)$");
+                if (isImage) {
+                    msg = msg + "<tr><td colspan=\"2\"><img src=\"$$$$&&\" alt=\"imagen\" style=\"max-width: 100%; max-height: 100%;\"></td></tr>";
+                }
+            }
+            msg = msg + "<tr><td colspan=\"2\">" + notificacion.getDescripcion() + "</td></tr>";
+            msg = msg + "<tr>";
+            
+            
+            msg = msg + "</tr></table>";
         } else if (notificacion.getTipo().equals(varNotiGeneral)) {
-            mensaje = "<h3>" + notificacion.getAsunto() + "</h3><br>";
-            boolean isImage = notificacion.getAdjunto().matches(".*\\.(jpg|jpeg|png|gif|bmp|webp)$");
-            if (isImage) {
-                mensaje = mensaje + "<img src=\"cid:imagen\" alt=\"imagen\"><br>";
+            msg = "<h3>" + notificacion.getAsunto() + "</h3><br>";
+            msg = msg + "<table>";
+            if (notificacion.getAdjunto().length() > 0) {
+                boolean isImage = notificacion.getAdjunto().matches(".*\\.(jpg|jpeg|png|gif|bmp|webp)$");
+                if (isImage) {
+                    msg = msg + "<tr><td colspan=\"2\"><img src=\"$$$$&&\" alt=\"imagen\" style=\"max-width: 100%; max-height: 100%;\"></td></tr>";
+                }
             }
-            mensaje = mensaje + notificacion.getDescripcion() + "<br>";
-            mensaje = mensaje + "<table><tr>";
-            if (!notificacion.getDesde().toString().equals("")) {
-                mensaje = mensaje + "<td>Inicia:" + Tools.formateaFecha(notificacion.getDesde()) + "</td>";
+            msg = msg + "<tr><td colspan=\"2\">" + notificacion.getDescripcion() + "</td></tr>";
+            msg = msg + "<tr>";
+            if (notificacion.getDesde() != null && !notificacion.getDesde().toString().equals("")) {
+                msg = msg + "<td>Inicia:" + Tools.formateaFecha(notificacion.getDesde()) + "</td>";
             }
-            if (!notificacion.getHasta().toString().equals("")) {
-                mensaje = mensaje + "<td>Finaliza:" + Tools.formateaFecha(notificacion.getHasta()) + "</td>";
+            if (notificacion.getHasta() != null && !notificacion.getHasta().toString().equals("")) {
+                msg = msg + "<td>Finaliza:" + Tools.formateaFecha(notificacion.getHasta()) + "</td>";
             }
-            mensaje = mensaje + "</tr></table>";
+            msg = msg + "</tr></table>";
         }
-
+        String mensajeMail = msg.replace("$$$$&&", "cid:imagen");
+        mensajeHTML = msg.replace("$$$$&&", notificacion.getAdjunto());
+        mensaje.add(mensajeMail);
+        mensaje.add(mensajeHTML);
         return mensaje;
     }
 }

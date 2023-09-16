@@ -22,4 +22,6 @@ public interface TicketService {
     public void eliminar(Ticket ticket);
     
     public Ticket encontrarTicket(Ticket ticket);
+    
+    public Ticket encontrarTicket(Long idTicket);
 }

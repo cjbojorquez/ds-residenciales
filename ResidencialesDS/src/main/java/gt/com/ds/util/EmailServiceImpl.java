@@ -28,50 +28,54 @@ public class EmailServiceImpl implements EmailService {
 
     @Override
     public void sendSimpleMessage(
-            String[] to, String subject, String text, String origin) {
+            String to, String subject, String text, String origin) {
         /*SimpleMailMessage message = new SimpleMailMessage(); 
         message.setFrom("cesar970@gmail.com");
         message.setTo(to); 
         message.setSubject(subject); 
         message.setText(text);
         mailSender.send(message);*/
+
+        System.out.println("Intento de envio de correo");
         MimeMessage mimeMessage = mailSender.createMimeMessage();
         try {
             MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true, StandardCharsets.UTF_8.name());
 
-            mimeMessageHelper.setFrom("no-replay@residencial.com");
+            mimeMessageHelper.setFrom(origin);
             mimeMessageHelper.setTo(to);
             mimeMessageHelper.setSubject(subject);
             mimeMessageHelper.setText(text, true);
-
+            System.out.println("correo enviado con descripcion : " + text);
             mailSender.send(mimeMessage);
         } catch (MessagingException ex) {
+            System.out.println("ex = " + ex);
             Logger.getLogger(EmailServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
     @Override
-    public void sendMessage(String to, String subject, String message, File file) {
+    public void sendMessage(String to, String subject, String message, File file, String origin) {
         MimeMessage mimeMessage = mailSender.createMimeMessage();
         try {
             MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true, StandardCharsets.UTF_8.name());
 
-            mimeMessageHelper.setFrom(emailUser);
+            mimeMessageHelper.setFrom(origin);
             mimeMessageHelper.setTo(to);
             mimeMessageHelper.setSubject(subject);
-            mimeMessageHelper.setText(message);
+            mimeMessageHelper.setText(message, true);
 
-            boolean isImage = file.getName().matches(".*\\.(jpg|jpeg|png|gif|bmp|webp)$");
+            if (file != null) {
+                boolean isImage = file.getName().matches(".*\\.(jpg|jpeg|png|gif|bmp|webp)$");
 
-            if (isImage) {
-                // Si es una imagen, incrusta la imagen en el mensaje
-                mimeMessageHelper.addInline("imagen", file);
-            } else {
-                // Si no es una imagen, adjunta el archivo
+                if (isImage) {
+                    // Si es una imagen, incrusta la imagen en el mensaje
+                    mimeMessageHelper.addInline("imagen", file);
+                } else {
+                    // Si no es una imagen, adjunta el archivo
+                    mimeMessageHelper.addAttachment(file.getName(), file);
+                }
                 mimeMessageHelper.addAttachment(file.getName(), file);
             }
-
-            mimeMessageHelper.addAttachment(file.getName(), file);
 
             mailSender.send(mimeMessage);
         } catch (MessagingException ex) {

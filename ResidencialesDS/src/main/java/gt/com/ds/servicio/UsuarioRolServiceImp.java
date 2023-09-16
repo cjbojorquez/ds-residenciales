@@ -7,6 +7,7 @@ import gt.com.ds.util.UsuarioRol;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  *
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Service;
 public class UsuarioRolServiceImp implements UsuarioRolService{
     
     @Override
+    @Transactional(readOnly = true)
     public List<UsuarioRol> combinarUsuarioConRol(List<Usuario> usuarios, List<RolUsuario> rolesUsuario){
         List<UsuarioRol> usuariosRoles = new ArrayList<>();
         

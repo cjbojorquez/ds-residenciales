@@ -9,82 +9,66 @@
         <title>DS-Residenciales</title>
         <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
         <link href="css/styles.css" rel="stylesheet" />
+        <link rel="stylesheet" th:href="@{/css/styles-ticket.css}">
         <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
     </head>
     <body class="sb-nav-fixed">
 
-        <header th:replace="layout/plantilla :: header"></header>
-        <!-- barra vertical -->
-        <div id="layoutSidenav">
-            <div th:replace="layout/plantilla :: menu" id="layoutSidenav_nav"></div>  
+    <th:block th:replace="~{layout/plantilla :: header}"></th:block>
+    <!-- barra vertical -->
+    <div id="layoutSidenav">
+        <th:block th:replace="~{layout/plantilla :: menu}"></th:block> 
 
-            <div id="layoutSidenav_content">
-                <main>
-                    <div class="container">
-                        <div class="row justify-content-center">
-                            <div class="col-lg-7">
-                                <div class="card shadow-lg border-0 rounded-lg mt-5">
-                                    
-                                    <div class="card-header">
-                                        <div class="row">
-                                            <a class="btn-close" th:href="@{/gestion}"></a>
-                                        </div>
-                                        <div class="row">
-                                            <h3 class="text-center font-weight-light my-4">Gestion</h3>
-                                        </div>
-                                    </div>
-
-                                    <div class="card-body">
-                                        <form class="was-validated" th:action="@{guardargestion}" method="post" th:object="${ticket}">
-                                            <input class="form-control" id="id" type="hidden" th:field="*{idTicket}"/>
-                                            <div class="form-floating mb-3">
-                                                <input class="form-control is-valid" id="nombre" type="text" placeholder="Ingrese el nombre" th:field="*{asunto}" disabled/>
-                                                <label for="inputFirstName">Asunto</label>
-                                                <span th:if="${#fields.hasErrors('asunto')}" th:errors="*{nombre}">Error en asunto</span>
-                                            </div>
-                                            <div class="form-floating mb-3">
-                                                <input class="form-control is-valid" id="nombre" type="text" placeholder="Ingrese el Descripcion" th:field="*{descripcion}" disabled/>
-                                                <label for="inputFirstName">Descripcion</label>
-                                                <span th:if="${#fields.hasErrors('descripcion')}" th:errors="*{nombre}">Error en asunto</span>
-                                            </div>
-                                            <input class="form-control" id="status" type="hidden" value="1"/>
-                                            <div class="form-floating mb-3">
-                                                <select class="form-control" aria-label="Cambiar estado"  th:field="*{estado}">
-                                                    <option th:each="estado : ${estadosTicket}" th:value="${estado.idEstado}" th:text="${estado.nombre}">
-                                                    </option>
-                                                </select>
-                                                <input class="form-control" id="asunto" type="hidden" th:field="*{asunto}"/>
-                                                <input class="form-control" id="descripcion" type="hidden" th:field="*{descripcion}"/>
-                                                <input class="form-control" id="residencial" type="hidden" th:field="*{idResidencial}"/>
-                                                <input class="form-control" id="tipo" type="hidden" th:field="*{idTipo}"/>
-                                                <input class="form-control" id="usuario" type="hidden" th:field="*{usuario}"/>
-                                                <div class="mt-4 mb-0">
-                                                    <div class="d-grid"><input type="submit" class="btn btn-primary" value="Guardar"></div>
-                                                </div>
-
-
-                                        </form>
-                                    </div>
-                                    <div class="card-footer text-center py-3">
-                                        <div class="small"></div>
-                                    </div>
-                                </div>
-                            </div>
+        <div id="layoutSidenav_content">
+            <main>
+                <div th:object="${ticket}"></div>
+                <div th:object="${comentarios}"></div>
+                <div class="container">
+                    <div class="card  bg-light mb-3" style="max-width: 100%;">
+                        <div class="card-header" th:text='Gestion'></div>
+                        <div class="card-body">
+                            <h5 class="card-title" th:text="${ticket.asunto}"></h5>
+                            <p class="card-text" th:text="${ticket.descripcion}"></p>
                         </div>
                     </div>
-                </main>
-                <footer th:replace="layout/plantilla :: footer"></footer>     
-            </div>
+                    <div class="row justify-content-center">
+                        <div class="col-lg-7">
 
+                            <div class="chat">
+                                
+                                <div th:if="${comentarios != null and !comentarios.empty}">
+                                    <table>
+                                        <tr th:each="comment : ${comentarios}">
+                                        <div class="conversacion">
+                                            <div th:class="${comment.usuario.nombreUsuario == #authentication.principal.getUsername() ? 'mensaje pregunta' : 'mensaje respuesta'}" th:text="${comment.comentario}"></div>
+                                        </div>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="caja-mensaje">
+                                <form th:action="@{guardarcomentario}" method="post" >
+                                    <input type="text" id="txtcomentario" name="txtcomentario" placeholder="Escribe acá">
+                                    <input type="hidden" id="idticket" name="idticket" th:value="${ticket.idTicket}"/>
+                                    <button type="submit">Enviar</button>
+                                </form>
+                            </div>
+                            
+                        </div>
+                    </div>
+            </main>
+            <th:block th:replace="~{layout/plantilla :: footer}"></th:block>    
         </div>
 
+    </div>
 
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
-        <script src="js/scripts.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
-        <script src="assets/demo/chart-area-demo.js"></script>
-        <script src="assets/demo/chart-bar-demo.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>
-        <script src="js/datatables-simple-demo.js"></script>
-    </body>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+    <script src="js/scripts.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
+    <script src="assets/demo/chart-area-demo.js"></script>
+    <script src="assets/demo/chart-bar-demo.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>
+    <script src="js/datatables-simple-demo.js"></script>
+</body>
 </html>

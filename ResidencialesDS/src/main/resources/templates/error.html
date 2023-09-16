@@ -12,11 +12,10 @@
         <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
     </head>
     <body class="sb-nav-fixed">
-        <header th:replace="layout/plantilla :: header"></header>
+        <th:block th:replace="~{layout/plantilla :: header}"></th:block>
         <!-- barra vertical -->
         <div id="layoutSidenav">
-            <div th:replace="layout/plantilla :: menu" id="layoutSidenav_nav"></div>  
-            
+            <th:block th:replace="~{layout/plantilla :: menu}"></th:block>
             <div id="layoutSidenav_content">
                 <!-- contenido -->
                 <br><br><br>
@@ -24,7 +23,7 @@
                     <h5>Se gener&oacute; un error inesperado, p&oacute;ngase en contacto con soporte.</h5>
                     <h5 th:text="${errors}"></h5>
                 </div>
-            <footer th:replace="layout/plantilla :: footer"></footer>     
+            <th:block th:replace="~{layout/plantilla :: footer}"></th:block>    
             </div>
             
         </div>

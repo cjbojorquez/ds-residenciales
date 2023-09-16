@@ -28,7 +28,7 @@
 
                     <nav class="navbar navbar-light bg-light">
                         <form class="container-fluid justify-content-start">
-                            <a class="btn btn-outline-success me-2" role="button" th:href="@{/agregargestion}">Crear Gestion        <i class="fa-solid fa-person-circle-plus"></i></a>
+                            <a sec:authorize="hasRole('ROLE_USER')"  class="btn btn-outline-success me-2" role="button" th:href="@{/agregargestion}">Crear Gestion        <i class="fa-solid fa-person-circle-plus"></i></a>
                         </form>
                     </nav>
                     <div class="card mb-4">

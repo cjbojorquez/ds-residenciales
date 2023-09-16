@@ -9,7 +9,8 @@
         <meta name="author" content="" />
         <title>DS-Residenciales</title>
         <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
-        <link href="css/styles.css" rel="stylesheet" />
+        <!--link th:href="@{/css/styles.css}" rel="stylesheet" /-->
+        
         <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
     </head>
     <body>
@@ -37,7 +38,7 @@
                             <i class="fa-solid fa-bell fa-shake" th:if="1==0"></i>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                            <li><a class="dropdown-item" href="#!">Notificaciones</a></li>
+                            <li><a class="dropdown-item" href="#!" th:text="${nuevos}">Notificaciones</a></li>
                             
                             </ul>
                     </li>
@@ -62,7 +63,7 @@
             <div id="layoutSidenav_nav">
                 <nav class="sb-sidenav accordion sb-sidenav-light" id="sidenavAccordion" style="background-color: #e3f2fd;">
                     <div>
-                        <a th:href="@{/}"><img src="images/logo4.jpeg" class="img-thumbnail" width="223" height="height" alt="alt"/></a>
+                        <a th:href="@{/}"><img th:src="@{/images/logo4.jpeg}" class="img-thumbnail" width="223" height="height" alt="alt"/></a>
                     </div>
                     <div class="sb-sidenav-menu">
                         <div class="nav">
@@ -100,6 +101,10 @@
                                 <div class="sb-nav-link-icon"><i class="fa-solid fa-clipboard fa-xl"></i></div>
                                 <span class="text-success">Solicitar Gesti&oacute;n</span>
                             </a>
+                            <a sec:authorize="hasRole('ROLE_EMPLOYEE')" class="nav-link" href="/gestion">
+                                <div class="sb-nav-link-icon"><i class="fa-solid fa-clipboard fa-xl"></i></div>
+                                <span class="text-success">Gesti&oacute;nes</span>
+                            </a>
                             <a sec:authorize="hasAnyRole('ROLE_USER','ROLE_EMPLOYEE')" class="nav-link" href="/anomalia">
                                 <div class="sb-nav-link-icon"><i class="fa-solid fa-pen-clip fa-xl"></i></div>
                                 <span class="text-success">Ingresar Anomalia</span>
@@ -111,6 +116,10 @@
                             <a sec:authorize="hasRole('ROLE_EMPLOYEE')" class="nav-link" href="/especifica">
                                 <div class="sb-nav-link-icon"><i class="fa-solid fa-envelope-open-text fa-xl"></i></div>
                                 <span class="text-success">Notificaci&oacute;n Espec&iacute;fica</span>
+                            </a>
+                            <a sec:authorize="hasRole('ROLE_USER')" class="nav-link" href="/buzon">
+                                <div class="sb-nav-link-icon"><i class="fa-solid fa-envelope fa-xl"></i></div>
+                                <span class="text-success">Buzon</span>
                             </a>
                         </div>
                     </div>

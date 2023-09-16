@@ -1,8 +1,10 @@
 package gt.com.ds.web;
 
+import gt.com.ds.domain.Comentario;
 import gt.com.ds.domain.EstadoTicket;
 import gt.com.ds.domain.Ticket;
 import gt.com.ds.domain.Usuario;
+import gt.com.ds.servicio.ComentarioService;
 import gt.com.ds.servicio.EstadoTicketService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import gt.com.ds.servicio.TicketService;
 import gt.com.ds.servicio.UsuarioService;
+import gt.com.ds.servicio.Varios;
 
 /**
  *
@@ -33,10 +36,16 @@ public class ControladorTicket {
     private TicketService ticketService;
     
     @Autowired
+    private ComentarioService comentarioService;
+    
+    @Autowired
     private EstadoTicketService estadoTicketService;
     
     @Autowired
     private UsuarioService usuarioService;
+    
+    @Autowired
+    private Varios varios;
 
     @GetMapping("/gestion")
     public String Inicio(Model model) {
@@ -86,7 +95,9 @@ public class ControladorTicket {
             EstadoTicket estadoTicket = estadoTicketService.encontrarEstado(2L);
             ticket.setEstado(estadoTicket);
         }
-         model.addAttribute("estadosTicket", estadosTicket);
+        var comentarios = comentarioService.comentarioPorTicket(ticket.getIdTicket());
+        model.addAttribute("comentarios", comentarios);
+        model.addAttribute("estadosTicket", estadosTicket);
         model.addAttribute("ticket", ticket);
         log.info("se envia ticket " + ticket.toString());
         return "modificargestion";
@@ -158,7 +169,7 @@ public class ControladorTicket {
             EstadoTicket estadoTicket = estadoTicketService.encontrarEstado(2L);
             ticket.setEstado(estadoTicket);
         }
-         model.addAttribute("estadosTicket", estadosTicket);
+        model.addAttribute("estadosTicket", estadosTicket);
         model.addAttribute("ticket", ticket);
         log.info("se envia ticket " + ticket.toString());
         return "modificaranomalia";
@@ -174,6 +185,36 @@ public class ControladorTicket {
         //log.info("Eliminando gestion " + rol);
         ticketService.guardar(ticket);
         return "redirect:/anomalia";
+    }
+    
+    /**
+     * COMENTARIOS
+     */
+    
+    @PostMapping("/guardarcomentario")
+    public String guardarComentario(Comentario comentario, @RequestParam("txtcomentario") String txtComentario , @RequestParam("idticket") String idTicket, Model model ,Errors errors) {
+        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+        Usuario usuarioLogueado = varios.getUsuarioLogueado();
+        System.out.println("usuarioLogueado = " + usuarioLogueado);
+        System.out.println("txtComentario = " + txtComentario);
+        System.out.println("idTicket = " + idTicket);
+        Ticket tk = ticketService.encontrarTicket(Long.parseLong(idTicket));
+        Date date = new Date();
+        if (errors.hasErrors()) {
+            return "modificargestion";
+        }
+        comentario.setTicket(tk);
+        comentario.setFecha(date);
+        comentario.setUsuario(usuarioLogueado);
+        comentario.setComentario(txtComentario);
+        comentario.setAdjunto("");
+        log.info("Se crea comentario " + comentario);
+        comentarioService.guardar(comentario);
+        
+        var comentarios = comentarioService.comentarioPorTicket(tk.getIdTicket());
+        model.addAttribute("comentarios", comentarios);
+        model.addAttribute("ticket", tk);
+        return "redirect:/editargestion?idTicket=" + idTicket;
     }
 
 }

@@ -32,16 +32,19 @@ public class EstadoTicketServiceImpl implements EstadoTicketService{
 
     
     @Override
+    @Transactional(readOnly = true)
     public List<EstadoTicket> listarEstadoTicket() {
         return (List<EstadoTicket>)estadoTicketDao.findAll();
     }
 
     @Override
+    @Transactional(readOnly = true)
     public EstadoTicket encontrarEstado(EstadoTicket estadoTicket) {
         return estadoTicketDao.findById(estadoTicket.getIdEstado()).orElse(null);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public EstadoTicket encontrarEstado(Long idEstado) {
         return estadoTicketDao.findById(idEstado).orElse(null);
     }

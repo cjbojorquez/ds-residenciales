@@ -33,16 +33,19 @@ public class RolUsuarioServiceImpl implements RolUsuarioService {
 
    
     @Override
+    @Transactional(readOnly = true)
     public List<RolUsuario> encontrarRoles(RolUsuario rolUsuario) {
         return rolUsuarioDao.buscarPorUsuario(rolUsuario.getRolUsuario().getUsuario().getIdUsuario());
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<RolUsuario> encontrarRoles(Long idUsuario) {
         return rolUsuarioDao.buscarPorUsuario(idUsuario);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<RolUsuario> listarRoles() {
         return rolUsuarioDao.findAll();
     }

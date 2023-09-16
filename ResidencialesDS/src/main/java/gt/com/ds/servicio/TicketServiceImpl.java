@@ -18,38 +18,50 @@ public class TicketServiceImpl implements TicketService{
     private TicketDao ticketDao;
     
     @Override
+    @Transactional(readOnly = true)
     public List<Ticket> ticketsPorTipo(Long idTipo, Long idResidencial) {
         return (List<Ticket>)ticketDao.buscarPorTipo(idTipo,idResidencial);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<Ticket> ticketPorEstado(Long idEstado, Long idResidencial) {
         return (List<Ticket>)ticketDao.buscarPorEstado(idEstado,idResidencial);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<Ticket> ticketPorUsuario(Long idUsuario) {
         return (List<Ticket>)ticketDao.buscarPorUsuario(idUsuario);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<Ticket> listarTicketsAbiertos(Long tipoTicket,Long idResidencial) {
         return (List<Ticket>)ticketDao.buscarPorTipo(tipoTicket,idResidencial);
     }
 
     @Override
+    @Transactional
     public void guardar(Ticket ticket) {
         ticketDao.save(ticket);
     }
 
     @Override
+    @Transactional
     public void eliminar(Ticket ticket) {
         ticketDao.delete(ticket);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Ticket encontrarTicket(Ticket ticket) {
         return ticketDao.findById(ticket.getIdTicket()).orElse(null);
+    }
+
+    @Override
+    public Ticket encontrarTicket(Long idTicket) {
+        return ticketDao.findById(idTicket).orElse(null);
     }
 
     
