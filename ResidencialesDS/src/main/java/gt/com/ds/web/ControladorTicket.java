@@ -23,6 +23,16 @@ import org.springframework.web.multipart.MultipartFile;
 import gt.com.ds.servicio.TicketService;
 import gt.com.ds.servicio.UsuarioService;
 import gt.com.ds.servicio.Varios;
+import gt.com.ds.util.Tools;
+import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.springframework.web.bind.annotation.PathVariable;
 
 /**
  *
@@ -34,16 +44,16 @@ public class ControladorTicket {
 
     @Autowired
     private TicketService ticketService;
-    
+
     @Autowired
     private ComentarioService comentarioService;
-    
+
     @Autowired
     private EstadoTicketService estadoTicketService;
-    
+
     @Autowired
     private UsuarioService usuarioService;
-    
+
     @Autowired
     private Varios varios;
 
@@ -51,7 +61,7 @@ public class ControladorTicket {
     public String Inicio(Model model) {
         // Tipo de ticket 1 = Gestion ; 2 = Anomalias
         Long tipoTicket = 1L;
-        var gestiones = ticketService.listarTicketsAbiertos(tipoTicket,1L);//residencial dinamica
+        var gestiones = ticketService.listarTicketsAbiertos(tipoTicket, 1L);//residencial dinamica
         model.addAttribute("gestiones", gestiones);
         return "gestion";
     }
@@ -75,10 +85,10 @@ public class ControladorTicket {
             ticket.setEstado(estadoTicket);
             ticket.setIdResidencial(1L);//cambiar a dinamico
             ticket.setIdTipo(1L);
-            
+
             Usuario us = new Usuario();
             us.setIdUsuario(1L);
-            us=usuarioService.encontrarUsuario(us);
+            us = usuarioService.encontrarUsuario(us);
             ticket.setUsuario(us);
         }
 
@@ -91,7 +101,7 @@ public class ControladorTicket {
     public String editar(Ticket ticket, Model model) {
         ticket = ticketService.encontrarTicket(ticket);
         var estadosTicket = estadoTicketService.listarEstadoTicket();
-        if (ticket.getEstado().getIdEstado()==1L) {
+        if (ticket.getEstado().getIdEstado() == 1L) {
             EstadoTicket estadoTicket = estadoTicketService.encontrarEstado(2L);
             ticket.setEstado(estadoTicket);
         }
@@ -115,17 +125,18 @@ public class ControladorTicket {
         return "redirect:/gestion";
     }
 
-    /***************
-     * 
-     *           ANOMALIAS
-     * 
-     **************/
-    
+    /**
+     * *************
+     *
+     * ANOMALIAS
+     *
+     *************
+     */
     @GetMapping("/anomalia")
     public String InicioAnomalia(Model model) {
         // Tipo de ticket 1 = Gestion ; 2 = Anomalias
         Long tipoTicket = 2L;
-        var anomalias = ticketService.listarTicketsAbiertos(tipoTicket,1L);//residencial
+        var anomalias = ticketService.listarTicketsAbiertos(tipoTicket, 1L);//residencial
         model.addAttribute("anomalias", anomalias);
         return "anomalia";
     }
@@ -149,10 +160,10 @@ public class ControladorTicket {
             ticket.setEstado(estadoTicket);
             ticket.setIdResidencial(1L);//cambiar a dinamico
             ticket.setIdTipo(2L);
-            
+
             Usuario us = new Usuario();
             us.setIdUsuario(1L);
-            us=usuarioService.encontrarUsuario(us);
+            us = usuarioService.encontrarUsuario(us);
             ticket.setUsuario(us);
         }
 
@@ -165,7 +176,7 @@ public class ControladorTicket {
     public String editarAnomalia(Ticket ticket, Model model) {
         ticket = ticketService.encontrarTicket(ticket);
         var estadosTicket = estadoTicketService.listarEstadoTicket();
-        if (ticket.getEstado().getIdEstado()==1L) {
+        if (ticket.getEstado().getIdEstado() == 1L) {
             EstadoTicket estadoTicket = estadoTicketService.encontrarEstado(2L);
             ticket.setEstado(estadoTicket);
         }
@@ -186,35 +197,69 @@ public class ControladorTicket {
         ticketService.guardar(ticket);
         return "redirect:/anomalia";
     }
-    
+
     /**
      * COMENTARIOS
      */
-    
     @PostMapping("/guardarcomentario")
-    public String guardarComentario(Comentario comentario, @RequestParam("txtcomentario") String txtComentario , @RequestParam("idticket") String idTicket, Model model ,Errors errors) {
+    public String guardarComentario(Comentario comentario, @RequestParam("txtcomentario") String txtComentario, @RequestParam("idticket") String idTicket, Model model, @RequestParam("file") MultipartFile imagen, Errors errors) {
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
         Usuario usuarioLogueado = varios.getUsuarioLogueado();
         System.out.println("usuarioLogueado = " + usuarioLogueado);
         System.out.println("txtComentario = " + txtComentario);
         System.out.println("idTicket = " + idTicket);
+        System.out.println("imagen = " + imagen);
         Ticket tk = ticketService.encontrarTicket(Long.parseLong(idTicket));
         Date date = new Date();
         if (errors.hasErrors()) {
             return "modificargestion";
         }
-        comentario.setTicket(tk);
-        comentario.setFecha(date);
-        comentario.setUsuario(usuarioLogueado);
-        comentario.setComentario(txtComentario);
-        comentario.setAdjunto("");
-        log.info("Se crea comentario " + comentario);
-        comentarioService.guardar(comentario);
-        
+        if (txtComentario != "" && !imagen.isEmpty()) {
+            comentario.setTicket(tk);
+            comentario.setFecha(date);
+            comentario.setUsuario(usuarioLogueado);
+            comentario.setComentario(txtComentario);
+            if (!imagen.isEmpty()) {
+                Path directorioImagenes = Paths.get("src//main//resources//static//adjunto");
+
+                String rutaAbsoluta = directorioImagenes.toFile().getAbsolutePath();
+                log.info("Ruta absoluta " + rutaAbsoluta + " " + directorioImagenes.toString());
+                try {
+                    byte[] byteImg = imagen.getBytes();
+                    String nombreArchivo = Tools.newName(imagen.getOriginalFilename()); // cambiar por dinamica
+                    Path rutaCompleta = Paths.get(rutaAbsoluta + "/" + nombreArchivo);
+                    //notificacion.setAdjunto("adjunto/" + nombreArchivo);
+                    comentario.setAdjunto("adjunto/" + nombreArchivo);
+                    log.info("Se intenta guardar imagen " + rutaCompleta.toString());
+                    Files.write(rutaCompleta, byteImg);
+                } catch (IOException ex) {
+                    Logger.getLogger(ControladorUsuario.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
+            }
+
+            log.info("Se crea comentario " + comentario);
+            comentarioService.guardar(comentario);
+        }
         var comentarios = comentarioService.comentarioPorTicket(tk.getIdTicket());
         model.addAttribute("comentarios", comentarios);
         model.addAttribute("ticket", tk);
         return "redirect:/editargestion?idTicket=" + idTicket;
     }
 
+    /*@GetMapping("/download/{commentId}")
+    public void downloadFile(@PathVariable Long commentId, HttpServletResponse response) throws IOException {
+        Comentario comentario = comentarioService.comentarioPorTicket(commentId);
+
+        if (comentario != null && comentario.getAdjunto() != null) {
+            // Configurar la respuesta HTTP para la descarga del archivo adjunto
+            response.setContentType("application/octet-stream");
+            response.setHeader("Content-Disposition", "attachment; filename=" + comentario.getAdjunto());
+
+            // Escribir el contenido del archivo adjunto en la respuesta
+            OutputStream outputStream = response.getOutputStream();
+            outputStream.write(comentario.getAdjuntoBytes()); // Reemplaza 'getAdjuntoBytes' con el método apropiado para obtener los bytes del archivo adjunto
+            outputStream.close();
+        }
+    }*/
 }
