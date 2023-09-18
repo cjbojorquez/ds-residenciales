@@ -31,8 +31,8 @@ public class TicketServiceImpl implements TicketService{
 
     @Override
     @Transactional(readOnly = true)
-    public List<Ticket> ticketPorUsuario(Long idUsuario) {
-        return (List<Ticket>)ticketDao.buscarPorUsuario(idUsuario);
+    public List<Ticket> ticketPorUsuario(Long idTipo, Long idUsuario) {
+        return (List<Ticket>)ticketDao.buscarPorUsuario(idTipo,idUsuario);
     }
 
     @Override

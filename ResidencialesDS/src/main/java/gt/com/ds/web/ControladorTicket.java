@@ -30,6 +30,7 @@ import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -56,15 +57,34 @@ public class ControladorTicket {
 
     @Autowired
     private Varios varios;
+    
+    private Long tipoGestion=1L;
+    private Long tipoAnomalia=2L;
 
     @GetMapping("/gestion")
     public String Inicio(Model model) {
         // Tipo de ticket 1 = Gestion ; 2 = Anomalias
-        Long tipoTicket = 1L;
-        var gestiones = ticketService.listarTicketsAbiertos(tipoTicket, 1L);//residencial dinamica
+        //Long tipoTicket = 1L;
+        Usuario us=varios.getUsuarioLogueado();
+        List<Ticket> gestiones;
+         if(varios.getRolLogueado().equals("ROLE_USER"))
+            gestiones = ticketService.ticketPorUsuario(tipoGestion,us.getIdUsuario());
+        else
+            gestiones = ticketService.listarTicketsAbiertos(tipoGestion, us.getResidencial().getIdResidential());
+        
         model.addAttribute("gestiones", gestiones);
         return "gestion";
     }
+    
+    /*@GetMapping("/mi_gestion")
+    public String mis_gestiones(Model model) {
+        // Tipo de ticket 1 = Gestion ; 2 = Anomalias
+        Usuario us=varios.getUsuarioLogueado();
+        Long tipoTicket = 1L;
+        var gestiones = ticketService.ticketPorUsuario(tipoGestion,us.getIdUsuario());
+        model.addAttribute("gestiones", gestiones);
+        return "mi_gestion";
+    }*/
 
     @GetMapping("/agregargestion")
     public String agregar(Ticket ticket, Model model) {
@@ -77,23 +97,24 @@ public class ControladorTicket {
     public String guardar(@Valid Ticket ticket, Errors errors) {
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
         Date date = new Date();
+        Usuario us=varios.getUsuarioLogueado();
         if (errors.hasErrors()) {
             return "modificargestion";
         }
         if (ticket.getIdTicket() == null) {
             EstadoTicket estadoTicket = estadoTicketService.encontrarEstado(1L);
             ticket.setEstado(estadoTicket);
-            ticket.setIdResidencial(1L);//cambiar a dinamico
-            ticket.setIdTipo(1L);
+            ticket.setIdResidencial(us.getResidencial().getIdResidential());//cambiar a dinamico
+            ticket.setIdTipo(tipoGestion);
 
-            Usuario us = new Usuario();
-            us.setIdUsuario(1L);
-            us = usuarioService.encontrarUsuario(us);
+            
             ticket.setUsuario(us);
         }
 
         log.info("Se crea gestion " + ticket);
         ticketService.guardar(ticket);
+        
+        
         return "redirect:/gestion";
     }
 
@@ -135,12 +156,28 @@ public class ControladorTicket {
     @GetMapping("/anomalia")
     public String InicioAnomalia(Model model) {
         // Tipo de ticket 1 = Gestion ; 2 = Anomalias
-        Long tipoTicket = 2L;
-        var anomalias = ticketService.listarTicketsAbiertos(tipoTicket, 1L);//residencial
+        //Long tipoTicket = 2L;
+        Usuario us=varios.getUsuarioLogueado();
+        List<Ticket> anomalias;
+         if(varios.getRolLogueado().equals("ROLE_USER"))
+            anomalias = ticketService.ticketPorUsuario(tipoAnomalia,us.getIdUsuario());
+        else
+            anomalias = ticketService.listarTicketsAbiertos(tipoAnomalia, us.getResidencial().getIdResidential());
+        
         model.addAttribute("anomalias", anomalias);
         return "anomalia";
     }
 
+    /*@GetMapping("/mi_anomalia")
+    public String mis_anomalias(Model model) {
+        // Tipo de ticket 1 = Gestion ; 2 = Anomalias
+        Usuario us=varios.getUsuarioLogueado();
+        Long tipoTicket = 1L;
+        var anomalias = ticketService.ticketPorUsuario(tipoAnomalia,us.getIdUsuario());
+        model.addAttribute("anomalias", anomalias);
+        return "mi_anomalia";
+    }*/
+    
     @GetMapping("/agregaranomalia")
     public String agregarAnomalia(Ticket ticket, Model model) {
         var estadoTicket = estadoTicketService.encontrarEstado(1L);
@@ -152,23 +189,24 @@ public class ControladorTicket {
     public String guardarAnomalia(@Valid Ticket ticket, Errors errors) {
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
         Date date = new Date();
+        Usuario us=varios.getUsuarioLogueado();
         if (errors.hasErrors()) {
             return "modificaranomalia";
         }
         if (ticket.getIdTicket() == null) {
             EstadoTicket estadoTicket = estadoTicketService.encontrarEstado(1L);
             ticket.setEstado(estadoTicket);
-            ticket.setIdResidencial(1L);//cambiar a dinamico
-            ticket.setIdTipo(2L);
+            ticket.setIdResidencial(us.getResidencial().getIdResidential());
+            ticket.setIdTipo(tipoAnomalia);
 
-            Usuario us = new Usuario();
-            us.setIdUsuario(1L);
-            us = usuarioService.encontrarUsuario(us);
             ticket.setUsuario(us);
         }
 
         log.info("Se crea anomalia " + ticket);
         ticketService.guardar(ticket);
+        String strReturn="";
+       
+        
         return "redirect:/anomalia";
     }
 
@@ -180,6 +218,8 @@ public class ControladorTicket {
             EstadoTicket estadoTicket = estadoTicketService.encontrarEstado(2L);
             ticket.setEstado(estadoTicket);
         }
+        var comentarios = comentarioService.comentarioPorTicket(ticket.getIdTicket());
+        model.addAttribute("comentarios", comentarios);
         model.addAttribute("estadosTicket", estadosTicket);
         model.addAttribute("ticket", ticket);
         log.info("se envia ticket " + ticket.toString());
@@ -214,11 +254,13 @@ public class ControladorTicket {
         if (errors.hasErrors()) {
             return "modificargestion";
         }
-        if (txtComentario != "" && !imagen.isEmpty()) {
+        System.out.println("txtComentario = " + txtComentario + " tipo " + tk.getIdTipo());
+        if (txtComentario != "" || !imagen.isEmpty()) {
             comentario.setTicket(tk);
             comentario.setFecha(date);
             comentario.setUsuario(usuarioLogueado);
             comentario.setComentario(txtComentario);
+            System.out.println("Ingresa antes de img");
             if (!imagen.isEmpty()) {
                 Path directorioImagenes = Paths.get("src//main//resources//static//adjunto");
 
@@ -244,7 +286,13 @@ public class ControladorTicket {
         var comentarios = comentarioService.comentarioPorTicket(tk.getIdTicket());
         model.addAttribute("comentarios", comentarios);
         model.addAttribute("ticket", tk);
-        return "redirect:/editargestion?idTicket=" + idTicket;
+        
+        if(tk.getIdTipo()==tipoGestion)
+            return "redirect:/editargestion?idTicket=" + idTicket;
+        if(tk.getIdTipo()==tipoAnomalia)
+            return "redirect:/editaranomalia?idTicket=" + idTicket;
+        
+        return "/";
     }
 
     /*@GetMapping("/download/{commentId}")

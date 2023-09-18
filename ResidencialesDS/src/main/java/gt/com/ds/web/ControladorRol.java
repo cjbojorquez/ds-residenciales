@@ -1,6 +1,7 @@
 package gt.com.ds.web;
 
 import gt.com.ds.domain.Rol;
+import gt.com.ds.domain.Usuario;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -13,9 +14,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.multipart.MultipartFile;
 import gt.com.ds.servicio.RolService;
+import gt.com.ds.servicio.Varios;
 import gt.com.ds.util.Tools;
 
 /**
@@ -29,7 +29,8 @@ public class ControladorRol {
     @Autowired
     private RolService rolService;
 
-     
+    @Autowired
+    private Varios varios; 
     
     @GetMapping("/rol")
     public String Inicio(Model model) {
@@ -49,16 +50,17 @@ public class ControladorRol {
     public String guardar(@Valid Rol rol, Errors errors) {
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
         Date date = new Date();
+        Usuario us = varios.getUsuarioLogueado();
         if (errors.hasErrors()) {
             return "modificarrol";
         }
         rol.setEstado(1L);
         if (rol.getIdRol() == null) {
             rol.setFechaCrea(Tools.now());
-            rol.setUsuarioCrea(1L);
+            rol.setUsuarioCrea(us.getIdUsuario());
         } else {
             rol.setFechaModifica(Tools.now());
-            rol.setUsuarioModifica(1L);
+            rol.setUsuarioModifica(us.getIdUsuario());
         }
         log.info("Se actualiza rol " + rol);
         rolService.guardar(rol);
@@ -78,9 +80,10 @@ public class ControladorRol {
         rol = rolService.encontrarRol(rol);
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
         Date date = new Date();
+        Usuario us = varios.getUsuarioLogueado();
         rol.setEstado(0L);
         rol.setFechaModifica(Tools.now());
-        rol.setUsuarioModifica(1L);
+        rol.setUsuarioModifica(us.getIdUsuario());
         log.info("Eliminando rol " + rol);
         rolService.guardar(rol);
         return "redirect:/rol";

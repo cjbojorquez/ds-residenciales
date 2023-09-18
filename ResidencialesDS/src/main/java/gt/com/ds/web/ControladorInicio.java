@@ -2,6 +2,7 @@ package gt.com.ds.web;
 
 import gt.com.ds.domain.Usuario;
 import gt.com.ds.servicio.BuzonService;
+import gt.com.ds.servicio.ResidencialService;
 import gt.com.ds.servicio.UsuarioService;
 import gt.com.ds.servicio.Varios;
 import lombok.extern.slf4j.Slf4j;
@@ -29,6 +30,9 @@ public class ControladorInicio {
     private BuzonService buzonService;
     
     @Autowired
+    private ResidencialService residencialService;
+    
+    @Autowired
     private Varios varios;
     
     @Autowired
@@ -40,9 +44,11 @@ public class ControladorInicio {
         var mensaje = "Hola mundo con Thymeleaf"; 
         log.info("ejecutando controlador spring mvc");
         var mensajes = buzonService.buzonPorEstado(1L, usuarioLogueado.getIdUsuario());
+        var residencial = usuarioLogueado.getResidencial();
         int nuevos=mensajes.size();
         model.addAttribute("mensajes",mensajes);
         model.addAttribute("nuevos",nuevos);
+        model.addAttribute("residencial",residencial);
         return "index";
     }
     

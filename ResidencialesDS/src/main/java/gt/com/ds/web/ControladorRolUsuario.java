@@ -17,6 +17,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import gt.com.ds.servicio.UsuarioService;
+import gt.com.ds.servicio.Varios;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import java.io.IOException;
@@ -55,7 +56,9 @@ public class ControladorRolUsuario {
     private RolService rolService;
     @Autowired
     private UsuarioRolService usuarioRolService;
-
+    @Autowired
+    private Varios varios; 
+    
     @GetMapping("/listaUsuarios")
     public String Inicio(Model model) {
         

@@ -97,18 +97,24 @@
                                 <span class="text-success">Servicios</span>
                             </a>
                             <div  class="sb-sidenav-menu-heading">Operaciones</div>
+                            
+                            <a sec:authorize="hasAnyRole('ROLE_USER','ROLE_EMPLOYEE')" class="nav-link" href="/solicitud">
+                                <div class="sb-nav-link-icon"><i class="fa-solid fa-wrench fa-xl"></i></div>
+                                <span class="text-success">Solicitud de Servicio</span>
+                            </a>
                             <a sec:authorize="hasRole('ROLE_USER')" class="nav-link" href="/gestion">
                                 <div class="sb-nav-link-icon"><i class="fa-solid fa-clipboard fa-xl"></i></div>
                                 <span class="text-success">Solicitar Gesti&oacute;n</span>
                             </a>
                             <a sec:authorize="hasRole('ROLE_EMPLOYEE')" class="nav-link" href="/gestion">
                                 <div class="sb-nav-link-icon"><i class="fa-solid fa-clipboard fa-xl"></i></div>
-                                <span class="text-success">Gesti&oacute;nes</span>
+                                <span class="text-success">Gestiones</span>
                             </a>
                             <a sec:authorize="hasAnyRole('ROLE_USER','ROLE_EMPLOYEE')" class="nav-link" href="/anomalia">
                                 <div class="sb-nav-link-icon"><i class="fa-solid fa-pen-clip fa-xl"></i></div>
                                 <span class="text-success">Ingresar Anomalia</span>
                             </a>
+                            
                             <a sec:authorize="hasRole('ROLE_EMPLOYEE')" class="nav-link" href="/general">
                                 <div class="sb-nav-link-icon"><i class="fa-solid fa-envelopes-bulk fa-xl"></i></div>
                                 <span class="text-success">Notificaci&oacute;n General</span>

@@ -13,7 +13,7 @@ public interface TicketService {
     
     public List<Ticket> ticketPorEstado(Long idEstado,Long idResidencial);
     
-    public List<Ticket> ticketPorUsuario(Long idUsuario);
+    public List<Ticket> ticketPorUsuario(Long idTipo,Long idUsuario);
     
     public List<Ticket> listarTicketsAbiertos(Long tipoTicket,Long idResidencial);
     

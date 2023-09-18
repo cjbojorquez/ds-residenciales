@@ -116,10 +116,8 @@ public class ControladorNotificacion {
 
         if (notificacion.getIdNotificacion() == null) {
 
-            Usuario us = new Usuario();
-            us.setIdUsuario(1L);
-            us = usuarioService.encontrarUsuario(us);
-            notificacion.setUsuario(us);
+            
+            notificacion.setUsuario(usuarioLogueado);
 
             notificacion.setFechaCrea(Tools.now());
             notificacion.setUsuarioCrea(usuarioLogueado.getIdUsuario());
@@ -128,7 +126,7 @@ public class ControladorNotificacion {
 
         } else {
             notificacion.setFechaModifica(Tools.now());
-            notificacion.setUsuarioModifica(1L);
+            notificacion.setUsuarioModifica(usuarioLogueado.getIdUsuario());
         }
 
         if (!imagen.isEmpty()) {
@@ -252,7 +250,8 @@ public class ControladorNotificacion {
     public String InicioEspecifica(Model model) {
         // Tipo de ticket 1 = Gestion ; 2 = Anomalias
         //  G = Notificacion General
-        var notificaciones = notificacionService.notificacionPorTipo(varNotiEspecifica, 1L);//agregar residencial
+        Usuario us = varios.getUsuarioLogueado();
+        var notificaciones = notificacionService.notificacionPorTipo(varNotiEspecifica, us.getResidencial().getIdResidential());//agregar residencial
 
         model.addAttribute("notificaciones", notificaciones);
         return "especifica";
@@ -291,7 +290,7 @@ public class ControladorNotificacion {
         } else {
             log.info("else de validar " + notificacion.getIdNotificacion());
             notificacion.setFechaModifica(Tools.now());
-            notificacion.setUsuarioModifica(1L);
+            notificacion.setUsuarioModifica(usuarioLogueado.getIdUsuario());
         }
 
         if (!imagen.isEmpty()) {

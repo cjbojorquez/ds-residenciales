@@ -3,6 +3,7 @@ package gt.com.ds.web;
 import gt.com.ds.domain.Residencial;
 import gt.com.ds.domain.Rol;
 import gt.com.ds.domain.Servicio;
+import gt.com.ds.domain.Usuario;
 import gt.com.ds.servicio.ResidencialService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import gt.com.ds.servicio.ServicioService;
 import gt.com.ds.servicio.UsuarioService;
+import gt.com.ds.servicio.Varios;
 import gt.com.ds.util.Tools;
 
 /**
@@ -39,6 +41,9 @@ public class ControladorServicio {
     @Autowired
     private ResidencialService residencialService;
     
+    @Autowired
+    private Varios varios; 
+    
     @GetMapping("/servicio")
     public String Inicio(Model model) {
         var servicios = servicioService.listarServicios(1L);
@@ -49,6 +54,7 @@ public class ControladorServicio {
     
     @GetMapping("/agregarserv")
     public String agregar(Servicio servicio, Model model) {
+        Usuario us = varios.getUsuarioLogueado();
         var empleados = usuarioService.listarEmpleados(1L);
         log.info("Emp desde servicio "+empleados);
         model.addAttribute("empleados", empleados);
@@ -57,11 +63,11 @@ public class ControladorServicio {
 
     @PostMapping("/guardarserv")
     public String guardar(@Valid Servicio servicio, Errors errors) {
-        
+        Usuario us = varios.getUsuarioLogueado();
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
         Date date = new Date();
         
-        var residencial = residencialService.encontrarPorId(1L);
+        var residencial = residencialService.encontrarPorId(us.getResidencial().getIdResidential());
         
         if (errors.hasErrors()) {
             log.info("errores en guardar serv " + errors);
@@ -70,11 +76,11 @@ public class ControladorServicio {
         servicio.setEstado(1L);
         if (servicio.getIdServicio() == null) {
             servicio.setFechaCrea(Tools.now());
-            servicio.setUsuarioCrea(1L);
+            servicio.setUsuarioCrea(us.getIdUsuario());
             servicio.setResidencial(residencial);
         } else {
             servicio.setFechaModifica(Tools.now());
-            servicio.setUsuarioModifica(1L);
+            servicio.setUsuarioModifica(us.getIdUsuario());
         }
         log.info("Se actualiza servicio " + servicio);
         servicioService.guardar(servicio);
@@ -93,12 +99,13 @@ public class ControladorServicio {
 
     @GetMapping("/eliminarserv")
     public String eliminar(Servicio servicio, Model model) {
+        Usuario us = varios.getUsuarioLogueado();
         servicio = servicioService.encontrarServicio(servicio);
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
         Date date = new Date();
         servicio.setEstado(0L);
         servicio.setFechaModifica(Tools.now());
-        servicio.setUsuarioModifica(1L);
+        servicio.setUsuarioModifica(us.getIdUsuario());
         log.info("Eliminando servicio " + servicio);
         servicioService.guardar(servicio);
         return "redirect:/servicio";

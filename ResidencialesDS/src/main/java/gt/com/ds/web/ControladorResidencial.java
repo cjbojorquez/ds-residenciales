@@ -1,6 +1,7 @@
 package gt.com.ds.web;
 
 import gt.com.ds.domain.Residencial;
+import gt.com.ds.domain.Usuario;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -9,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import gt.com.ds.servicio.ResidencialService;
+import gt.com.ds.servicio.Varios;
 import gt.com.ds.util.Tools;
 import jakarta.validation.Valid;
 import java.io.IOException;
@@ -41,6 +43,9 @@ public class ControladorResidencial {
     @Autowired
     private ResidencialService residencialService;
 
+    @Autowired
+    private Varios varios;
+    
     //Tools tool = new Tools();
     
     @GetMapping("/residencial")
@@ -66,6 +71,7 @@ public class ControladorResidencial {
     public String guardar(@Valid Residencial residencial, @RequestParam("file") MultipartFile imagen,Errors errors) {
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");  
         Date date = new Date();
+        Usuario us = varios.getUsuarioLogueado();
         if(errors.hasErrors()){
             return "modificarres";
         }
@@ -90,10 +96,10 @@ public class ControladorResidencial {
         residencial.setStatus(1L);
         if (residencial.getIdResidential() == null) {
             residencial.setCreate_time(Tools.now());
-            residencial.setCreate_user(1L);
+            residencial.setCreate_user(us.getIdUsuario());
         } else {
             residencial.setModify_time(Tools.now());
-            residencial.setModify_user(1L);
+            residencial.setModify_user(us.getIdUsuario());
         }
         log.info("Se actualiza Residencial " + residencial);
         residencialService.guardar(residencial);

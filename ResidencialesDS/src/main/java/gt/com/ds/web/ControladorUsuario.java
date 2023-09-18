@@ -254,11 +254,12 @@ public class ControladorUsuario {
     @GetMapping("/eliminarus")
     public String eliminar(Usuario usuario, Model model) {
         usuario = usuarioService.encontrarUsuario(usuario);
+        Usuario us = varios.getUsuarioLogueado();
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
         Date date = new Date();
         usuario.setEstado(0L);
         usuario.setFechaModifica(Tools.now());
-        usuario.setUsuarioModifica(1L);
+        usuario.setUsuarioModifica(us.getIdUsuario());
         usuarioService.guardar(usuario);
         return "redirect:/usuario";
     }
@@ -286,6 +287,7 @@ public class ControladorUsuario {
 
     @PostMapping("/guardaremp")
     public String guardarEmpleado(@Valid Usuario usuario, BindingResult bindingResult, @RequestParam("file") MultipartFile imagen, Model model, Errors errors) {
+        Usuario us = varios.getUsuarioLogueado();
         if (usuarioService.encontrarUsuario(usuario.getNombreUsuario()) != null && usuario.getIdUsuario() == null) {
             // Agrega un error personalizado al objeto BindingResult
             log.info("Existe usuario");
@@ -318,12 +320,12 @@ public class ControladorUsuario {
 
         if (usuario.getIdUsuario() == null) {
             usuario.setFechaCrea(Tools.now());
-            usuario.setUsuarioCrea(1L);
+            usuario.setUsuarioCrea(us.getIdUsuario());
 
             //usuario.setResidencial(residencialService.encontrarPorId(1L));
         } else {
             usuario.setFechaModifica(Tools.now());
-            usuario.setUsuarioModifica(1L);
+            usuario.setUsuarioModifica(us.getIdUsuario());
         }
         log.info("Se actualiza usuario " + usuario);
         usuarioService.guardar(usuario);
@@ -343,9 +345,10 @@ public class ControladorUsuario {
     @GetMapping("/eliminaremp")
     public String eliminarEmpleado(Usuario usuario, Model model) {
         usuario = usuarioService.encontrarUsuario(usuario);
+        Usuario us = varios.getUsuarioLogueado();
         usuario.setEstado(0L);
         usuario.setFechaModifica(Tools.now());
-        usuario.setUsuarioModifica(1L);
+        usuario.setUsuarioModifica(us.getIdUsuario());
         usuarioService.guardar(usuario);
         return "redirect:/empleado";
     }
@@ -416,11 +419,12 @@ public class ControladorUsuario {
     @GetMapping("/eliminarusres")
     public String eliminarusres(Usuario usuario, Model model) {
         usuario = usuarioService.encontrarUsuario(usuario);
+        Usuario us = varios.getUsuarioLogueado();
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
         Date date = new Date();
         usuario.setEstado(0L);
         usuario.setFechaModifica(Tools.now());
-        usuario.setUsuarioModifica(1L);
+        usuario.setUsuarioModifica(us.getIdUsuario());
         usuarioService.guardar(usuario);
         return "redirect:/usuariores";
     }

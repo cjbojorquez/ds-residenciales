@@ -11,6 +11,22 @@
         <link href="css/styles.css" rel="stylesheet" />
         <link rel="stylesheet" th:href="@{/css/styles-ticket.css}">
         <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+        <style>
+            #txtcomentario {
+                /* width: 100%; */
+            }
+
+            #customFile {
+                margin-left: 10px;
+            }
+
+
+
+            /* Ajusta el ancho máximo de la vista previa */
+            #file-preview {
+                max-width: 100%;
+            }
+        </style>
     </head>
     <body class="sb-nav-fixed">
 
@@ -24,24 +40,20 @@
                 <div th:object="${ticket}"></div>
                 <div th:object="${comentarios}"></div>
                 <div class="container">
-                    <div class="card  bg-light mb-3" style="max-width: 100%;">
-                        <div class="card-header" th:text='Gestion'></div>
-                        <div class="card-body">
-                            <h5 class="card-title" th:text="${ticket.asunto}"></h5>
-                            <p class="card-text" th:text="${ticket.descripcion}"></p>
-                        </div>
-                    </div>
+                    
                     <div class="row justify-content-center">
                         <div class="col-lg-7">
 
                             <div class="chat">
-
+                                <div class="conversacion">
+                                    <div th:if="${ticket.descripcion}!=''" th:class="${ticket.usuario.nombreUsuario == #authentication.principal.getUsername() ? 'mensaje pregunta' : 'mensaje respuesta'}" th:utext="'<b>' + ${ticket.asunto} + '</b><br/>' + ${ticket.descripcion}">
+                                    </div>
+                                </div>
                                 <div th:if="${comentarios != null and !comentarios.empty}">
                                     <table>
                                         <tr th:each="comment : ${comentarios}">
                                         <div class="conversacion">
                                             <div th:if="${comment.comentario}!=''" th:class="${comment.usuario.nombreUsuario == #authentication.principal.getUsername() ? 'mensaje pregunta' : 'mensaje respuesta'}" th:text="${comment.comentario}">
-
                                             </div>
                                             <div th:if="${comment.adjunto}!='' and ${comment.adjunto}!=null" th:class="${comment.usuario.nombreUsuario == #authentication.principal.getUsername() ? 'mensaje pregunta' : 'mensaje respuesta'}" >
                                                 <a th:href="@{/__${comment.adjunto}__}" download th:text="'Descargar Adjunto'"></a>
@@ -54,20 +66,40 @@
                             <div class="caja-mensaje">
                                 <form th:action="@{guardarcomentario}" method="post" enctype="multipart/form-data">
                                     <div class="row justify-content-center">
+
                                         <div class="col-lg-12">
-                                            <!--input type="text" id="txtcomentario" name="txtcomentario" placeholder="Escribe acá" width="90%"-->
-                                            <textarea id="txtcomentario" name="txtcomentario" placeholder="Escribe acá" style="width: 90%; height: 100px;"></textarea>
+                                            <div  class="row">
+                                                <input type="hidden" id="idticket" name="idticket" th:value="${ticket.idTicket}"/>
+                                                <div class="col-9">
+                                                    <textarea id="txtcomentario" name="txtcomentario" placeholder="Escribe acá" style="width: 100%; height: 100px;"></textarea>
+                                                </div>
+                                                <div class="col-1">
+                                                    <label class="custom-file-label" for="customFile" style="margin-left: 10px;">
+                                                        <i class="fas fa-paperclip"></i>
+                                                        <input type="file" class="form-control border border-primary" id="customFile" name="file" style="display: none;">
 
-                                            <input type="hidden" id="idticket" name="idticket" th:value="${ticket.idTicket}"/>
+                                                    </label>
+                                                </div>
+                                                <div class="col-2">
+                                                    <button type="submit" style="margin-left: 10px;">Enviar</button>
+                                                </div>
 
-                                            <label class="custom-file-label" for="customFile">
-                                                <i class="fas fa-paperclip"></i>
-                                                <input type="file" class="form-control border border-primary" id="customFile" name="file" style="display: none;">
-                                            </label>
-                                            <div id="preview-container" style="display: none;">
-                                                <img id="file-preview" src="#" alt="Vista previa" style="max-width: 100%; max-height: 150px;">
                                             </div>
-                                            <button type="submit">Enviar</button>
+                                            <div class="row">
+                                                <div class="col-9">
+                                                    <div id="preview-container" style="display: none;">
+                                                        <img id="file-preview" src="#" alt="Vista previa" style="max-width: 25%; max-height: 75px;">
+                                                        <span id="name-preview"></span>
+
+                                                    </div>
+
+                                                </div>
+                                                <div class="col-1">
+                                                    <a class="btn btn-danger"  id="clearFileInput" type="button" style="display: none;width: 50px;height: 30px;"><i class="fas fa-times"> </i></a>
+                                                </div>
+                                                <div class="col-2"></div>
+                                            </div>
+
                                         </div>
                                     </div>
                                 </form>
@@ -87,6 +119,9 @@
         const textarea = document.getElementById('txtcomentario');
         const previewContainer = document.getElementById('preview-container');
         const filePreview = document.getElementById('file-preview');
+        const fileIcon = document.getElementById('file-icon');
+        const namePreview = document.getElementById('name-preview');
+        const clearFileButton = document.getElementById('clearFileInput');
 
         fileInput.addEventListener('change', function () {
             const file = fileInput.files[0];
@@ -95,13 +130,25 @@
                 const reader = new FileReader();
 
                 reader.onload = function (e) {
-                    filePreview.src = e.target.result;
+                    if (file.type.startsWith('image/')) {
+                        filePreview.src = e.target.result;
+                    } else {
+                        filePreview.src = "/images/doc.png"
+                    }
                     previewContainer.style.display = 'block';
-                    textarea.style.display = 'none';
+                    namePreview.textContent = file.name;
+                    clearFileButton.style.display = 'block';
                 };
 
                 reader.readAsDataURL(file);
             }
+        });
+
+        clearFileButton.addEventListener('click', function () {
+            const fileInput = document.getElementById('customFile');
+            fileInput.value = ''; // Limpia el valor del campo de carga de archivos
+            clearFileButton.style.display = 'none'; // Oculta el botón "X"
+            previewContainer.style.display = 'none';
         });
     </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>

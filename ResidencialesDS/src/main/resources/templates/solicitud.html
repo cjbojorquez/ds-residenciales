@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <title>Dashboard - DS Admin</title> 
+        <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min1.css" rel="stylesheet" />
+        <link href="css/styles.css" rel="stylesheet" />
+        <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+    </head>
+    <body class="sb-nav-fixed">
+        <!--header th:replace="layout/plantilla :: header"></header-->
+    <th:block th:replace="~{layout/plantilla :: header}"></th:block>
+    <!-- barra vertical -->
+    <div id="layoutSidenav">
+        <!--div th:replace="layout/plantilla :: menu" id="layoutSidenav_nav"></div-->
+        <th:block th:replace="~{layout/plantilla :: menu}"></th:block>
+        <div id="layoutSidenav_content">
+            <main>
+                <div class="container-fluid px-4">
+                    <h1 class="mt-4">Dashboard</h1>
+                    <ol class="breadcrumb mb-4">
+                        <li class="breadcrumb-item active">Solicitud de Servicio</li>
+                    </ol>
+
+                    <nav class="navbar navbar-light bg-light">
+                        <form class="container-fluid justify-content-start">
+                            <a sec:authorize="hasRole('ROLE_USER')" class="btn btn-outline-success me-2" role="button" th:href="@{/agregarsolicitud}">Crear Solicitud de Servicio       <i class="fa-solid fa-circle-plus"></i></a>
+                        </form>
+                    </nav>
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <i class="fas fa-table me-1"></i>
+                            Solicitudes
+                        </div>
+
+                        <div class="card-body">
+                            <div th:if="${solicitudes != null and !solicitudes.empty}">
+                                <table id="datatablesSimple">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Asunto</th>
+                                            <th>Comentario</th>
+                                            <th>Fecha</th>
+                                            <th>Usuario</th>
+                                            <th></th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tfoot>
+                                        <tr>
+                                             <th>#</th>
+                                            <th>Asunto</th>
+                                            <th>Comentario</th>
+                                            <th>Fecha</th>
+                                            <th>Usuario</th>
+                                            <th></th>
+                                            <th></th>
+                                        </tr>
+                                    </tfoot>
+                                    <tbody>
+                                        <tr th:each="solicitud : ${solicitudes}">
+                                            <td th:text="${solicitud.idSolicitud}"></td>
+                                            <td th:text="${solicitud.comentario}"></td>
+                                            <td th:text="${#dates.format(notificacion.fecha, 'dd/MM/yyyy HH:mm')}"></td>
+                                            <td th:text="${notificacion.adjunto}"></td>
+                                            <td><a class="btn btn-info" role="button"  th:href="@{/modificarsolicitud(idSolicitud=${solicitud.idSolicitud})}" th:text="Editar"/></td>
+                                            <td><a class="btn btn-danger" role="button"  th:href="@{/cerrarsolicitud(idSolicitud=${solicitud.idSolicitud})}" th:text="Cerrar"/></td>
+                                        </tr>
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+            <!--footer th:replace="layout/plantilla :: footer"></footer-->  
+            <th:block th:replace="~{layout/plantilla :: footer}"></th:block>
+        </div>
+    </div>
+    <script src="js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+    <script src="js/scripts.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
+    <script src="assets/demo/chart-area-demo.js"></script>
+    <script src="assets/demo/chart-bar-demo.js"></script>
+    <script src="js/simple-datatables.min.js" crossorigin="anonymous"></script>
+    <script src="js/datatables-simple-demo.js"></script>
+</body>
+</html>

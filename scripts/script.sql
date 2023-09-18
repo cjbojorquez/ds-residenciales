@@ -221,7 +221,10 @@ ENGINE = InnoDB;
 CREATE TABLE IF NOT EXISTS `dssoluti_residenciales`.`service_request` (
   `idservicerequest` INT NOT NULL AUTO_INCREMENT,
   `subject` VARCHAR(200) NOT NULL,
+  `comment` VARCHAR(1000) NOT NULL,
+  `start_date` DATETIME NULL,
   `iduser` INT NULL,
+  `idemployee` INT NULL,
   `idresidential` INT NOT NULL,
   `status` INT NULL,
   `idservice` INT NOT NULL,
@@ -231,24 +234,29 @@ CREATE TABLE IF NOT EXISTS `dssoluti_residenciales`.`service_request` (
   `modify_user` INT NULL,
   PRIMARY KEY (`idservicerequest`),
   INDEX `fk_service_user1_idx` (`iduser` ASC) ,
+   INDEX `fk_service_employee_idx` (`idemployee` ASC) ,
   INDEX `fk_service_residential1_idx` (`idresidential` ASC) ,
   INDEX `fk_service_request_service1_idx` (`idservice` ASC) ,
   CONSTRAINT `fk_service_user10`
     FOREIGN KEY (`iduser`)
-    REFERENCES `dssoluti_residenciales`.`user` (`iduser`)
+    REFERENCES `user` (`iduser`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_service_employee10`
+    FOREIGN KEY (`idemployee`)
+    REFERENCES `user` (`iduser`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_service_residential10`
     FOREIGN KEY (`idresidential`)
-    REFERENCES `dssoluti_residenciales`.`residential` (`idresidential`)
+    REFERENCES `residential` (`idresidential`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_service_request_service1`
     FOREIGN KEY (`idservice`)
-    REFERENCES `dssoluti_residenciales`.`service` (`idservice`)
+    REFERENCES `service` (`idservice`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION);
-
 
 -- -----------------------------------------------------
 -- Table `dssoluti_residenciales`.`comment`
@@ -349,7 +357,7 @@ SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
 -- -----------------------------------------------------
 INSERT INTO residential (name,address,phone,email,nit,logo,status,create_time,create_user,modify_time,modify_user) VALUES
 	 ('DS','guatemala','12345678','cesar970@gmail.com','','',1,NOW(),1,NULL,NULL),
-	 ('demo1','guatemala','12345678','cesar970@gmail.com','','',1,NOW(),1,NULL,NULL);
+	 ('demo1','guatemala','12345678','cesar970@gmail.com','images/logos/logo3.jpeg','',1,NOW(),1,NULL,NULL);
 
 INSERT INTO `user` (name,username,password,email,phone,code,address,`position`,photo,employee,status,create_time,create_user,modify_time,modify_user,idresidential) VALUES
 	 ('Cesar Joel Bojorquez','usuario1','$2a$10$B2CgcKhdQ3SDevqKqNgc7eNa3.d8J.rfys5IOgqFbRact26jb/vk2','cesar970@gmail.com','','','gau','','',0,1,NOW(),1,NULL,NULL,1),
