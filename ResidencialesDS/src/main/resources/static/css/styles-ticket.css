@@ -37,7 +37,7 @@ body {
 }
 
 .caja-mensaje {
-  display: flex;
+  display: block;
   align-items: center;
   max-width: 600px;
   margin: 0 auto;

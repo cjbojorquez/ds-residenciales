@@ -1,34 +1,3 @@
-<!--DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-    <head>
-        <title>Inicio</title>
-        <meta charset="UTF-8">
-    </head>
-    <body>
-        <h1>Inicio</h1>
-        
-        <div ><!--th:if="${residencial != null and !recidencial.empty}">
-            <table border="1"> 
-                <tr>
-                    <th>Nombre</th>
-                    <th>Direccion</th>
-                    <th>Telefono</th>
-                    <th>Email</th>
-                    <th>Logo</th>
-                </tr>
-                <tr>
-                    <td><span th:text="${residencial.nombre}"></span></td>
-                    <td><span th:text="${residencial.direccion}"></span></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr>
-            </table>
-        </div>
-        
-    </body>
-</html-->
-
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
     <head>
@@ -41,6 +10,7 @@
         <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
         <link href="css/styles.css" rel="stylesheet" />
         <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+        <script src="js/util.js"></script>
     </head>
     <body class="sb-nav-fixed">
         <th:block th:replace="~{layout/plantilla :: header}"></th:block>
@@ -124,7 +94,7 @@
                                                 <td th:text="${residencial.modify_time}">Mostrar fecha de modificacion</td>
                                                 <td th:text="${residencial.modify_user}">Mostrar quien modifico el registro</td>
                                                 <td><a class="btn btn-info" role="button"  th:href="@{/editarres(idResidential=${residencial.idResidential})}" th:text="Editar"/></td>
-                                                <td><a class="btn btn-danger" role="button"  th:href="@{/eliminarres(idResidential=${residencial.idResidential})}" th:text="Eliminar"/></td>
+                                                <td><a class="btn btn-danger" role="button"  th:href="@{/eliminarres(idResidential=${residencial.idResidential})}" th:onclick="confirmarEliminacion([[(${residencial.idResidential})]],'/eliminarres?idResidential=');" th:text="Eliminar"/></td>
                                             </tr>
 
                                         </tbody>
@@ -142,7 +112,7 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
         <script src="assets/demo/chart-area-demo.js"></script>
         <script src="assets/demo/chart-bar-demo.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>
+        <script src="js/simple-datatables.min.js" crossorigin="anonymous"></script>
         <script src="js/datatables-simple-demo.js"></script>
     </body>
 </html>

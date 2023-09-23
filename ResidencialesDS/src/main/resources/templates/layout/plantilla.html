@@ -12,6 +12,7 @@
         <!--link th:href="@{/css/styles.css}" rel="stylesheet" /-->
         
         <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+        
     </head>
     <body>
         <header th:fragment="header">
@@ -48,7 +49,7 @@
                         <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                             <li><a class="dropdown-item" href="#!"><b>Usuario</b> <span sec:authentication="name"></span></a></li>
-                            <li><a class="dropdown-item" href="#!">Perfil</a></li>
+                            <li><a class="dropdown-item" th:href="@{/perfil}">Perfil</a></li>
                             <li><a class="dropdown-item" th:href="@{/cambiapass}">Cambiar contrase&ntilde;a</a></li>
                             <li><a class="dropdown-item" href="#!"></a></li>
                             <li><hr class="dropdown-divider" /></li>
@@ -84,11 +85,15 @@
                                 <div class="sb-nav-link-icon"><i class="fas fa-building-user fa-xl"></i></div>
                                 <span class="text-success">Empleados</span>
                             </a>
+                            <a sec:authorize="hasRole('ROLE_EMPLOYEE')" class="nav-link" href="/empleadores">
+                                <div class="sb-nav-link-icon"><i class="fas fa-building-user fa-xl"></i></div>
+                                <span class="text-success">Empleados</span>
+                            </a>
                             <a sec:authorize="hasRole('ROLE_ADMIN')" class="nav-link" href="/rol">
                                 <div class="sb-nav-link-icon"><i class="fa-solid fa-users-gear fa-xl"></i></div>
                                 <span class="text-success">Rol</span>
                             </a>
-                            <a sec:authorize="hasRole('ROLE_ADMIN')" class="nav-link" href="/listaUsuarios">
+                            <a sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_EMPLOYEE')" class="nav-link" href="/listaUsuarios">
                                 <div class="sb-nav-link-icon"><i class="fa-solid fa-clipboard-user fa-xl"></i></div>
                                 <span class="text-success">Asignar Rol</span>
                             </a>

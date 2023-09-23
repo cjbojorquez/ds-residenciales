@@ -9,6 +9,7 @@ import gt.com.ds.domain.Usuario;
 import gt.com.ds.servicio.BuzonService;
 import gt.com.ds.servicio.EstadoTicketService;
 import gt.com.ds.servicio.NotificacionService;
+import gt.com.ds.servicio.ServicioService;
 import gt.com.ds.servicio.SolicitudServicioService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,6 +58,9 @@ public class ControladorSolicitudServicio {
     private SolicitudServicioService solicitudServicioService;
 
     @Autowired
+    private ServicioService servicioService;
+    
+    @Autowired
     private EstadoTicketService estadoTicketService;
 
     @Autowired
@@ -70,6 +74,7 @@ public class ControladorSolicitudServicio {
 
     private Long varEstadoActivo=1L;
 
+    
     @GetMapping("/solicitud")
     public String InicioGeneral(Model model) {
         // Tipo de ticket 1 = Gestion ; 2 = Anomalias
@@ -88,7 +93,13 @@ public class ControladorSolicitudServicio {
 
     @GetMapping("/agregarsolicitud")
     public String agregarGeneral(SolicitudServicio solicitudServicio, Model model) {
+        
+        Usuario us = varios.getUsuarioLogueado();
+        var servicios = servicioService.listarPorResidencial(us.getResidencial().getIdResidential());
+        var empleados = usuarioService.listarEmpleadosResidencial(varEstadoActivo, us.getResidencial().getIdResidential());
         model.addAttribute("solicitud", solicitudServicio);
+        model.addAttribute("servicios", servicios);
+        model.addAttribute("empleados", empleados);
         return "modificarsolicitud";
     }
 
@@ -112,10 +123,8 @@ public class ControladorSolicitudServicio {
         
         if (errors.hasErrors()) {
             log.info("Error en guardar ");
-            return "modificargeneral";
+            return "modificarsolicitud";
         }
-
-        
         solicitudServicio.setFecha(Tools.getFecha(desdeFecha, desdeHora));
         //solicitudServicio.setHasta(Tools.getFecha(hastaFecha, hastaHora));
 
@@ -154,21 +163,35 @@ public class ControladorSolicitudServicio {
 
         log.info("Se crea gestion " + solicitudServicio);
         solicitudServicioService.guardar(solicitudServicio);
-        //model.addAttribute("notificacion", newNoti);
+        Usuario us=varios.getUsuarioLogueado();
+        List<SolicitudServicio> solicitudes;
+         if(varios.getRolLogueado().equals("ROLE_USER"))
+            solicitudes = solicitudServicioService.listarPorUsuario(varEstadoActivo,us.getIdUsuario());
+        else
+            solicitudes = solicitudServicioService.listarSolicitudes(varEstadoActivo, us.getResidencial().getIdResidential());
+        
+        model.addAttribute("solicitudes", solicitudes);
         //return "redirect:/vergeneral?idNotificacion=" + newNoti.getIdNotificacion();
         return "solicitud";
     }
 
     @GetMapping("/modificarsolicitud")
     public String editarGeneral(SolicitudServicio solicitudServicio, Model model) {
+        Usuario us = varios.getUsuarioLogueado();
         var solicitud = solicitudServicioService.encontrarServicio(solicitudServicio);
         var estadosTicket = estadoTicketService.listarEstadoTicket();
+        var servicios = servicioService.listarPorResidencial(us.getResidencial().getIdResidential());
+        var empleados = usuarioService.listarEmpleadosResidencial(varEstadoActivo, us.getResidencial().getIdResidential());
+        model.addAttribute("solicitud", solicitud);
+        model.addAttribute("servicios", servicios);
+        model.addAttribute("empleados", empleados);
+        
         /*if (notificacion.getEstado().getIdEstado() == 1L) {
             EstadoTicket estadoTicket = estadoTicketService.encontrarEstado(2L);
             notificacion.setEstado(estadoTicket);
         }*/
         model.addAttribute("estadosTicket", estadosTicket);
-        model.addAttribute("solicitud", solicitud);
+        //model.addAttribute("solicitud", solicitud);
         //log.info("se envia ticket " + notificacion.toString());
         return "modificarsolicitud";
     }

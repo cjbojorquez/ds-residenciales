@@ -49,5 +49,10 @@ public class RolServiceImpl implements RolService{
         return rolDao.findById(rol.getIdRol()).orElse(null);
     }
 
-    
+    @Override
+    @Transactional(readOnly = true)
+    public List<Rol> listarRolesNoAdmin() {
+        
+        return (List<Rol>)rolDao.rolesNoAdmin();
+    }
 }

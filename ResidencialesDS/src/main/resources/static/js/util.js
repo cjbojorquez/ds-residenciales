@@ -1,3 +1,11 @@
+function confirmarEliminacion(idUsuario,url) {
+        const confirmacion = confirm('¿Seguro que quiere eliminar este item?');
+        if (confirmacion) {
+            // Si el usuario confirma, redirige a la URL de eliminación
+            window.location.href = url + idUsuario;
+        }
+    }
+
 function obtenerFechaYHora() {
     // Obtener los campos de fecha y hora seleccionados
     const fechaInputDesde = document.getElementById("desde");
@@ -25,9 +33,36 @@ function obtenerFechaYHora() {
         document.getElementById("hastaHora").value = horaHastaFormateada;
     }
 }
+
+function obtenerFechaYHoraServ() {
+    // Obtener los campos de fecha y hora seleccionados
+    const fechaInputDesde = document.getElementById("desde");
+
+    // Convertir los valores de los campos en objetos Date
+
+    const fechaDesde = new Date(fechaInputDesde.value);
+    if (fechaInputDesde.value != "") {
+        // Formatear las fechas en dd/MM/yyyy
+        const optionsFecha = {year: 'numeric', month: '2-digit', day: '2-digit'};
+        const fechaDesdeFormateada = fechaDesde.toLocaleDateString('es-ES', optionsFecha);
+
+        // Formatear las horas en HH:mm
+        const optionsHora = {hour: '2-digit', minute: '2-digit', hour12: false};
+        const horaDesdeFormateada = fechaDesde.toLocaleTimeString('es-ES', optionsHora);
+
+        // Establecer las partes de fecha y hora en los campos de texto
+        document.getElementById("desdeFecha").value = fechaDesdeFormateada;
+        document.getElementById("desdeHora").value = horaDesdeFormateada;
+    }
+}
+
+/*window.addEventListener('load', function () {
+    obtenerFechaYHoraServ();
+});
+
 window.addEventListener('load', function () {
     obtenerFechaYHora();
-});
+});*/
 
 $(document).ready(function () {
     // Configura el Datepicker

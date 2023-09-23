@@ -43,7 +43,38 @@
                     
                     <div class="row justify-content-center">
                         <div class="col-lg-7">
+                            <div class="card">
+                                <div class="card-header" >
+                                    <div  class="text-center mx-auto" th:utext="'<b>' + ${ticket.asunto} + '</b>'"></div>
+                                </div>
+                                <div class="card-body">
+                                    <div  th:utext="${ticket.descripcion}"></div>
+                                    <br>
+                                   
+                                    <form th:action="@{estadoTicket}" enctype="multipart/form-data"  method="post" th:object="${ticket}">
+                                        <input type="hidden" id="idTicket" th:field="*{idTicket}"/>
+                                        <div class="row">
+                                            <div class="col-4" ></div>
+                                            <div class="col-2">
+                                                <label>Estado:</label>
+                                            </div>
+                                            <div class="col-6">
+                                                <select class="form-control" id="cmbServ" aria-label="Tipo servicio" width="100%" th:field="*{estado}">
+                                                    <option th:each="status : ${estadosTicket}" th:value="${status.idEstado}" th:text="${status.nombre}"></option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <br>
+                                        <div class="row">
+                                            <div class="col-9"></div>
+                                            <div class="col-2">
+                                                <button type="submit" class="btn btn-outline-primary btn-lg">Guardar</button>
+                                            </div>
+                                        </div>
 
+                                    </form>
+                                </div>
+                            </div>
                             <div class="chat">
                                 <div class="conversacion">
                                     <div th:if="${ticket.descripcion}!=''" th:class="${ticket.usuario.nombreUsuario == #authentication.principal.getUsername() ? 'mensaje pregunta' : 'mensaje respuesta'}" th:utext="'<b>' + ${ticket.asunto} + '</b><br/>' + ${ticket.descripcion}">

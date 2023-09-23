@@ -50,10 +50,10 @@
                                                 <label for="inputFirstName">Usuario</label>
                                                 <span th:if="${#fields.hasErrors('nombreUsuario')}" th:errors="*{nombreUsuario}">Error en usuario</span>
                                             </div>
-                                            <div class="form-floating mb-3">
+                                            <!--div class="form-floating mb-3">
                                                 <input class="form-control is-invalid" id="newpassword" name="newpassword" type="password" placeholder="Ingrese el nombre" value="" />
                                                 <label for="inputFirstName">Password</label>
-                                            </div>
+                                            </div-->
                                             <input class="form-control" id="nombreUsuario" type="hidden" th:field="*{nombreUsuario}"/>
                                             <input class="form-control" id="password" type="hidden" th:field="*{password}"/>
                                             <div class="form-floating mb-3">
@@ -69,10 +69,10 @@
                                                 <input class="form-control" id="direccion" type="text" placeholder="Ingrese direccion" th:field="*{direccion}" required/>
                                                 <label for="inputLastName">Direcci&oacute;n</label>
                                             </div>
-                                            <div class="form-floating mb-3">
+                                            <!--div class="form-floating mb-3">
                                                 <input class="form-control" id="puesto" type="text" placeholder="Ingrese Puesto" th:field="*{cargo}"/>
                                                 <label for="inputEmail">Puesto</label>
-                                            </div>
+                                            </div-->
 
                                             <div class="custom-file mb-3">
                                                 <label class="custom-file-label" for="customFile">Seleccionar Foto</label>

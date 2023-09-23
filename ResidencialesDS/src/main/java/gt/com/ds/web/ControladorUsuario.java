@@ -60,6 +60,9 @@ public class ControladorUsuario {
 
     @Value("${jwt.expiracion}")
     private Long expiracionMs;
+    
+    private Long estadoActivo=1L;
+    private Long estadoInactivo=0L;
 
     //////////////////////////////////////////////////////////////////////
     //     USUARIOS
@@ -92,13 +95,13 @@ public class ControladorUsuario {
 
     }
 
-    /*@PostMapping("/perfil")
-    public String perfil(Usuario usuario, Model model) {
-
+    @GetMapping("/perfil")
+    public String perfil(Model model) {
+        var usuario = varios.getUsuarioLogueado();
         model.addAttribute("usuario", usuario);
         log.info("se cargara perfil :" + usuario);
         return "perfil";
-    }*/
+    }
     @PostMapping("/guardarperfil")
     public String guardarPerfil(@Valid Usuario usuario, BindingResult bindingResult, @RequestParam("newpassword") String newPassword, @RequestParam("file") MultipartFile imagen, Model model, Errors errors) {
 
@@ -124,8 +127,6 @@ public class ControladorUsuario {
             }
 
         }
-
-        usuario.setEstado(1L);
 
         usuario.setFechaModifica(Tools.now());
         log.info("Modifica Usuario " + usuario + " fecha " + Tools.now());
@@ -427,6 +428,93 @@ public class ControladorUsuario {
         usuario.setUsuarioModifica(us.getIdUsuario());
         usuarioService.guardar(usuario);
         return "redirect:/usuariores";
+    }
+    
+    ///////////
+    
+    @GetMapping("/agregarempres")
+    public String agregarEmpleadoRes(Usuario Usuario, Model model) {
+        var residenciales = residencialService.listarRecidencialesActivas();
+        log.info("Res desde user " + residenciales);
+        model.addAttribute("residenciales", residenciales);
+        return "crearempres";
+    }
+
+    @PostMapping("/guardarempres")
+    public String guardarEmpleadoRes(@Valid Usuario usuario, BindingResult bindingResult, @RequestParam("file") MultipartFile imagen, Model model, Errors errors) {
+        Usuario us = varios.getUsuarioLogueado();
+        if (usuarioService.encontrarUsuario(usuario.getNombreUsuario()) != null && usuario.getIdUsuario() == null) {
+            // Agrega un error personalizado al objeto BindingResult
+            log.info("Existe usuario");
+            bindingResult.rejectValue("nombreUsuario", "error.nombreUsuario", "El nombre de usuairo ya existe!");
+        }
+        if (errors.hasErrors()) {
+            
+            return "crearempres";
+        }
+        if (!imagen.isEmpty()) {
+            Path directorioImagenes = Paths.get("src//main//resources//static//images//perfil");
+
+            String rutaAbsoluta = directorioImagenes.toFile().getAbsolutePath();
+            log.info("Ruta absoluta " + rutaAbsoluta + " " + directorioImagenes.toString());
+            try {
+                byte[] byteImg = imagen.getBytes();
+                String nombreArchivo = Tools.newName(imagen.getOriginalFilename()); //cambiar por dinamico
+                Path rutaCompleta = Paths.get(rutaAbsoluta + "/" + nombreArchivo);
+                usuario.setFoto("images/perfil/" + nombreArchivo);
+                log.info("Se intenta guardar imagen " + rutaCompleta.toString());
+                Files.write(rutaCompleta, byteImg);
+            } catch (IOException ex) {
+                Logger.getLogger(ControladorUsuario.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+        }
+        usuario.setEsEmpleado(1L);
+        usuario.setEstado(1L);
+
+        if (usuario.getIdUsuario() == null) {
+            usuario.setFechaCrea(Tools.now());
+            usuario.setUsuarioCrea(us.getIdUsuario());
+
+            usuario.setResidencial(us.getResidencial());
+        } else {
+            usuario.setFechaModifica(Tools.now());
+            usuario.setUsuarioModifica(us.getIdUsuario());
+        }
+        log.info("Se actualiza usuario " + usuario);
+        usuarioService.guardar(usuario);
+        return "redirect:/empleadores";
+    }
+    
+    @GetMapping("/empleadores")
+    public String InicioEmpleadoRes(Model model) {
+        Usuario us = varios.getUsuarioLogueado();
+        var usuarios = usuarioService.listarEmpleadosResidencial(estadoActivo, us.getResidencial().getIdResidential());
+        log.info("ejecutando controlador empleado spring mvc " + usuarios);
+
+        model.addAttribute("usuarios", usuarios);
+        return "empleadores";
+    }
+    
+    @GetMapping("/editarempres")
+    public String editarEmpleadoRes(Usuario usuario, Model model) {
+        usuario = usuarioService.encontrarUsuario(usuario);
+        model.addAttribute("usuario", usuario);
+        var residenciales = residencialService.listarRecidencialesActivas();
+        log.info("Res desde user " + residenciales);
+        model.addAttribute("residenciales", residenciales);
+        return "modificarempres";
+    }
+
+    @GetMapping("/eliminarempres")
+    public String eliminarEmpleadoRes(Usuario usuario, Model model) {
+        usuario = usuarioService.encontrarUsuario(usuario);
+        Usuario us = varios.getUsuarioLogueado();
+        usuario.setEstado(0L);
+        usuario.setFechaModifica(Tools.now());
+        usuario.setUsuarioModifica(us.getIdUsuario());
+        usuarioService.guardar(usuario);
+        return "redirect:/empleadores";
     }
 
     //////////////////////////////////////////////////////////////////////////////////////

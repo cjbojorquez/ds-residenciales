@@ -25,6 +25,13 @@ public class ServicioServiceImpl implements ServicioService{
     }
 
     @Override
+    @Transactional(readOnly = true)
+    public List<Servicio> listarPorResidencial(Long idResidencial) {
+        
+        return (List<Servicio>)servicioDao.buscarPorResidencial(idResidencial);
+    }
+    
+    @Override
     @Transactional
     public void guardar(Servicio servicio) {
         servicioDao.save(servicio);

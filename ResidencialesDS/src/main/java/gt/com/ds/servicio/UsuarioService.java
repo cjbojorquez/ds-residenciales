@@ -24,4 +24,6 @@ public interface UsuarioService {
     public Usuario encontrarUsuario(String nombreUsuario);
     
     public List<Usuario> listarUsuarios();
+    
+    public List<Usuario> listarUsuariosxResidencial(Long estado,Long idResidencial);
 }

@@ -13,6 +13,8 @@ public interface ServicioService {
     
     public List<Servicio> listarServicios();
     
+    public List<Servicio> listarPorResidencial(Long idResidencial);
+    
     public void guardar(Servicio servicio);
     
     public void eliminar(Servicio servicio);

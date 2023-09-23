@@ -10,6 +10,7 @@
         <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min1.css" rel="stylesheet" />
         <link href="css/styles.css" rel="stylesheet" />
         <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+        <script src="js/util.js"></script>
     </head>
     <body class="sb-nav-fixed">
         <!--header th:replace="layout/plantilla :: header"></header-->
@@ -103,7 +104,7 @@
                                             <td th:text="${usuario.fechaModifica}">Mostrar fecha de modificacion</td>
                                             <td th:text="${usuario.usuarioModifica}">Mostrar quien modifico el registro</td>
                                             <td><a class="btn btn-info" role="button"  th:href="@{/editarus(idUsuario=${usuario.idUsuario})}" th:text="Editar"/></td>
-                                            <td><a class="btn btn-danger" role="button"  th:href="@{/eliminarus(idUsuario=${usuario.idUsuario})}" th:text="Eliminar"/></td>
+                                            <td><a class="btn btn-danger" role="button" th:onclick="confirmarEliminacion([[(${usuario.idUsuario})]],'//eliminarus?idUsuario=');" th:text="Eliminar"/></td>
                                         </tr>
 
                                     </tbody>

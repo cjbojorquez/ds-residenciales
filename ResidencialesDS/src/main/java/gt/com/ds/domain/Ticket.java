@@ -51,5 +51,20 @@ public class Ticket implements Serializable {
     @Column(name="idresidential")
     private Long idResidencial;
     
+    @Temporal(TemporalType.TIMESTAMP)
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+    @Column(name="create_time")
+    private Date fechaCrea;
+    
+    @Column(name="create_user")
+    private Long usuarioCrea;
+    
+    @Temporal(TemporalType.TIMESTAMP)
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+    @Column(name="modify_time")
+    private Date fechaModifica;
+    
+    @Column(name="modify_user")
+    private Long usuarioModifica;
         
 }

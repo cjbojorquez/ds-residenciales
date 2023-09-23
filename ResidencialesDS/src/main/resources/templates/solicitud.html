@@ -10,6 +10,7 @@
         <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min1.css" rel="stylesheet" />
         <link href="css/styles.css" rel="stylesheet" />
         <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+        <script src="js/util.js"></script>
     </head>
     <body class="sb-nav-fixed">
         <!--header th:replace="layout/plantilla :: header"></header-->
@@ -42,11 +43,13 @@
                                 <table id="datatablesSimple">
                                     <thead>
                                         <tr>
-                                            <th>#</th>
+                                             <th>#</th>
                                             <th>Asunto</th>
                                             <th>Comentario</th>
+                                            <th>Tipo de Servicio</th>
                                             <th>Fecha</th>
                                             <th>Usuario</th>
+                                            <th>Empleado Asignado</th>
                                             <th></th>
                                             <th></th>
                                         </tr>
@@ -56,8 +59,10 @@
                                              <th>#</th>
                                             <th>Asunto</th>
                                             <th>Comentario</th>
+                                            <th>Tipo de Servicio</th>
                                             <th>Fecha</th>
                                             <th>Usuario</th>
+                                            <th>Empleado Asignado</th>
                                             <th></th>
                                             <th></th>
                                         </tr>
@@ -65,11 +70,14 @@
                                     <tbody>
                                         <tr th:each="solicitud : ${solicitudes}">
                                             <td th:text="${solicitud.idSolicitud}"></td>
+                                            <td th:text="${solicitud.asunto}"></td>
                                             <td th:text="${solicitud.comentario}"></td>
-                                            <td th:text="${#dates.format(notificacion.fecha, 'dd/MM/yyyy HH:mm')}"></td>
-                                            <td th:text="${notificacion.adjunto}"></td>
+                                            <td th:text="${solicitud.servicio.descripcion}"></td>
+                                            <td th:text="${#dates.format(solicitud.fecha, 'dd/MM/yyyy HH:mm')}"></td>
+                                            <td th:text="${solicitud.usuario.nombre}"></td>
+                                            <td th:text="${solicitud.empleado.nombre}"></td>
                                             <td><a class="btn btn-info" role="button"  th:href="@{/modificarsolicitud(idSolicitud=${solicitud.idSolicitud})}" th:text="Editar"/></td>
-                                            <td><a class="btn btn-danger" role="button"  th:href="@{/cerrarsolicitud(idSolicitud=${solicitud.idSolicitud})}" th:text="Cerrar"/></td>
+                                            <td><a class="btn btn-danger" role="button" th:onclick="confirmarEliminacion([[(${solicitud.idSolicitud})]],'/cerrarsolicitud?idSolicitud=');" th:text="Cerrar"/></td>
                                         </tr>
 
                                     </tbody>

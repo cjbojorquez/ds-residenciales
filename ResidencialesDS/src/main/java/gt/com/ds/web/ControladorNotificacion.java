@@ -213,7 +213,7 @@ public class ControladorNotificacion {
                 buzon.setFechaCrea(Tools.now());
                 buzon.setUsuarioCrea(usuarioLogueado.getIdUsuario());
                 varios.sendEmail(us.getEmail(), notificacion.getAsunto(), mensaje.get(0), file, "no-replay@residencial.com");
-                //buzonService.guardar(buzon);
+                buzonService.guardar(buzon);
             }
         }
         model.addAttribute("notificacion", notificacion);

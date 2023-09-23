@@ -48,21 +48,25 @@ public class UsuarioServiceImpl implements UsuarioService{
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<Usuario> listarEmpleados(Long estado) {
         return (List<Usuario>)usuarioDao.buscaUsuariosTipo(1L,estado);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Usuario encontrarUsuario(Long idUsuario) {
         return usuarioDao.findById(idUsuario).get();
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<Usuario> listarUsuarios() {
         return usuarioDao.listarUsuarios();
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Usuario encontrarUsuario(String nombreUsuario) {
         
         //return usuarioDao.buscarUsuario(nombreUsuario, idResidencial);
@@ -70,13 +74,21 @@ public class UsuarioServiceImpl implements UsuarioService{
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<Usuario> listarEmpleadosResidencial(Long estado, Long idResidencial) {
         return (List<Usuario>)usuarioDao.buscaUsuariosResidencial(1L,estado,idResidencial);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<Usuario> listarUsuariosResidencial(Long estado, Long idResidencial) {
         return (List<Usuario>)usuarioDao.buscaUsuariosResidencial(0L,estado,idResidencial);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Usuario> listarUsuariosxResidencial(Long estado,Long idResidencial) {
+        return (List<Usuario>)usuarioDao.listarUsuariosResidencial(estado,idResidencial);
     }
     
 }

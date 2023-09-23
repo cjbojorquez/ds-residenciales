@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 import gt.com.ds.servicio.UsuarioService;
 import gt.com.ds.servicio.Varios;
+import gt.com.ds.util.UsuarioRol;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import java.io.IOException;
@@ -57,32 +58,50 @@ public class ControladorRolUsuario {
     @Autowired
     private UsuarioRolService usuarioRolService;
     @Autowired
-    private Varios varios; 
-    
+    private Varios varios;
+
     @GetMapping("/listaUsuarios")
     public String Inicio(Model model) {
-        
-        var usuarios = usuarioService.listarUsuarios();
-        log.info("Usuarios  --------------------    " + usuarios.toString());
-        var rolesUsuario = rolUsuarioService.listarRoles();
-        var usuariosRol = usuarioRolService.combinarUsuarioConRol(usuarios,rolesUsuario);
-        log.info("Roles  --------------------    " + usuariosRol.toString());
-        
+        Usuario us = varios.getUsuarioLogueado();
+        String rol = varios.getRolLogueado();
+        List<Usuario> usuarios;
+        List<RolUsuario> rolesUsuario;
+        List<UsuarioRol> usuariosRol;
+        if (rol.equals("ROLE_ADMIN")) {
+            usuarios = usuarioService.listarUsuarios();
+            log.info("Usuarios  --------------------    " + usuarios.toString());
+            rolesUsuario = rolUsuarioService.listarRoles();
+            usuariosRol = usuarioRolService.combinarUsuarioConRol(usuarios, rolesUsuario);
+            log.info("Roles  --------------------    " + usuariosRol.toString());
+        } else {
+            usuarios = usuarioService.listarUsuariosxResidencial(1L, us.getResidencial().getIdResidential());
+            log.info("Usuarios  --------------------    " + usuarios.toString());
+            rolesUsuario = rolUsuarioService.listarRoles();
+            usuariosRol = usuarioRolService.combinarUsuarioConRol(usuarios, rolesUsuario);
+            log.info("Roles  --------------------    " + usuariosRol.toString());
+        }
+
         model.addAttribute("usuariosRol", usuariosRol);
         return "listaUsuarios";
     }
-    
+
     @GetMapping("/asignarol")
     public String asignar(@RequestParam("idUsuario") Long idUsuario, Model model) {
         Long vEstado = 1L;// Roles estado Activo
-
+        Usuario us = varios.getUsuarioLogueado();
+        String rolLogueado = varios.getRolLogueado();
         log.info("ingresando a asignarol con id valor =" + idUsuario + ";");
-        var rolUsuario=new RolUsuario();
-        if(!rolUsuarioService.encontrarRoles(idUsuario).isEmpty()){
+        var rolUsuario = new RolUsuario();
+        if (!rolUsuarioService.encontrarRoles(idUsuario).isEmpty()) {
             rolUsuario = rolUsuarioService.encontrarRoles(idUsuario).get(0);
         }
         Rol rol = new Rol();
-        var roles = rolService.listarRoles(vEstado);
+        List<Rol> roles;
+        if(rolLogueado.equals("ROLE_ADMIN")){
+            roles = rolService.listarRoles();
+        }else{
+            roles = rolService.listarRolesNoAdmin();
+        }
         log.info("Roles encontrados = " + roles.toString());
         var usuario = usuarioService.encontrarUsuario(idUsuario);
         log.info("Usuario encontrado = " + usuario.getNombre());
@@ -97,8 +116,8 @@ public class ControladorRolUsuario {
     public String guardar(HttpServletRequest request, RolUsuario rolUsuario) {
         String idUsuarioString = request.getParameter("idUsuario");
         Long idUsuario = Long.parseLong(idUsuarioString);
-        List<RolUsuario> rolUsuario1= rolUsuarioService.encontrarRoles(idUsuario);
-        if(!rolUsuario1.isEmpty()){
+        List<RolUsuario> rolUsuario1 = rolUsuarioService.encontrarRoles(idUsuario);
+        if (!rolUsuario1.isEmpty()) {
             RolUsuario rolUsuarioOld = rolUsuario1.get(0);
             rolUsuarioService.eliminar(rolUsuarioOld);
         }
@@ -110,6 +129,5 @@ public class ControladorRolUsuario {
         rolUsuarioService.guardar(rolUsuarioNew);
         return "redirect:/listaUsuarios";
     }
-
 
 }

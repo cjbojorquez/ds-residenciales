@@ -21,7 +21,8 @@ USE `dssoluti_residenciales` ;
 -- -----------------------------------------------------
 -- Table `dssoluti_residenciales`.`residential`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `dssoluti_residenciales`.`residential` (
+DROP TABLE `residential`;
+CREATE TABLE IF NOT EXISTS `residential` (
   `idresidential` INT NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(100) NOT NULL,
   `address` VARCHAR(200) NULL,
@@ -41,7 +42,8 @@ CREATE TABLE IF NOT EXISTS `dssoluti_residenciales`.`residential` (
 -- -----------------------------------------------------
 -- Table `dssoluti_residenciales`.`user`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `dssoluti_residenciales`.`user` (
+DROP TABLE `user`;
+CREATE TABLE IF NOT EXISTS `user` (
   `iduser` INT NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(45) NOT NULL,
   `username` VARCHAR(16) NULL,
@@ -63,7 +65,7 @@ CREATE TABLE IF NOT EXISTS `dssoluti_residenciales`.`user` (
   INDEX `fk_user_residential1_idx` (`idresidential` ASC) ,
   CONSTRAINT `fk_user_residential1`
     FOREIGN KEY (`idresidential`)
-    REFERENCES `dssoluti_residenciales`.`residential` (`idresidential`)
+    REFERENCES `residential` (`idresidential`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION);
 
@@ -71,7 +73,8 @@ CREATE TABLE IF NOT EXISTS `dssoluti_residenciales`.`user` (
 -- -----------------------------------------------------
 -- Table `dssoluti_residenciales`.`role`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `dssoluti_residenciales`.`role` (
+DROP TABLE `role`;
+CREATE TABLE IF NOT EXISTS `role` (
   `idrole` INT NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(255) NOT NULL,
   `status` INT NOT NULL,
@@ -85,7 +88,8 @@ CREATE TABLE IF NOT EXISTS `dssoluti_residenciales`.`role` (
 -- -----------------------------------------------------
 -- Table `dssoluti_residenciales`.`role_user`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `dssoluti_residenciales`.`role_user` (
+DROP TABLE `role_user`;
+CREATE TABLE IF NOT EXISTS `role_user` (
   `iduser` INT NOT NULL,
   `idrole` INT NOT NULL,
   INDEX `fk_rol_user_user_idx` (`iduser` ASC) ,
@@ -93,12 +97,12 @@ CREATE TABLE IF NOT EXISTS `dssoluti_residenciales`.`role_user` (
   PRIMARY KEY (`iduser`, `idrole`),
   CONSTRAINT `fk_rol_user_user`
     FOREIGN KEY (`iduser`)
-    REFERENCES `dssoluti_residenciales`.`user` (`iduser`)
+    REFERENCES `user` (`iduser`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_rol_user_rol1`
     FOREIGN KEY (`idrole`)
-    REFERENCES `dssoluti_residenciales`.`role` (`idrole`)
+    REFERENCES `role` (`idrole`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
@@ -107,7 +111,8 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `dssoluti_residenciales`.`page`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `dssoluti_residenciales`.`page` (
+DROP TABLE `page`;
+CREATE TABLE IF NOT EXISTS `page` (
   `idpage` INT NOT NULL AUTO_INCREMENT,
   `path` VARCHAR(255) NOT NULL,
   PRIMARY KEY (`idpage`),
@@ -117,19 +122,20 @@ CREATE TABLE IF NOT EXISTS `dssoluti_residenciales`.`page` (
 -- -----------------------------------------------------
 -- Table `dssoluti_residenciales`.`role_page`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `dssoluti_residenciales`.`role_page` (
+DROP TABLE `role_page`;
+CREATE TABLE IF NOT EXISTS `role_page` (
   `idrole` INT NOT NULL,
   `idpage` INT NOT NULL,
   INDEX `fk_category_role1_idx` (`idrole` ASC) ,
   INDEX `fk_category_role_page1_idx` (`idpage` ASC) ,
   CONSTRAINT `fk_category_role1`
     FOREIGN KEY (`idrole`)
-    REFERENCES `dssoluti_residenciales`.`role` (`idrole`)
+    REFERENCES `role` (`idrole`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_category_role_page1`
     FOREIGN KEY (`idpage`)
-    REFERENCES `dssoluti_residenciales`.`page` (`idpage`)
+    REFERENCES `page` (`idpage`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION);
 
@@ -137,7 +143,8 @@ CREATE TABLE IF NOT EXISTS `dssoluti_residenciales`.`role_page` (
 -- -----------------------------------------------------
 -- Table `dssoluti_residenciales`.`service`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `dssoluti_residenciales`.`service` (
+DROP TABLE `service`;
+CREATE TABLE IF NOT EXISTS `service` (
   `idservice` INT NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(200) NOT NULL,
   `description` VARCHAR(100) NULL,
@@ -151,7 +158,7 @@ CREATE TABLE IF NOT EXISTS `dssoluti_residenciales`.`service` (
   INDEX `fk_service_residential1_idx` (`idresidential` ASC) ,
   CONSTRAINT `fk_service_residential1`
     FOREIGN KEY (`idresidential`)
-    REFERENCES `dssoluti_residenciales`.`residential` (`idresidential`)
+    REFERENCES `residential` (`idresidential`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION);
 
@@ -159,7 +166,8 @@ CREATE TABLE IF NOT EXISTS `dssoluti_residenciales`.`service` (
 -- -----------------------------------------------------
 -- Table `dssoluti_residenciales`.`ticket_type`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `dssoluti_residenciales`.`ticket_type` (
+DROP TABLE `ticket_type`;
+CREATE TABLE IF NOT EXISTS `ticket_type` (
   `idtype` INT NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(255) NOT NULL,
   PRIMARY KEY (`idtype`));
@@ -168,7 +176,8 @@ CREATE TABLE IF NOT EXISTS `dssoluti_residenciales`.`ticket_type` (
 -- -----------------------------------------------------
 -- Table `dssoluti_residenciales`.`ticket_status`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `dssoluti_residenciales`.`ticket_status` (
+DROP TABLE `ticket_status`;
+CREATE TABLE IF NOT EXISTS `ticket_status` (
   `idstatus` INT NOT NULL AUTO_INCREMENT,
   `description` VARCHAR(50) NOT NULL,
   PRIMARY KEY (`idstatus`))
@@ -178,7 +187,8 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `dssoluti_residenciales`.`ticket`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `dssoluti_residenciales`.`ticket` (
+DROP TABLE `ticket`;
+CREATE TABLE IF NOT EXISTS `ticket` (
   `idticket` INT NOT NULL AUTO_INCREMENT,
   `subject` VARCHAR(100) NULL,
   `description` VARCHAR(400) NOT NULL,
@@ -187,6 +197,10 @@ CREATE TABLE IF NOT EXISTS `dssoluti_residenciales`.`ticket` (
   `idticket_type` INT NOT NULL,
   `idstatus` INT NOT NULL,
   `idresidential` INT NOT NULL,
+  `create_time` DATETIME NULL,
+  `create_user` INT NULL,
+  `modify_time` DATETIME NULL,
+  `modify_user` INT NULL,
   PRIMARY KEY (`idticket`),
   INDEX `fk_ticket_user1_idx` (`iduser` ASC) ,
   INDEX `fk_ticket_ticket_type1_idx` (`idticket_type` ASC) ,
@@ -194,22 +208,22 @@ CREATE TABLE IF NOT EXISTS `dssoluti_residenciales`.`ticket` (
   INDEX `fk_ticket_residential1_idx` (`idresidential` ASC) ,
   CONSTRAINT `fk_ticket_user1`
     FOREIGN KEY (`iduser`)
-    REFERENCES `dssoluti_residenciales`.`user` (`iduser`)
+    REFERENCES `user` (`iduser`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_ticket_ticket_type1`
     FOREIGN KEY (`idticket_type`)
-    REFERENCES `dssoluti_residenciales`.`ticket_type` (`idtype`)
+    REFERENCES `ticket_type` (`idtype`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_ticket_ticket_status1`
     FOREIGN KEY (`idstatus`)
-    REFERENCES `dssoluti_residenciales`.`ticket_status` (`idstatus`)
+    REFERENCES `ticket_status` (`idstatus`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_ticket_residential1`
     FOREIGN KEY (`idresidential`)
-    REFERENCES `dssoluti_residenciales`.`residential` (`idresidential`)
+    REFERENCES `residential` (`idresidential`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
@@ -218,10 +232,11 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `dssoluti_residenciales`.`service_request`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `dssoluti_residenciales`.`service_request` (
+DROP TABLE `service_request`;
+CREATE TABLE IF NOT EXISTS `service_request` (
   `idservicerequest` INT NOT NULL AUTO_INCREMENT,
   `subject` VARCHAR(200) NOT NULL,
-  `comment` VARCHAR(1000) NOT NULL,
+  `comment` VARCHAR(1000) NULL,
   `start_date` DATETIME NULL,
   `iduser` INT NULL,
   `idemployee` INT NULL,
@@ -258,10 +273,12 @@ CREATE TABLE IF NOT EXISTS `dssoluti_residenciales`.`service_request` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION);
 
+
 -- -----------------------------------------------------
 -- Table `dssoluti_residenciales`.`comment`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `dssoluti_residenciales`.`comment` (
+DROP TABLE `comment`;
+CREATE TABLE IF NOT EXISTS `comment` (
   `idcomment` INT NOT NULL AUTO_INCREMENT,
   `idticket` INT NOT NULL,
   `iduser` INT NOT NULL,
@@ -273,12 +290,12 @@ CREATE TABLE IF NOT EXISTS `dssoluti_residenciales`.`comment` (
   PRIMARY KEY (`idcomment`),
   CONSTRAINT `fk_comment_ticket1`
     FOREIGN KEY (`idticket`)
-    REFERENCES `dssoluti_residenciales`.`ticket` (`idticket`)
+    REFERENCES `ticket` (`idticket`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_comment_user1`
     FOREIGN KEY (`iduser`)
-    REFERENCES `dssoluti_residenciales`.`user` (`iduser`)
+    REFERENCES `user` (`iduser`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
@@ -286,7 +303,8 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `dssoluti_residenciales`.`message`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `dssoluti_residenciales`.`message` (
+DROP TABLE `message`;
+CREATE TABLE IF NOT EXISTS `message` (
   `idmessage` INT NOT NULL AUTO_INCREMENT,
   `subject` VARCHAR(100) NULL,
   `description` VARCHAR(1000) NULL,
@@ -326,7 +344,8 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `dssoluti_residenciales`.`mailbox`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `dssoluti_residenciales`.`mailbox` (
+DROP TABLE `mailbox`;
+CREATE TABLE IF NOT EXISTS `mailbox` (
   `idmailbox` INT NOT NULL AUTO_INCREMENT,
   `iduser` INT NOT NULL,
   `subject` VARCHAR(100) NULL,
@@ -341,7 +360,7 @@ CREATE TABLE IF NOT EXISTS `dssoluti_residenciales`.`mailbox` (
   INDEX `fk_mailbox_user1_idx` (`iduser` ASC) ,
   CONSTRAINT `fk_mailbox_user1`
     FOREIGN KEY (`iduser`)
-    REFERENCES `dssoluti_residenciales`.`user` (`iduser`)
+    REFERENCES `user` (`iduser`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
@@ -357,25 +376,25 @@ SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
 -- -----------------------------------------------------
 INSERT INTO residential (name,address,phone,email,nit,logo,status,create_time,create_user,modify_time,modify_user) VALUES
 	 ('DS','guatemala','12345678','cesar970@gmail.com','','',1,NOW(),1,NULL,NULL),
-	 ('demo1','guatemala','12345678','cesar970@gmail.com','images/logos/logo3.jpeg','',1,NOW(),1,NULL,NULL);
+	 ('demo1','guatemala','12345678','cesar970@gmail.com','','images/logos/logo3.jpeg',1,NOW(),1,NULL,NULL);
 
 INSERT INTO `user` (name,username,password,email,phone,code,address,`position`,photo,employee,status,create_time,create_user,modify_time,modify_user,idresidential) VALUES
 	 ('Cesar Joel Bojorquez','usuario1','$2a$10$B2CgcKhdQ3SDevqKqNgc7eNa3.d8J.rfys5IOgqFbRact26jb/vk2','cesar970@gmail.com','','','gau','','',0,1,NOW(),1,NULL,NULL,1),
 	 ('Juan ','usuario2','$2a$10$B2CgcKhdQ3SDevqKqNgc7eNa3.d8J.rfys5IOgqFbRact26jb/vk2','cesar970@gmail.com','30391123','','villa nueva','Jardinero','',0,1,NOW(),1,NULL,NULL,2),
 	 ('miguel','usuario3','$2a$10$B2CgcKhdQ3SDevqKqNgc7eNa3.d8J.rfys5IOgqFbRact26jb/vk2','cesar970@gmail.com','30391123',NULL,'villa nueva',NULL,'',0,1,NOW(),1,NULL,NULL,2);
 
-INSERT INTO `dssoluti_residenciales`.`role` (`idrole`,`name`, `status`, `create_time`, `create_user`) VALUES ('1','ROLE_ADMIN', '1', NOW(), '1');
-INSERT INTO `dssoluti_residenciales`.`role` (`idrole`, `name`, `status`, `create_time`, `create_user`) VALUES ('2', 'ROLE_EMPLOYEE', '1', NOW(), '1');
-INSERT INTO `dssoluti_residenciales`.`role` (`idrole`, `name`, `status`, `create_time`, `create_user`) VALUES ('3', 'ROLE_USER', '1', NOW(), '1');
+INSERT INTO `role` (`idrole`,`name`, `status`, `create_time`, `create_user`) VALUES ('1','ROLE_ADMIN', '1', NOW(), '1');
+INSERT INTO `role` (`idrole`, `name`, `status`, `create_time`, `create_user`) VALUES ('2', 'ROLE_EMPLOYEE', '1', NOW(), '1');
+INSERT INTO `role` (`idrole`, `name`, `status`, `create_time`, `create_user`) VALUES ('3', 'ROLE_USER', '1', NOW(), '1');
 
-INSERT INTO `dssoluti_residenciales`.`role_user` (`iduser`, `idrole`) VALUES ('1', '1');
-INSERT INTO `dssoluti_residenciales`.`role_user` (`iduser`, `idrole`) VALUES ('2', '2');
-INSERT INTO `dssoluti_residenciales`.`role_user` (`iduser`, `idrole`) VALUES ('3', '3');
+INSERT INTO `role_user` (`iduser`, `idrole`) VALUES ('1', '1');
+INSERT INTO `role_user` (`iduser`, `idrole`) VALUES ('2', '2');
+INSERT INTO `role_user` (`iduser`, `idrole`) VALUES ('3', '3');
 
-INSERT INTO `dssoluti_residenciales`.`ticket_type` (`name`) VALUES ('Gestion');
-INSERT INTO `dssoluti_residenciales`.`ticket_type` (`name`) VALUES ('Anomalia');
+INSERT INTO `ticket_type` (`name`) VALUES ('Gestion');
+INSERT INTO `ticket_type` (`name`) VALUES ('Anomalia');
 
-INSERT INTO `dssoluti_residenciales`.`ticket_status` (`description`) VALUES ('Creado');
-INSERT INTO `dssoluti_residenciales`.`ticket_status` (`description`) VALUES ('Abierto');
-INSERT INTO `dssoluti_residenciales`.`ticket_status` (`description`) VALUES ('En progreso');
-INSERT INTO `dssoluti_residenciales`.`ticket_status` (`description`) VALUES ('Cerrado');
+INSERT INTO `ticket_status` (`description`) VALUES ('Creado');
+INSERT INTO `ticket_status` (`description`) VALUES ('Abierto');
+INSERT INTO `ticket_status` (`description`) VALUES ('En progreso');
+INSERT INTO `ticket_status` (`description`) VALUES ('Cerrado');

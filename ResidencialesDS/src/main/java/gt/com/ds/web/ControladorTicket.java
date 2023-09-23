@@ -106,9 +106,12 @@ public class ControladorTicket {
             ticket.setEstado(estadoTicket);
             ticket.setIdResidencial(us.getResidencial().getIdResidential());//cambiar a dinamico
             ticket.setIdTipo(tipoGestion);
-
-            
+            ticket.setFechaCrea(Tools.now());
+            ticket.setUsuarioCrea(us.getIdUsuario());
             ticket.setUsuario(us);
+        }else{
+            ticket.setFechaModifica(Tools.now());
+            ticket.setUsuarioModifica(us.getIdUsuario());
         }
 
         log.info("Se crea gestion " + ticket);
@@ -117,15 +120,38 @@ public class ControladorTicket {
         
         return "redirect:/gestion";
     }
+    
+    @PostMapping("/estadoTicket")
+    public String guardarEstadoTicket(@Valid Ticket ticket,Model model, Errors errors) {
+        Usuario us = varios.getUsuarioLogueado();
+        Ticket tk = ticketService.encontrarTicket(ticket.getIdTicket());
+        
+        tk.setEstado(ticket.getEstado());
+        ticketService.guardar(tk);
+        
+        var comentarios = comentarioService.comentarioPorTicket(ticket.getIdTicket());
+        var estadosTicket = estadoTicketService.listarEstadoTicket();
+        model.addAttribute("comentarios", comentarios);
+        model.addAttribute("estadosTicket", estadosTicket);
+        model.addAttribute("ticket", ticket);
+        log.info("se envia ticket " + ticket.toString());
+        String id="?idTicket=" + tk.getIdTicket();
+        if(tk.getIdTipo()==1){
+            return "redirect:/editargestion" + id;
+        }else{
+            return "redirect:/editaranomalia" + id;
+        }
+        
+    }
 
     @GetMapping("/editargestion")
     public String editar(Ticket ticket, Model model) {
         ticket = ticketService.encontrarTicket(ticket);
         var estadosTicket = estadoTicketService.listarEstadoTicket();
-        if (ticket.getEstado().getIdEstado() == 1L) {
+        /*if (ticket.getEstado().getIdEstado() == 1L) {
             EstadoTicket estadoTicket = estadoTicketService.encontrarEstado(2L);
             ticket.setEstado(estadoTicket);
-        }
+        }*/
         var comentarios = comentarioService.comentarioPorTicket(ticket.getIdTicket());
         model.addAttribute("comentarios", comentarios);
         model.addAttribute("estadosTicket", estadosTicket);
@@ -137,10 +163,12 @@ public class ControladorTicket {
     @GetMapping("/cerrargestion")
     public String eliminar(Ticket ticket, Model model) {
         //ticket = ticketService.encontrarTicket(ticket);
+        Usuario us = varios.getUsuarioLogueado();
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
         Date date = new Date();
-        //ticket.setEstado(0L);
-
+        ticket.setEstado(estadoTicketService.encontrarEstado(4L));
+        ticket.setFechaModifica(Tools.now());
+        ticket.setUsuarioModifica(us.getIdUsuario());
         //log.info("Eliminando gestion " + rol);
         ticketService.guardar(ticket);
         return "redirect:/gestion";
@@ -199,7 +227,12 @@ public class ControladorTicket {
             ticket.setIdResidencial(us.getResidencial().getIdResidential());
             ticket.setIdTipo(tipoAnomalia);
 
+            ticket.setFechaCrea(Tools.now());
+            ticket.setUsuarioCrea(us.getIdUsuario());
             ticket.setUsuario(us);
+        }else{
+            ticket.setFechaModifica(Tools.now());
+            ticket.setUsuarioModifica(us.getIdUsuario());
         }
 
         log.info("Se crea anomalia " + ticket);
@@ -214,10 +247,10 @@ public class ControladorTicket {
     public String editarAnomalia(Ticket ticket, Model model) {
         ticket = ticketService.encontrarTicket(ticket);
         var estadosTicket = estadoTicketService.listarEstadoTicket();
-        if (ticket.getEstado().getIdEstado() == 1L) {
+        /*if (ticket.getEstado().getIdEstado() == 1L) {
             EstadoTicket estadoTicket = estadoTicketService.encontrarEstado(2L);
             ticket.setEstado(estadoTicket);
-        }
+        }*/
         var comentarios = comentarioService.comentarioPorTicket(ticket.getIdTicket());
         model.addAttribute("comentarios", comentarios);
         model.addAttribute("estadosTicket", estadosTicket);
@@ -229,10 +262,11 @@ public class ControladorTicket {
     @GetMapping("/cerraranomalia")
     public String eliminarAnomalia(Ticket ticket, Model model) {
         //ticket = ticketService.encontrarTicket(ticket);
-        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-        Date date = new Date();
-        //ticket.setEstado(0L);
-
+        
+        Usuario us = varios.getUsuarioLogueado();
+        ticket.setEstado(estadoTicketService.encontrarEstado(4L));
+        ticket.setFechaModifica(Tools.now());
+        ticket.setUsuarioModifica(us.getIdUsuario());
         //log.info("Eliminando gestion " + rol);
         ticketService.guardar(ticket);
         return "redirect:/anomalia";

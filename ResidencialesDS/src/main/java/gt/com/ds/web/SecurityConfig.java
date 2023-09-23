@@ -27,14 +27,14 @@ public class SecurityConfig {// extends WebSecurityConfigurerAdapter{
 
     //@Autowired
     private UserDetailsService userDetailsService;
-    
-    @Bean 
-    public BCryptPasswordEncoder passwordEncoder(){
+
+    @Bean
+    public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-    
+
     //@Autowired
-    public void configurerGlobal(AuthenticationManagerBuilder build) throws Exception{
+    public void configurerGlobal(AuthenticationManagerBuilder build) throws Exception {
         build.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
     }
 
@@ -42,20 +42,22 @@ public class SecurityConfig {// extends WebSecurityConfigurerAdapter{
     public AuthenticationEntryPoint authenticationEntryPoint() {
         return new LoginUrlAuthenticationEntryPoint("/login"); // Puedes ajustar la URL según tus necesidades
     }
-    
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests((requests) -> requests
-                .requestMatchers("/usuario", "/empleado","/modificarus","/modificaremp","/crearus","/crearemp","/listaUsuarios","/rol","/modificarrol","/asignarol"
-                ,"/residencial","/modificarres").hasRole("ADMIN")
-                .requestMatchers("/usuariores", "/empleado","/modificarusres","/modificaremp","/crearusres","/crearemp","/crearnotificacion","/especifica","/general"
-                ,"/modificarespecifica","/modificargeneral","/modificargerstion","/modificarserv","/servicio","/verespecifica","/vergeneral","/enviageneral","/asignarol").hasAnyRole("ADMIN","EMPLOYEE")
-                .requestMatchers("/modificargestion","/creargestion","/verbuzon").hasRole("USER")
-                .requestMatchers("/","/perfil","/userconfigauth").hasAnyRole("ADMIN","EMPLOYEE","USER")
-                .requestMatchers("/anomalia","/crearanomalia","/modificaranomalia","/gestion","solicitud").hasAnyRole("EMPLOYEE","USER")
+                .requestMatchers("/usuario", "/crearus", "/rol", "/modificarrol",
+                         "/residencial", "/modificarres", "/empleado", "/modificarus", "/modificaremp").hasRole("ADMIN")
+                .requestMatchers( "/listaUsuarios", "/asignarol").hasAnyRole("EMPLOYEE", "ADMIN")
+                .requestMatchers("/usuariores", "/empleado", "/modificarusres", "/modificaremp", "/crearusres", "/crearemp", "/crearnotificacion", "/especifica", "/general",
+                         "/modificarespecifica", "/modificargeneral", "/modificargerstion", "/modificarserv", "/servicio", "/verespecifica", "/vergeneral", "/enviageneral",
+                         "/empleadores","/crearempres","/modificarempres").hasRole("EMPLOYEE")
+                .requestMatchers("/modificargestion", "/creargestion", "/verbuzon").hasRole("USER")
+                .requestMatchers("/", "/perfil", "/userconfigauth").hasAnyRole("ADMIN", "EMPLOYEE", "USER")
+                .requestMatchers("/anomalia", "/crearanomalia", "/modificaranomalia", "/gestion", "solicitud").hasAnyRole("EMPLOYEE", "USER")
                 .requestMatchers("/css/**", "/js/**", "/images/**", "/adjunto/**", "/assets/**").permitAll()
-                .requestMatchers("/getresidenciales","/registro","/userconfig","/guardarcontrasena","/recupera","/recuperacontrasena").permitAll()
+                .requestMatchers("/getresidenciales", "/registro", "/userconfig", "/guardarcontrasena", "/recupera", "/recuperacontrasena").permitAll()
                 .anyRequest().authenticated()
                 )
                 .formLogin((form) -> form

@@ -12,6 +12,9 @@ import org.springframework.data.repository.query.Param;
  */
 public interface ServicioDao extends JpaRepository<Servicio,Long>{
     
-     @Query("SELECT s FROM Servicio s WHERE s.estado = :estado")
+    @Query("SELECT s FROM Servicio s WHERE s.estado = :estado")
     List<Servicio> buscarPorEstado(@Param("estado") Long estado);
+    
+    @Query("SELECT s FROM Servicio s WHERE s.estado = 1 AND s.residencial.idResidential=:idResidencial")
+    List<Servicio> buscarPorResidencial(@Param("idResidencial") Long idResidencial);
 }

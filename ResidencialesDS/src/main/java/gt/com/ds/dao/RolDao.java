@@ -13,6 +13,9 @@ import org.springframework.data.repository.query.Param;
 public interface RolDao extends JpaRepository<Rol,Long>{
     
     
-     @Query("SELECT r FROM Rol r WHERE r.estado = :estado")
+    @Query("SELECT r FROM Rol r WHERE r.estado = :estado")
     List<Rol> buscarPorEstado(@Param("estado") Long estado);
+    
+    @Query("SELECT r FROM Rol r WHERE r.estado = 1 AND r.idRol<>1")
+    List<Rol> rolesNoAdmin();
 }

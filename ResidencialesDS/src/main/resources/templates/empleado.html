@@ -10,6 +10,7 @@
         <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
         <link href="css/styles.css" rel="stylesheet" />
         <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+        <script src="js/util.js"></script>
     </head>
     <body class="sb-nav-fixed">
         <!--header th:replace="layout/plantilla :: header"></header-->
@@ -50,6 +51,7 @@
                                             <th>Email</th>
                                             <th>Tel&eacute;fono</th>
                                             <th>Direcci&oacute;n</th>
+                                            <th>Residencial</th>
                                             <th>Puesto</th>
 
                                             <th>Foto</th>
@@ -70,6 +72,7 @@
                                             <th>Email</th>
                                             <th>Tel&eacute;fono</th>
                                             <th>Direcci&oacute;n</th>
+                                            <th>Residencial</th>
                                             <th>Puesto</th>
 
                                             <th>Foto</th>
@@ -90,6 +93,7 @@
                                             <td th:text="${usuario.email}">Mostrar Email</td>
                                             <td th:text="${usuario.telefono}">Mostrar Telefono</td>
                                             <td th:text="${usuario.direccion}">Mostrar Direcci&oacute;n</td>
+                                            <td th:text="${usuario.residencial.name}">Mostrar Puesto</td>
                                             <td th:text="${usuario.cargo}">Mostrar Puesto</td>
 
                                             <td>
@@ -97,13 +101,13 @@
                                                     <img th:src="${usuario.foto}" alt="Foto de Perfil" height="100">
                                                 </span>
                                             </td>
-                                            <td th:text="${usuario.estado}">Mostrar Estado</td>
+                                            <td th:text="${usuario.estado}==1?'Activo':'Inactivo'">Mostrar Estado</td>
                                             <td th:text="${usuario.fechaCrea}">Mostrar fecha de creacion</td>
                                             <td th:text="${usuario.usuarioCrea}">Mostrar quien ingreso el registro</td>
                                             <td th:text="${usuario.fechaModifica}">Mostrar fecha de modificacion</td>
                                             <td th:text="${usuario.usuarioModifica}">Mostrar quien modifico el registro</td>
                                             <td><a class="btn btn-info" role="button"  th:href="@{/editaremp(idUsuario=${usuario.idUsuario})}" th:text="Editar"/></td>
-                                            <td><a class="btn btn-danger" role="button"  th:href="@{/eliminaremp(idUsuario=${usuario.idUsuario})}" th:text="Eliminar"/></td>
+                                            <td><a class="btn btn-danger" role="button"  th:onclick="confirmarEliminacion([[(${usuario.idUsuario})]],'/eliminaremp?idUsuario=');" th:text="Eliminar"/></td>
                                         </tr>
 
                                     </tbody>
