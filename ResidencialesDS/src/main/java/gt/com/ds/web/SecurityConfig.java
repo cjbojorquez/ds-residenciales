@@ -47,15 +47,15 @@ public class SecurityConfig {// extends WebSecurityConfigurerAdapter{
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests((requests) -> requests
-                .requestMatchers("/usuario", "/crearus", "/rol", "/modificarrol",
-                         "/residencial", "/modificarres", "/empleado", "/modificarus", "/modificaremp").hasRole("ADMIN")
-                .requestMatchers( "/listaUsuarios", "/asignarol").hasAnyRole("EMPLOYEE", "ADMIN")
-                .requestMatchers("/usuariores", "/empleado", "/modificarusres", "/modificaremp", "/crearusres", "/crearemp", "/crearnotificacion", "/especifica", "/general",
-                         "/modificarespecifica", "/modificargeneral", "/modificargerstion", "/modificarserv", "/servicio", "/verespecifica", "/vergeneral", "/enviageneral",
+                .requestMatchers("/usuario", "/crearus", "/rol", "/modificarrol", "/crearemp"
+                         ,"/residencial", "/modificarres", "/empleado", "/modificarus", "/modificaremp").hasRole("ADMIN")
+                .requestMatchers( "/listaUsuarios", "/asignarol").hasAnyRole("EMPLOYEE","ADMIN")
+                .requestMatchers("/usuariores", "/modificarusres", "/crearusres", "/crearnotificacion", "/especifica", "/general",
+                         "/modificarespecifica", "/modificargeneral", "/modificarserv", "/servicio", "/verespecifica", "/vergeneral", "/enviageneral",
                          "/empleadores","/crearempres","/modificarempres").hasRole("EMPLOYEE")
                 .requestMatchers("/modificargestion", "/creargestion", "/verbuzon").hasRole("USER")
-                .requestMatchers("/", "/perfil", "/userconfigauth").hasAnyRole("ADMIN", "EMPLOYEE", "USER")
-                .requestMatchers("/anomalia", "/crearanomalia", "/modificaranomalia", "/gestion", "solicitud").hasAnyRole("EMPLOYEE", "USER")
+                .requestMatchers("/", "/perfil", "/userconfigauth","/obtenerMensajes").hasAnyRole("ADMIN", "EMPLOYEE", "USER")
+                .requestMatchers("/anomalia", "/crearanomalia", "/modificaranomalia", "/gestion", "/solicitud").hasAnyRole("EMPLOYEE", "USER")
                 .requestMatchers("/css/**", "/js/**", "/images/**", "/adjunto/**", "/assets/**").permitAll()
                 .requestMatchers("/getresidenciales", "/registro", "/userconfig", "/guardarcontrasena", "/recupera", "/recuperacontrasena").permitAll()
                 .anyRequest().authenticated()

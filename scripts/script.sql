@@ -115,6 +115,8 @@ DROP TABLE `page`;
 CREATE TABLE IF NOT EXISTS `page` (
   `idpage` INT NOT NULL AUTO_INCREMENT,
   `path` VARCHAR(255) NOT NULL,
+  `menu` INT NULL,
+  `status` INT NULL,
   PRIMARY KEY (`idpage`),
   UNIQUE INDEX `name_UNIQUE` (`path` ASC) );
 
@@ -282,6 +284,7 @@ CREATE TABLE IF NOT EXISTS `comment` (
   `idcomment` INT NOT NULL AUTO_INCREMENT,
   `idticket` INT NOT NULL,
   `iduser` INT NOT NULL,
+  `status` INT NOT NULL,
   `attachment` VARCHAR(200) NULL,
   `date` DATETIME NULL,
   `comment` VARCHAR(1000) NULL,
@@ -398,3 +401,45 @@ INSERT INTO `ticket_status` (`description`) VALUES ('Creado');
 INSERT INTO `ticket_status` (`description`) VALUES ('Abierto');
 INSERT INTO `ticket_status` (`description`) VALUES ('En progreso');
 INSERT INTO `ticket_status` (`description`) VALUES ('Cerrado');
+
+INSERT INTO page (path,status,menu) VALUES ('/usuario',1,1);
+INSERT INTO page (path,status,menu) VALUES ('/crearus',1,0);
+INSERT INTO page (path,status,menu) VALUES ('/rol',1,1);
+INSERT INTO page (path,status,menu) VALUES ('/modificarrol',1,0);
+INSERT INTO page (path,status,menu) VALUES ('/residencial',1,1);
+INSERT INTO page (path,status,menu) VALUES ('/modificarres',1,0);
+INSERT INTO page (path,status,menu) VALUES ('/empleado',1,1);
+INSERT INTO page (path,status,menu) VALUES ('/modificarus',1,0);
+INSERT INTO page (path,status,menu) VALUES ('/modificaremp',1,0);
+INSERT INTO page (path,status,menu) VALUES ('/listaUsuarios',1,1);
+INSERT INTO page (path,status,menu) VALUES ('/asignarol',1,0);
+INSERT INTO page (path,status,menu) VALUES ('/usuariores',1,1);
+INSERT INTO page (path,status,menu) VALUES ('/modificarusres',1,0);
+INSERT INTO page (path,status,menu) VALUES ('/crearusres',1,0);
+INSERT INTO page (path,status,menu) VALUES ('/crearemp',1,0);
+INSERT INTO page (path,status,menu) VALUES ('/crearnotificacion',1,0);
+INSERT INTO page (path,status,menu) VALUES ('/especifica',1,1);
+INSERT INTO page (path,status,menu) VALUES ('/general',1,1);
+INSERT INTO page (path,status,menu) VALUES ('/modificarespecifica',1,0);
+INSERT INTO page (path,status,menu) VALUES ('/modificargeneral',1,0);
+INSERT INTO page (path,status,menu) VALUES ('/modificargerstion',1,0);
+INSERT INTO page (path,status,menu) VALUES ('/modificarserv',1,0);
+INSERT INTO page (path,status,menu) VALUES ('/servicio',1,1);
+INSERT INTO page (path,status,menu) VALUES ('/verespecifica',1,0);
+INSERT INTO page (path,status,menu) VALUES ('/vergeneral',1,0);
+INSERT INTO page (path,status,menu) VALUES ('/enviageneral',1,0);
+INSERT INTO page (path,status,menu) VALUES ('/empleadores',1,1);
+INSERT INTO page (path,status,menu) VALUES ('/crearempres',1,0);
+INSERT INTO page (path,status,menu) VALUES ('/modificarempres',1,1);
+INSERT INTO page (path,status,menu) VALUES ('/modificargestion',1,0);
+INSERT INTO page (path,status,menu) VALUES ('/creargestion',1,0);
+INSERT INTO page (path,status,menu) VALUES ('/verbuzon',1,0);
+INSERT INTO page (path,status,menu) VALUES ('/perfil',1,0);
+INSERT INTO page (path,status,menu) VALUES ('/userconfigauth',1,0);
+INSERT INTO page (path,status,menu) VALUES ('/anomalia',1,1);
+INSERT INTO page (path,status,menu) VALUES ('/crearanomalia',1,0);
+INSERT INTO page (path,status,menu) VALUES ('/modificaranomalia',1,0);
+INSERT INTO page (path,status,menu) VALUES ('/gestion',1,1);
+INSERT INTO page (path,status,menu) VALUES ('/solicitud',1,1);
+INSERT INTO page (path,status,menu) VALUES ('/',1,0);
+

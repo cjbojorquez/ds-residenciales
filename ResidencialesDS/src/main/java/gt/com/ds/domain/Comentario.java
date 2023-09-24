@@ -30,6 +30,9 @@ public class Comentario implements Serializable {
     @JoinColumn(name = "iduser")
     private Usuario usuario;
     
+    @Column(name="status")
+    private Long idEstado;
+    
     @Column(name="attachment")
     private String adjunto;
     

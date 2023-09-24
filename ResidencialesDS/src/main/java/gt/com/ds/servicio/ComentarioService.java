@@ -15,4 +15,8 @@ public interface ComentarioService {
     
     public void eliminar(Comentario comentario);
     
+    public List<Comentario> buscaNoLeidos(Long idUsuario);
+    
+    public List<Comentario> buscaNoLeidosR(Long idResidencial);
+    
 }

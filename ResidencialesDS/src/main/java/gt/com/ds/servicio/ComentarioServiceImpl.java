@@ -38,6 +38,15 @@ public class ComentarioServiceImpl implements ComentarioService{
         comentarioDao.delete(comentario);
     }
 
-    
-    
+    @Override
+    @Transactional(readOnly = true)
+    public List<Comentario> buscaNoLeidos(Long idUsuario) {
+        return (List<Comentario>)comentarioDao.buscarNoLeidos(idUsuario);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Comentario> buscaNoLeidosR(Long idResidencial) {
+        return (List<Comentario>)comentarioDao.buscarNoLeidosR(idResidencial);
+    }
 }

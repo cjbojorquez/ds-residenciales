@@ -31,6 +31,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -55,6 +56,7 @@ public class ControladorTicket {
     @Autowired
     private UsuarioService usuarioService;
 
+        
     @Autowired
     private Varios varios;
     
@@ -146,12 +148,14 @@ public class ControladorTicket {
 
     @GetMapping("/editargestion")
     public String editar(Ticket ticket, Model model) {
+        Usuario us = varios.getUsuarioLogueado();
         ticket = ticketService.encontrarTicket(ticket);
         var estadosTicket = estadoTicketService.listarEstadoTicket();
-        /*if (ticket.getEstado().getIdEstado() == 1L) {
+        if (ticket.getEstado().getIdEstado() == 1L  && us.getIdUsuario()!=ticket.getUsuarioCrea()) {
             EstadoTicket estadoTicket = estadoTicketService.encontrarEstado(2L);
             ticket.setEstado(estadoTicket);
-        }*/
+            ticketService.guardar(ticket);
+        }
         var comentarios = comentarioService.comentarioPorTicket(ticket.getIdTicket());
         model.addAttribute("comentarios", comentarios);
         model.addAttribute("estadosTicket", estadosTicket);
@@ -246,12 +250,22 @@ public class ControladorTicket {
     @GetMapping("/editaranomalia")
     public String editarAnomalia(Ticket ticket, Model model) {
         ticket = ticketService.encontrarTicket(ticket);
+        Usuario us = varios.getUsuarioLogueado();
         var estadosTicket = estadoTicketService.listarEstadoTicket();
-        /*if (ticket.getEstado().getIdEstado() == 1L) {
+        if (ticket.getEstado().getIdEstado() == 1L && !Objects.equals(us.getIdUsuario(), ticket.getUsuarioCrea())) {
             EstadoTicket estadoTicket = estadoTicketService.encontrarEstado(2L);
             ticket.setEstado(estadoTicket);
-        }*/
+            ticketService.guardar(ticket);
+        }
         var comentarios = comentarioService.comentarioPorTicket(ticket.getIdTicket());
+        for(var c:comentarios){
+            
+            if(!Objects.equals(us.getIdUsuario(), c.getUsuario().getIdUsuario())){
+                c.setIdEstado(2L);c.setIdEstado(2L);
+                comentarioService.guardar(c);
+            }
+                
+        }
         model.addAttribute("comentarios", comentarios);
         model.addAttribute("estadosTicket", estadosTicket);
         model.addAttribute("ticket", ticket);
@@ -290,10 +304,12 @@ public class ControladorTicket {
         }
         System.out.println("txtComentario = " + txtComentario + " tipo " + tk.getIdTipo());
         if (txtComentario != "" || !imagen.isEmpty()) {
+            
             comentario.setTicket(tk);
             comentario.setFecha(date);
             comentario.setUsuario(usuarioLogueado);
             comentario.setComentario(txtComentario);
+            comentario.setIdEstado(1L);
             System.out.println("Ingresa antes de img");
             if (!imagen.isEmpty()) {
                 Path directorioImagenes = Paths.get("src//main//resources//static//adjunto");

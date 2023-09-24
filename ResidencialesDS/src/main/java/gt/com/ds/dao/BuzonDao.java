@@ -19,5 +19,7 @@ public interface BuzonDao extends JpaRepository<Buzon,Long>{
     @Query("SELECT b FROM Buzon b WHERE b.usuario.idUsuario = :idUsuario ORDER BY b.idBuzon DESC")
     List<Buzon> buscarPorUsuario(@Param("idUsuario") Long idUsuario);
     
+    @Query("SELECT b FROM Buzon b WHERE b.usuario.idUsuario = :idUsuario AND estado = 1 ORDER BY b.idBuzon DESC")
+    List<Buzon> buscarNoLeidos(@Param("idUsuario") Long idUsuario);
     
 }

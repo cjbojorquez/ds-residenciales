@@ -10,12 +10,13 @@
         <title>DS-Residenciales</title>
         <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
         <!--link th:href="@{/css/styles.css}" rel="stylesheet" /-->
-        
+
         <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
-        
+
     </head>
     <body>
         <header th:fragment="header">
+            <div th:object="${mensajes}"></div>
             <nav class="sb-topnav navbar navbar-expand navbar-light" style="background-color: #e3f2fd;">
                 <!-- Navbar Brand  e3f2fd -->
 
@@ -32,16 +33,19 @@
                 <ul class="d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0">
 
                 </ul>
-                <ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
+                <ul  class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="fas fa-bell fa-fw" th:if="1==1"></i>
-                            <i class="fa-solid fa-bell fa-shake" th:if="1==0"></i>
-                        </a>
-                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                            <li><a class="dropdown-item" href="#!" th:text="${nuevos}">Notificaciones</a></li>
                             
-                            </ul>
+                            <i id="alerta" class="fas fa-bell fa-fw"></i>
+                            <!--i class="fa-solid fa-bell fa-shake" th:if="${mensajes != null and !mensajes.empty}"></i-->
+                        </a>
+                        <ul id="mensajeList" class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                            
+                            <!--li th:each="mensaje : ${mensajes}">
+                                <!--a class="dropdown-item" href="" th:text="${mensaje.descripcion} + ${mensaje.asunto}"></a-->
+                            </li-->
+                        </ul>
                     </li>
                 </ul>
                 <ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
@@ -102,7 +106,7 @@
                                 <span class="text-success">Servicios</span>
                             </a>
                             <div  class="sb-sidenav-menu-heading">Operaciones</div>
-                            
+
                             <a sec:authorize="hasAnyRole('ROLE_USER','ROLE_EMPLOYEE')" class="nav-link" href="/solicitud">
                                 <div class="sb-nav-link-icon"><i class="fa-solid fa-wrench fa-xl"></i></div>
                                 <span class="text-success">Solicitud de Servicio</span>
@@ -119,7 +123,7 @@
                                 <div class="sb-nav-link-icon"><i class="fa-solid fa-pen-clip fa-xl"></i></div>
                                 <span class="text-success">Ingresar Anomalia</span>
                             </a>
-                            
+
                             <a sec:authorize="hasRole('ROLE_EMPLOYEE')" class="nav-link" href="/general">
                                 <div class="sb-nav-link-icon"><i class="fa-solid fa-envelopes-bulk fa-xl"></i></div>
                                 <span class="text-success">Notificaci&oacute;n General</span>
@@ -136,7 +140,7 @@
                     </div>
                     <div class="sb-sidenav-footer">
                         <div class="small">Version 1.0</div>
-                        
+
                     </div>
                 </nav>
             </div>
@@ -155,5 +159,26 @@
             </div>
 
         </footer>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script>
+                                /*function actualizarMensajes() {
+                                    $.get("/obtenerMensajes", function (data) {
+                                        alert("actualiza");
+                                        // Limpiar la lista de mensajes existente
+                                        $("#mensajeList").empty();
+
+                                        // Iterar sobre los nuevos mensajes y agregarlos a la lista
+                                        $.each(data, function (index, mensaje) {
+                                            $("#mensajeList").append(
+                                                    '<li><a class="dropdown-item" href="#!" th:text="' +
+                                                    mensaje.asunto + '">Notificaciones</a></li>'
+                                                    );
+                                        });
+                                    });
+                                }
+
+                                // Actualizar los mensajes cada cierto intervalo de tiempo (por ejemplo, cada 10 segundos)
+                                setInterval(actualizarMensajes, 10000); // 10000 milisegundos = 10 segundos*/
+        </script>
     </body>
 </html>

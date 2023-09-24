@@ -24,4 +24,6 @@ public interface NotificacionDao extends JpaRepository<Notificacion,Long>{
     
     @Query("SELECT t FROM Notificacion t WHERE t.tipo = :tipo AND t.estado.idEstado in(1,2) AND t.idResidencial = :idResidencial")
     List<Notificacion> buscarActivos(@Param("tipo") String tipo,@Param("idResidencial") Long idResidencial);
+    
+    
 }

@@ -59,13 +59,18 @@ public class ControladorBuzon {
 
     private String varNotiGeneral = "G";
     private String varNotiEspecifica = "E";
-
+    private Long noLeidos=1L;
     @GetMapping("/buzon")
     public String InicioGeneral(Model model) {
         // Tipo de ticket 1 = Gestion ; 2 = Anomalias
         //  G = Notificacion General
         Usuario usuarioLogueado = varios.getUsuarioLogueado();
-        var notificaciones = buzonService.buzonPorUsuario(usuarioLogueado.getIdUsuario());//agregar residencial
+        var notificaciones = buzonService.buzonPorUsuario(usuarioLogueado.getIdUsuario());
+        var notificacionesNoLeidas = buzonService.buzonPorEstado(noLeidos,usuarioLogueado.getIdUsuario());
+        for(Buzon noti:notificacionesNoLeidas){
+            noti.setEstado(2L);
+            buzonService.guardar(noti);
+        }
         log.info("estas son las notificaciones " + notificaciones.toString() + " IdUsuario=" + usuarioLogueado.getIdUsuario());
         model.addAttribute("notificaciones", notificaciones);
 
@@ -73,8 +78,8 @@ public class ControladorBuzon {
     }
 
     @GetMapping("/leerbuzon")
-    public String agregarGeneral(Notificacion notificacion, Model model) {
-
+    public String leerBuzon(Notificacion notificacion, Model model) {
+        //var buzon = buzonService.
         return "leerbuzon";
     }
 

@@ -1,10 +1,12 @@
 package gt.com.ds.web;
 
+import gt.com.ds.domain.Buzon;
 import gt.com.ds.domain.Usuario;
 import gt.com.ds.servicio.BuzonService;
 import gt.com.ds.servicio.ResidencialService;
 import gt.com.ds.servicio.UsuarioService;
 import gt.com.ds.servicio.Varios;
+import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -46,11 +48,12 @@ public class ControladorInicio {
         var mensajes = buzonService.buzonPorEstado(1L, usuarioLogueado.getIdUsuario());
         var residencial = usuarioLogueado.getResidencial();
         int nuevos=mensajes.size();
-        model.addAttribute("mensajes",mensajes);
-        model.addAttribute("nuevos",nuevos);
+        /*model.addAttribute("mensajes",mensajes);
+        model.addAttribute("nuevos",nuevos);*/
         model.addAttribute("residencial",residencial);
         return "index";
     }
+    
     
        
 }

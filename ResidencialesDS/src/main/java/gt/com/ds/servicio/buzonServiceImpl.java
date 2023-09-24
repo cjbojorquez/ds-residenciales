@@ -48,5 +48,9 @@ public class BuzonServiceImpl implements BuzonService{
         return buzonDao.findById(buzon.getIdBuzon()).orElse(null);
     }
 
-    
+    @Override
+    @Transactional(readOnly = true)
+    public List<Buzon> buzonNoLeidos(Long idUsuario) {
+        return (List<Buzon>)buzonDao.buscarNoLeidos(idUsuario);
+    }
 }

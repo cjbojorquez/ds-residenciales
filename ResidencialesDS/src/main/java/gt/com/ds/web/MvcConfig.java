@@ -19,6 +19,7 @@ public class MvcConfig implements WebMvcConfigurer {
         registry.addViewController("/recupera").setViewName("recupera");
         registry.addViewController("/errores/403").setViewName("403");
         registry.addViewController("/403").setViewName("403");
+        registry.addViewController("/obtenerMensajes").setViewName("obtenerMensajes");
     }
 
     @Override

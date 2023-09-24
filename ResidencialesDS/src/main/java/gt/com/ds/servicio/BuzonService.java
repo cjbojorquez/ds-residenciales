@@ -18,4 +18,6 @@ public interface BuzonService {
     public void eliminar(Buzon buzon);
     
     public Buzon encontrarBuzon(Buzon buzon);
+    
+    public List<Buzon> buzonNoLeidos(Long idUsuario);
 }

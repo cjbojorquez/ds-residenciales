@@ -77,8 +77,8 @@
                             </div>
                             <div class="chat">
                                 <div class="conversacion">
-                                    <div th:if="${ticket.descripcion}!=''" th:class="${ticket.usuario.nombreUsuario == #authentication.principal.getUsername() ? 'mensaje pregunta' : 'mensaje respuesta'}" th:utext="'<b>' + ${ticket.asunto} + '</b><br/>' + ${ticket.descripcion}">
-                                    </div>
+                                    <!--div th:if="${ticket.descripcion}!=''" th:class="${ticket.usuario.nombreUsuario == #authentication.principal.getUsername() ? 'mensaje pregunta' : 'mensaje respuesta'}" th:utext="'<b>' + ${ticket.asunto} + '</b><br/>' + ${ticket.descripcion}">
+                                    </div-->
                                 </div>
                                 <div th:if="${comentarios != null and !comentarios.empty}">
                                     <table>
@@ -189,5 +189,7 @@
     <script src="assets/demo/chart-bar-demo.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>
     <script src="js/datatables-simple-demo.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="js/mensajes.js"></script>
 </body>
 </html>
