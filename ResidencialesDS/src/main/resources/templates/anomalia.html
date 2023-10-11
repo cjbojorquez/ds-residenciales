@@ -6,7 +6,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="description" content="" />
         <meta name="author" content="" />
-        <title>Dashboard - DS Admin</title>
+        <title>DS-Residenciales</title>
         <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min1.css" rel="stylesheet" />
         <link href="css/styles.css" rel="stylesheet" />
         <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
@@ -22,9 +22,9 @@
         <div id="layoutSidenav_content">
             <main>
                 <div class="container-fluid px-4">
-                    <h1 class="mt-4">Dashboard</h1>
+                    <h1 class="mt-4">Anomalias</h1>
                     <ol class="breadcrumb mb-4">
-                        <li class="breadcrumb-item active">Anomalias</li>
+                        <li class="breadcrumb-item active"></li>
                     </ol>
 
                     <nav class="navbar navbar-light bg-light">
@@ -38,7 +38,7 @@
                             Anomalias
                         </div>
 
-                        <div class="card-body">
+                        <!--div class="card-body">
                             <div th:if="${anomalias != null and !anomalias.empty}">
                                 <table id="datatablesSimple">
                                     <thead>
@@ -72,6 +72,23 @@
 
                                     </tbody>
                                 </table>
+                            </div>
+                        </div-->
+                        <div class="card-body">
+                            <div th:if="${anomalias != null and !anomalias.empty}">
+                                <ol class="list-group list-group-numbered">
+                                    <li th:each="ticket : ${anomalias}" class="list-group-item d-flex justify-content-between align-items-start" >
+                                        <div class="ms-2 me-auto">
+                                            <div class="fw-bold" th:text="${ticket.asunto}"></div>
+                                            <span th:text="${ticket.descripcion}"></span>
+                                            <p class="mb-1" th:text="'Usuario:' + ${ticket.usuario.nombre}"></p>   
+                                            <p class="mb-1" th:text="'Estado:' + ${ticket.estado.nombre}"></p>
+                                            <a class="btn btn-outline-success" role="button" th:href="@{/editaranomalia(idTicket=${ticket.idTicket})}"  data-bs-dismiss="collapse">Leer</i></a>
+                                            
+                                        </div>
+                                        <span class="badge bg-primary rounded-pill" th:text="'#' + ${ticket.idTicket}"></span>
+                                    </li>
+                                </ol>
                             </div>
                         </div>
                     </div>

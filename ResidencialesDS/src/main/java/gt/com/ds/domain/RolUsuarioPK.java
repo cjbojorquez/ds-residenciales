@@ -6,8 +6,11 @@ import lombok.Data;
 
 
 /**
+ * Esta clase se utiliza para crear una llave compuesta que se utiliza en la entidad RolUsuario
+ * mapea las llaves primarias iduser y idrole, de la tabla role_user
  *
  * @author cjbojorquez
+ * 
  */
 @Data
 @Embeddable

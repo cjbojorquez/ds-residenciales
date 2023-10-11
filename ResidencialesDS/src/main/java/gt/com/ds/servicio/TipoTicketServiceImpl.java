@@ -39,7 +39,7 @@ public class TipoTicketServiceImpl implements TipoTicketService{
 
     @Override
     @Transactional(readOnly = true)
-    public TipoTicket encontrarRol(TipoTicket tipoTicket) {
+    public TipoTicket encontrarTipoTicket(TipoTicket tipoTicket) {
         return tipoTicketDao.findById(tipoTicket.getIdTipo()).orElse(null);
     }
 

@@ -18,6 +18,11 @@ public class ComentarioServiceImpl implements ComentarioService{
     private ComentarioDao comentarioDao;
     
    
+    /**
+     * ESta funcion lista todos los comentario filtardos por ticket
+     * @param idTicket
+     * @return 
+     */
     @Override
     @Transactional(readOnly = true)
     public List<Comentario> comentarioPorTicket(Long idTicket) {
@@ -25,25 +30,42 @@ public class ComentarioServiceImpl implements ComentarioService{
     }
 
     
-
+    /**
+     * Esta función permite persistir el objeto a base de datos
+     * @param comentario 
+     */
     @Override
     @Transactional
     public void guardar(Comentario comentario) {
         comentarioDao.save(comentario);
     }
 
+    /**
+     * Esta fucion permite eliminar el objetro de la base de datos, funcion que no se utiliza en esta aplicación
+     * @param comentario 
+     */
     @Override
     @Transactional
     public void eliminar(Comentario comentario) {
         comentarioDao.delete(comentario);
     }
 
+    /**
+     * Lista todos los comentario no leidos, filtrados por usuario
+     * @param idUsuario
+     * @return 
+     */
     @Override
     @Transactional(readOnly = true)
     public List<Comentario> buscaNoLeidos(Long idUsuario) {
         return (List<Comentario>)comentarioDao.buscarNoLeidos(idUsuario);
     }
 
+    /**
+     * Lista todos los comentarios no leidos, filtrados por residencial
+     * @param idResidencial
+     * @return 
+     */
     @Override
     @Transactional(readOnly = true)
     public List<Comentario> buscaNoLeidosR(Long idResidencial) {

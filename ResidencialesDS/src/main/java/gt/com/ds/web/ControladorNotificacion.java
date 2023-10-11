@@ -40,8 +40,13 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.BindingResult;
 
 /**
+ * Esta clase permite el manejo de notificaciones, tanto las generales como las específicas,
+ * las notificaciones se identifican de la siguiente forma:  
+ *          G = Notificación General
+ *          E = Notificación Específica
  *
  * @author cjbojorquez
+ * 
  */
 @Controller
 @Slf4j
@@ -65,10 +70,17 @@ public class ControladorNotificacion {
     private String varNotiGeneral = "G";
     private String varNotiEspecifica = "E";
 
+    /**
+     * Esta función permite listar todas las notificaciones creadas y en estado activo 
+     * @param model es una interfaz en Spring Framework que se utiliza en el
+     * contexto de aplicaciones web basadas en Spring MVC
+     * (Model-View-Controller) para pasar datos desde el controlador a la vista
+     * (la plantilla HTML) de una manera organizada y eficiente
+     * @return al cargar todas las notificaciones estas se envian a la pagina general.html
+     */
     @GetMapping("/general")
     public String InicioGeneral(Model model) {
-        // Tipo de ticket 1 = Gestion ; 2 = Anomalias
-        //  G = Notificacion General
+        
         Usuario usuarioLogueado = varios.getUsuarioLogueado();
         var notificaciones = notificacionService.notificacionPorTipo(varNotiGeneral, usuarioLogueado.getResidencial().getIdResidential());//agregar residencial
         log.info("estas son las notificaciones " + notificaciones.toString());
@@ -77,12 +89,41 @@ public class ControladorNotificacion {
         return "general";
     }
 
+    /**
+     * Esta función redirige la creacion de una notificacion  general hacia el formulario de 
+     * modificación
+     * @param notificacion este parametro se utiliza para enviarse al formulario de modificación
+     * @param model es una interfaz en Spring Framework que se utiliza en el
+     * contexto de aplicaciones web basadas en Spring MVC
+     * (Model-View-Controller) para pasar datos desde el controlador a la vista
+     * (la plantilla HTML) de una manera organizada y eficiente
+     * @return aqui se redirige hacia el formulario modificageneral.html
+     */
     @GetMapping("/agregargeneral")
     public String agregarGeneral(Notificacion notificacion, Model model) {
 
         return "modificargeneral";
     }
 
+    /**
+     * Esta función permite guardar las notificaciones creadas como modificadas
+     * @param notificacion este parametro recibe las notificaciones para ser persistidas en base
+     * de datos
+     * @param imagen este parametro permite que se puedan adjuntar archivos 
+     * @param desdeFecha este parametro indica la fecha inicial en la que aplica la notificación
+     * @param desdeHora este parametro indica la hora inicial en la que aplica la notificación
+     * @param hastaFecha este parametro indica la fecha final en la que aplica la notificación
+     * @param hastaHora este parametro indica la hora final en la que aplica la notificación
+     * @param bindingResult es una clase en Spring Framework que se utiliza en
+     * conjunto con la validación de datos en formularios web. Es una parte
+     * fundamental del proceso de validación de formularios en Spring MVC
+     * @param model es una interfaz en Spring Framework que se utiliza en el
+     * contexto de aplicaciones web basadas en Spring MVC
+     * (Model-View-Controller) para pasar datos desde el controlador a la vista
+     * (la plantilla HTML) de una manera organizada y eficiente
+     * @return luego de la persistencia del objeto en la base de datos se procede a redirigir  a la pagina de visualizacion de la
+     * notificacion
+     */
     @PostMapping("/guardargeneral")
     public String guardarGeneral(@Valid Notificacion notificacion, @RequestParam("file") MultipartFile imagen,
             @RequestParam("desdeFecha") String desdeFecha, @Valid @RequestParam("desdeHora") String desdeHora,
@@ -153,6 +194,17 @@ public class ControladorNotificacion {
         return "redirect:/vergeneral?idNotificacion=" + newNoti.getIdNotificacion();
     }
 
+    /**
+     * Al acceder a la modificación de la notificacion se cargan las variables necesarias 
+     * para ser cargadas al formulario
+     * @param notificacion este parametro contiene la informacion del objeto a modificar
+     * @param model es una interfaz en Spring Framework que se utiliza en el
+     * contexto de aplicaciones web basadas en Spring MVC
+     * (Model-View-Controller) para pasar datos desde el controlador a la vista
+     * (la plantilla HTML) de una manera organizada y eficiente
+     * @return las variables que se manejan dentro de la funcion son enviadas al formulario
+     * modificargeneral.html
+     */
     @GetMapping("/modificargeneral")
     public String editarGeneral(Notificacion notificacion, Model model) {
         notificacion = notificacionService.encontrarNotificacion(notificacion);
@@ -167,6 +219,17 @@ public class ControladorNotificacion {
         return "modificargeneral";
     }
 
+    /**
+     * Este controlador permite la visualizacion de la notificacion, ya sea para editar como para 
+     * enviarse a los usuarios
+     * @param notificacion este parametro contiene la informacion del objeto a mostrar
+     * @param model es una interfaz en Spring Framework que se utiliza en el
+     * contexto de aplicaciones web basadas en Spring MVC
+     * (Model-View-Controller) para pasar datos desde el controlador a la vista
+     * (la plantilla HTML) de una manera organizada y eficiente
+     * @return las variables que se manejan dentro de la funcion son enviadas al formulario
+     * vergeneral.html
+     */
     @GetMapping("/vergeneral")
     public String verGeneral(Notificacion notificacion, Model model) {
         notificacion = notificacionService.encontrarNotificacion(notificacion);
@@ -181,6 +244,16 @@ public class ControladorNotificacion {
         return "vergeneral";
     }
 
+    /**
+     * Este controlador permite el envio de la notificacion, tanto por correo como por la 
+     * misma aplicacion
+     * @param notificacion este parametro contiene la informacion del objeto a enviar
+     * @param model es una interfaz en Spring Framework que se utiliza en el
+     * contexto de aplicaciones web basadas en Spring MVC
+     * (Model-View-Controller) para pasar datos desde el controlador a la vista
+     * (la plantilla HTML) de una manera organizada y eficiente
+     * @return luego de enviarse el mensaje, se redirecciona al listado general de notificaciones
+     */
     @GetMapping("/enviageneral")
     public String enviaGeneral(Notificacion notificacion, Model model) {
         Long estdoActivoUs = 1L;
@@ -227,6 +300,10 @@ public class ControladorNotificacion {
         return "general";
     }
 
+    /**
+     * Esta función permite la eliminacion de la notificación 
+     * @param notificacion este parametro contiene la informacion del objeto a eliminar
+     */
     @GetMapping("/cerrargeneral")
     public String eliminarGeneral(Notificacion notificacion, Model model) {
         //ticket = notificacionService.encontrarTicket(ticket);
@@ -246,10 +323,18 @@ public class ControladorNotificacion {
      *
      *************
      */
+    
+    /**
+     * Esta función permite listar todas las notificaciones creadas y en estado activo 
+     * @param model es una interfaz en Spring Framework que se utiliza en el
+     * contexto de aplicaciones web basadas en Spring MVC
+     * (Model-View-Controller) para pasar datos desde el controlador a la vista
+     * (la plantilla HTML) de una manera organizada y eficiente
+     * @return al cargar todas las notificaciones estas se envian a la pagina especifica.html
+     */
     @GetMapping("/especifica")
     public String InicioEspecifica(Model model) {
-        // Tipo de ticket 1 = Gestion ; 2 = Anomalias
-        //  G = Notificacion General
+        
         Usuario us = varios.getUsuarioLogueado();
         var notificaciones = notificacionService.notificacionPorTipo(varNotiEspecifica, us.getResidencial().getIdResidential());//agregar residencial
 
@@ -257,6 +342,16 @@ public class ControladorNotificacion {
         return "especifica";
     }
 
+    /**
+     * Esta función redirige la creacion de una notificacion  específica hacia el formulario de 
+     * modificación
+     * @param notificacion este parametro se utiliza para enviarse al formulario de modificación
+     * @param model es una interfaz en Spring Framework que se utiliza en el
+     * contexto de aplicaciones web basadas en Spring MVC
+     * (Model-View-Controller) para pasar datos desde el controlador a la vista
+     * (la plantilla HTML) de una manera organizada y eficiente
+     * @return aqui se redirige hacia el formulario modificaespecifica.html
+     */
     @GetMapping("/agregarespecifica")
     public String agregarEspecifica(Notificacion notificacion, Model model) {
         var usuarios = usuarioService.listarUsuarios();
@@ -264,6 +359,18 @@ public class ControladorNotificacion {
         return "modificarespecifica";
     }
 
+    /**
+     * Esta función permite guardar las notificaciones creadas como modificadas
+     * @param notificacion este parametro recibe las notificaciones para ser persistidas en base
+     * de datos
+     * @param imagen este parametro permite que se puedan adjuntar archivos 
+     * @param model es una interfaz en Spring Framework que se utiliza en el
+     * contexto de aplicaciones web basadas en Spring MVC
+     * (Model-View-Controller) para pasar datos desde el controlador a la vista
+     * (la plantilla HTML) de una manera organizada y eficiente
+     * @return luego de la persistencia del objeto en la base de datos se procede a redirigir  a la pagina de visualizacion de la
+     * notificacion
+     */
     @PostMapping("/guardarespecifica")
     public String guardarEspecifica(@Valid Notificacion notificacion, @RequestParam("file") MultipartFile imagen, Model model, Errors errors) {
 
@@ -318,11 +425,23 @@ public class ControladorNotificacion {
         return "redirect:/verespecifica?idNotificacion=" + newNoti.getIdNotificacion();
     }
 
+    /**
+     * Al acceder a la modificación de la notificacion se cargan las variables necesarias 
+     * para ser cargadas al formulario
+     * @param notificacion este parametro contiene la informacion del objeto a modificar
+     * @param model es una interfaz en Spring Framework que se utiliza en el
+     * contexto de aplicaciones web basadas en Spring MVC
+     * (Model-View-Controller) para pasar datos desde el controlador a la vista
+     * (la plantilla HTML) de una manera organizada y eficiente
+     * @return las variables que se manejan dentro de la funcion son enviadas al formulario
+     * modificarespecifica.html
+     */
     @GetMapping("/modificarespecifica")
     public String editarEspecifica(Notificacion notificacion, Model model) {
+        Usuario us =  varios.getUsuarioLogueado();
         notificacion = notificacionService.encontrarNotificacion(notificacion);
         var estadosTicket = estadoTicketService.listarEstadoTicket();
-        var usuarios = usuarioService.listarUsuarios();
+        var usuarios = usuarioService.listarEmpleadosResidencial(1L, us.getIdUsuario());
         if (notificacion.getEstado().getIdEstado() == 1L) {
             EstadoTicket estadoTicket = estadoTicketService.encontrarEstado(2L);
             notificacion.setEstado(estadoTicket);
@@ -333,6 +452,17 @@ public class ControladorNotificacion {
         return "modificarespecifica";
     }
 
+    /**
+     * Este controlador permite la visualizacion de la notificacion, ya sea para editar como para 
+     * enviarse a los usuarios
+     * @param notificacion este parametro contiene la informacion del objeto a mostrar
+     * @param model es una interfaz en Spring Framework que se utiliza en el
+     * contexto de aplicaciones web basadas en Spring MVC
+     * (Model-View-Controller) para pasar datos desde el controlador a la vista
+     * (la plantilla HTML) de una manera organizada y eficiente
+     * @return las variables que se manejan dentro de la funcion son enviadas al formulario
+     * verespecifica.html
+     */
     @GetMapping("/verespecifica")
     public String verEspecifica(Notificacion notificacion, Model model) {
         notificacion = notificacionService.encontrarNotificacion(notificacion);
@@ -348,6 +478,16 @@ public class ControladorNotificacion {
         return "verespecifica";
     }
 
+    /**
+     * Este controlador permite el envio de la notificacion, tanto por correo como por la 
+     * misma aplicacion
+     * @param notificacion este parametro contiene la informacion del objeto a enviar
+     * @param model es una interfaz en Spring Framework que se utiliza en el
+     * contexto de aplicaciones web basadas en Spring MVC
+     * (Model-View-Controller) para pasar datos desde el controlador a la vista
+     * (la plantilla HTML) de una manera organizada y eficiente
+     * @return luego de enviarse el mensaje, se redirecciona al listado general de notificaciones
+     */
     @GetMapping("/enviaespecifica")
     public String enviaEspecifica(Notificacion notificacion, Model model) {
         Long estadoActivoUs = 1L;
@@ -398,6 +538,10 @@ public class ControladorNotificacion {
         return "especifica";
     }
 
+    /**
+     * Esta función permite la eliminacion de la notificación 
+     * @param notificacion este parametro contiene la informacion del objeto a eliminar
+     */
     @GetMapping("/cerrarespecifica")
     public String eliminarEspecifica(Notificacion notificacion, Model model) {
         //ticket = notificacionService.encontrarTicket(ticket);
@@ -408,6 +552,13 @@ public class ControladorNotificacion {
         return "redirect:/especifica";
     }
 
+    /**
+     * esta función permite la creacion de los mensajes que se enviaran por correo como los que se enviaran
+     * al buzon del usuario en esta aplicacion
+     * @param notificacion este parametro contiene la informacion del objeto a enviar en el mensaje
+     * @return se retornan un array de string que contiene el mensaje con formato para enviarse por correo, como 
+     * el mensaje que se enviara al buzon en esta aplicacion
+     */
     public List<String> creaMensaje(Notificacion notificacion) {
 
         ArrayList mensaje = new ArrayList();

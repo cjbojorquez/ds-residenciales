@@ -20,37 +20,71 @@
         <div id="layoutSidenav_content">
             <main>
                 <div class="container">
-                    <div class="row justify-content-center">
-                        <div class="col-lg-7">
-                            <div>
-                                <table>
-                                    <tr th:each="msg : ${notificaciones}">
-                                        <td>
-                                            <div class="card bg-primary mb-3">
+                    <ul class="nav nav-tabs" id="myTabs">
+                        <li class="nav-item">
+                            <a class="nav-link active" data-bs-toggle="tab" href="#notLeidas">No leídas</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-bs-toggle="tab" href="#leidas">Leídas</a>
+                        </li>
+                    </ul>
 
-                                                <div class="card-header text-white bg-primary">
-                                                    <div class="row">
-                                                        <!--a class="btn-close" th:href="@{/}"></a-->
-                                                    </div>
-                                                    <div class="row">
-                                                        <h3 class="text-center font-weight-light my-4" th:text="${msg.asunto}"></h3>
-                                                    </div>
-                                                </div>
+                    <div class="tab-content" id="myTabsContent">
+                        <div class="tab-pane active" id="notLeidas">
+                            <table>
+                                <tr th:each="msg : ${notificacionesNoLeidas}">
+                                    <td>
+                                        <div class="card bg-primary mb-3">
 
-                                                <div class="card-body text-bg-dark bg-secundary">
-                                                    <span th:utext="${msg.descripcion}"></span>
+                                            <div class="card-header text-white bg-primary">
+                                                <div class="row">
+                                                    <!--a class="btn-close" th:href="@{/}"></a-->
                                                 </div>
-                                                <div class="card-footer text-center py-3">
-                                                    <div class="small"></div>
+                                                <div class="row">
+                                                    <h3 class="text-center font-weight-light my-4" th:text="${msg.asunto}"></h3>
                                                 </div>
                                             </div>
-                                        <td>
-                                    </tr>
-                                </table>
-                            </div>
+
+                                            <div class="card-body text-bg-dark bg-secundary">
+                                                <span th:utext="${msg.descripcion}"></span>
+                                            </div>
+                                            <div class="card-footer text-center py-3">
+                                                <div class="small"></div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+
+                        <div class="tab-pane" id="leidas">
+                            <table>
+                                <tr th:each="msg : ${notificaciones}">
+                                    <td>
+                                        <div class="card bg-light mb-3">
+                                            <div class="card-header">
+                                                <div class="row">
+                                                    <!--a class="btn-close" th:href="@{/}"></a-->
+                                                </div>
+                                                <div class="row">
+                                                    <h3 class="text-center font-weight-light my-4" th:text="${msg.asunto}"></h3>
+                                                </div>
+                                            </div>
+
+                                            <div class="card-body ">
+                                                <span th:utext="${msg.descripcion}"></span>
+                                            </div>
+                                            <div class="card-footer text-center py-3">
+                                                <div class="small"></div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
                         </div>
                     </div>
                 </div>
+
             </main>
             <th:block th:replace="~{layout/plantilla :: footer}"></th:block>     
         </div>
@@ -66,6 +100,6 @@
     <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>
     <script src="js/datatables-simple-demo.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-        <script src="js/mensajes.js"></script>
+    <script src="js/mensajes.js"></script>
 </body>
 </html>

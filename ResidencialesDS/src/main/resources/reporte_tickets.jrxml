@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.20.6.final using JasperReports Library version 6.20.6-5c96b6aa8a39ac1dc6b6bea4b81168e16dd39231  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reporte_tickets" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="203ac63a-1b51-45e0-ae95-3047c27cea83">
+	
+    <property name="com.jaspersoft.studio.unit." value="pixel"/>
+    <property name="com.jaspersoft.studio.unit.pageHeight" value="pixel"/>
+    <property name="com.jaspersoft.studio.unit.pageWidth" value="pixel"/>
+    <property name="com.jaspersoft.studio.unit.topMargin" value="pixel"/>
+    <property name="com.jaspersoft.studio.unit.bottomMargin" value="pixel"/>
+    <property name="com.jaspersoft.studio.unit.leftMargin" value="pixel"/>
+    <property name="com.jaspersoft.studio.unit.rightMargin" value="pixel"/>
+    <property name="com.jaspersoft.studio.unit.columnWidth" value="pixel"/>
+    <property name="com.jaspersoft.studio.unit.columnSpacing" value="pixel"/>
+	
+    <parameter name="SUMATORIA_POR_TIPO" class="java.util.HashMap"/>
+	
+    <field name="idTipo" class="java.lang.Long">
+		
+    </field>
+    <field name="asunto" class="java.lang.String">
+		
+    </field>
+    <field name="fechaCrea" class="java.sql.Timestamp">
+		
+    </field>
+    <field name="idTicket" class="java.lang.Long">
+		
+    </field>
+    <field name="estado.nombre" class="java.lang.String">
+		
+    </field>	
+    <background>
+        <band splitType="Stretch"/>
+    </background>
+    <title>
+        <band height="79" splitType="Stretch">
+            <!--staticText>
+                <reportElement x="20" y="10" width="510" height="53" uuid="d7e9b293-7342-4e6a-881c-dbf0fa57239c"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font fontName="Arial Black" size="20"/>
+                </textElement>
+                <text><![CDATA[REPORTE DE TICKETS]]></text>
+                </staticText-->
+            <textField>
+                <reportElement x="20" y="10" width="510" height="53" uuid="d7e9b293-7342-4e6a-881c-dbf0fa57239c"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font fontName="Arial Black" size="20"/>
+                </textElement>
+                <!--text><![CDATA[REPORTE DE TICKETS]]></text-->
+                <textFieldExpression><![CDATA[(((java.util.Map<String, Long>) $P{SUMATORIA_POR_TIPO}).keySet().toArray()[1])]]></textFieldExpression>
+                <!--text><![CDATA[((java.util.Map<String, Long>) $P{SUMATORIA_POR_TIPO}).values().toArray()[0].toString()]]></text-->
+            </textField>
+        </band>
+    </title>
+    <pageHeader>
+        <band height="35" splitType="Stretch"/>
+    </pageHeader>
+    <columnHeader>
+        <band height="79" splitType="Stretch">
+            <rectangle>
+                <reportElement x="20" y="9" width="520" height="50" uuid="be66d371-f873-48a9-a329-14d546cd9f2b"/>
+            </rectangle>
+            <staticText>
+                <reportElement x="66" y="25" width="100" height="30" uuid="c66944bb-9fd1-452c-873f-14ca05945a45"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle"/>
+                <text><![CDATA[Asunto]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="227" y="24" width="100" height="30" uuid="fcaf1dc1-fcfa-40c6-96c1-9c0cd0a2a027"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle"/>
+                <text><![CDATA[Fecha]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="420" y="22" width="100" height="30" uuid="19627b6d-f720-42ef-b8e2-5e0f6339a13a"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle"/>
+                <text><![CDATA[Estado]]></text>
+            </staticText>
+        </band>
+    </columnHeader>
+    <detail>
+        <band height="42" splitType="Stretch">
+            <textField>
+                <reportElement x="68" y="11" width="212" height="30" uuid="b4f3c49b-2fad-44e5-aaea-d327467695e0"/>
+                <textElement textAlignment="Left" verticalAlignment="Middle"/>
+                <textFieldExpression><![CDATA[$F{asunto}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="216" y="11" width="180" height="30" uuid="632ba3b2-7208-420f-989d-b3261b6ced87"/>
+                <textElement textAlignment="Left" verticalAlignment="Middle"/>
+                <textFieldExpression><![CDATA[$F{fechaCrea}]]></textFieldExpression>
+                <!--textFieldExpression><![CDATA[$F{idTicket}]]></textFieldExpression-->
+            </textField>
+            <textField>
+                <reportElement x="431" y="11" width="100" height="30" uuid="1a285dc4-639b-484f-8aae-620884ccdfdc"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle"/>
+                <textFieldExpression><![CDATA[$F{estado.nombre}]]></textFieldExpression>
+            </textField>
+        </band>
+    </detail>
+    <columnFooter>
+        <band height="45" splitType="Stretch"/>
+    </columnFooter>
+    <pageFooter>
+        <band height="54" splitType="Stretch"/>
+    </pageFooter>
+    <summary>
+        <band height="270" splitType="Stretch">
+            <pieChart>
+                <chart evaluationTime="Report">
+                    <reportElement x="66" y="10" width="410" height="230" uuid="34aedfdc-b56f-4b90-8d85-b45c576d3201"/>
+                    <chartTitle/>
+                    <chartSubtitle/>
+                    <chartLegend/>
+                </chart>
+                <pieDataset>
+                    <keyExpression><![CDATA[(((java.util.Map<String, Long>) $P{SUMATORIA_POR_TIPO}).keySet())]]></keyExpression>
+                    <valueExpression><![CDATA[((java.util.Map<String, Long>) $P{SUMATORIA_POR_TIPO}).values()]]></valueExpression>
+                    <labelExpression><![CDATA[((java.util.Map<String, Long>) $P{SUMATORIA_POR_TIPO}).values()]]></labelExpression>
+                </pieDataset>
+                <piePlot>
+                    <plot/>
+                    <itemLabel/>
+                </piePlot>
+            </pieChart>
+        </band>
+    </summary>
+</jasperReport>

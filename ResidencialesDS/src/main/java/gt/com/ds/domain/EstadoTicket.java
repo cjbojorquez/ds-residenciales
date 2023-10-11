@@ -7,8 +7,11 @@ import lombok.Data;
 
 
 /**
+ * Esta entidad mapea la tabla ticket_status, la cual contiene los tipos de tickets que se
+ * manejaran, Gestiones y Anomalias
  *
  * @author cjbojorquez
+ * 
  */
 
 @Data

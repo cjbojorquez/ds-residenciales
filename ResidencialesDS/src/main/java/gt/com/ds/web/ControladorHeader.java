@@ -28,8 +28,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
+ * En esta clase se administra la informacion del header
  *
  * @author cjbojorquez
+ *
  */
 @Controller
 @Slf4j
@@ -55,47 +57,55 @@ public class ControladorHeader {
 
     private Long noLeidos = 1L;
 
+    /**
+     * Este controlador permite mostrar todos los mensajes nuevos que recibe el
+     * usuario en el header
+     *
+     * @param model
+     * @return
+     */
     @GetMapping("/obtenerMensajes")
     @ResponseBody
     public List<Mensaje> obtenerMensajes(Model model) {
         Usuario us = varios.getUsuarioLogueado();
         String rol = varios.getRolLogueado();
         var buzon = buzonService.buzonPorEstado(noLeidos, us.getIdUsuario());
-        List<Mensaje> mensajes = new ArrayList<>(); 
+        List<Mensaje> mensajes = new ArrayList<>();
         for (Buzon b : buzon) {
             Mensaje mensaje = new Mensaje();
             mensaje.setAsunto(b.getAsunto());
             mensaje.setUrl("/buzon");
             mensajes.add(mensaje);
         }
+        System.out.println("mensajes1 = " + mensajes);
         List<Comentario> comentarios = new ArrayList<>();
         if (rol.equals("ROLE_USER")) {
             comentarios = comentarioService.buscaNoLeidos(us.getIdUsuario());
         } else {
             comentarios = comentarioService.buscaNoLeidosR(us.getResidencial().getIdResidential());
             List<Ticket> tickets = ticketService.ticketPorEstado(1L, us.getResidencial().getIdResidential());
-            if(tickets!=null){
-            for (Ticket t : tickets) {
-                System.out.println("t = " + t);
-                Mensaje mensaje = new Mensaje();
-                mensaje.setAsunto(t.getAsunto());
-                mensaje.setUrl(t.getIdTipo() == 1 ? "/editargestion?idTicket=" + t.getIdTicket() : "/editaranomalia?idTicket=" + t.getIdTicket());
-                
-                mensajes.add(mensaje);
-            }
+            if (tickets != null) {
+                for (Ticket t : tickets) {
+                    System.out.println("t = " + t);
+                    Mensaje mensaje = new Mensaje();
+                    mensaje.setAsunto(t.getAsunto());
+                    mensaje.setUrl(t.getIdTipo() == 1 ? "/editargestion?idTicket=" + t.getIdTicket() : "/editaranomalia?idTicket=" + t.getIdTicket());
+
+                    mensajes.add(mensaje);
+                }
             }
         }
         for (Comentario c : comentarios) {
             Mensaje mensaje = new Mensaje();
-            mensaje.setAsunto(c.getComentario().length() > 10 ? c.getComentario().substring(0, 9)+"..." : c.getComentario());
-            mensaje.setUrl(c.getTicket().getIdTipo() == 1 ? "/editargestion?idTicket=" + c.getTicket().getIdTicket() : "/editaranomalia?idTicket=" + c.getTicket().getIdTicket());
-            System.out.println("mensaje = " + mensaje);
-            if(!Objects.equals(us.getIdUsuario(), c.getUsuario().getIdUsuario())){
+            mensaje.setAsunto(c.getComentario().length() > 10 ? c.getComentario().substring(0, 9) + "..." : c.getComentario());
+            String url=c.getTicket().getIdTipo() == 1 ? "/editargestion?idTicket=" + c.getTicket().getIdTicket() : "/editaranomalia?idTicket=" + c.getTicket().getIdTicket();
+            url=url + "&idcomentario="+c.getIdComentario();
+            mensaje.setUrl(url);
+            if (!Objects.equals(us.getIdUsuario(), c.getUsuario().getIdUsuario())) {
                 mensajes.add(mensaje);
-               
+
             }
         }
-
         var residencial = us.getResidencial();
         model.addAttribute("mensajes", mensajes);
         model.addAttribute("residencial", residencial);

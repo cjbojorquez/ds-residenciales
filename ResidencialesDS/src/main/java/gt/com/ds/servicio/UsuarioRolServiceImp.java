@@ -16,7 +16,15 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class UsuarioRolServiceImp implements UsuarioRolService{
+
     
+    /**
+     * Esta funcion hace un mapeo entre el listado de usuarios activos y su respectivo rol
+     * @param usuarios en este parametro se listan los usuarios activos
+     * @param rolesUsuario en este parametro se listan los usuarios y roles que ya se han asignado
+     * @return se regresa el mismo listado de usuarios que se recibe pero ya con su rol asignado y si no tiene rol 
+     * asingado se retorna el valor null
+     */
     @Override
     @Transactional(readOnly = true)
     public List<UsuarioRol> combinarUsuarioConRol(List<Usuario> usuarios, List<RolUsuario> rolesUsuario){

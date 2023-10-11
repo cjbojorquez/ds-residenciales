@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <title>DS-Residenciales</title>
+        <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min1.css" rel="stylesheet" />
+        <link href="css/styles.css" rel="stylesheet" />
+        <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+        <script src="js/util.js"></script>
+    </head>
+    <body class="sb-nav-fixed">
+        <!--header th:replace="layout/plantilla :: header"></header-->
+    <th:block th:replace="~{layout/plantilla :: header}"></th:block>
+    <!-- barra vertical -->
+    <div id="layoutSidenav">
+        <!--div th:replace="layout/plantilla :: menu" id="layoutSidenav_nav"></div-->
+        <th:block th:replace="~{layout/plantilla :: menu}"></th:block>
+        <div id="layoutSidenav_content">
+            <main>
+                <div th:object="${residencial}"></div>
+                <div th:object="${contactGroups}"></div>
+                <div class="container-fluid px-4">
+                    <div class="pricing-header p-3 pb-md-4 mx-auto text-center">
+                        <h1 class="display-4 fw-normal" th:text="${residencial.name}" ></h1>
+                        <p class="fs-5 text-muted" th:text="'Direccion: '+${residencial.address}"></p>
+                        <p class="fs-5 text-muted" th:text="'Tel&eacute;fono '+${residencial.phone}"></p>
+                    </div>
+                    <nav class="navbar navbar-light bg-light">
+                        <form class="container-fluid justify-content-start">
+                            <a sec:authorize="hasRole('ROLE_EMPLOYEE')" class="btn btn-outline-success me-2" role="button" th:href="@{/agregarcontacto}">Crear Contacto        <i class="fa-solid fa-address-book"></i></a>
+                        </form>
+                    </nav>
+                    
+                    <div class="container" th:if="${contactGroups != null and !contactGroups.empty}">
+                        <div th:each="contactGroup : ${contactGroups}">
+                            <div class="row row-cols-1 row-cols-md-3 mb-3 text-center">
+                                <div th:each="contact : ${contactGroup}">
+                                    <div class="col">
+                                        <div class="card mb-4 rounded-3 shadow-sm">
+                                            <div class="card-header py-3">
+                                                <div class="row">
+                                                    <div class="col"></div>
+                                                    <div class="col">
+                                                        
+                                                    </div>
+                                                    <div class="col">
+                                                        <button sec:authorize="hasRole('ROLE_EMPLOYEE')" type="button" class="btn-close" th:onclick="confirmarEliminacion([[(${contact.idContacto})]],'/eliminarcontacto?idContacto=');" aria-label="Cerrar"></button>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col"></div>
+                                                    <div class="col">
+                                                        <h4 class="my-0 fw-normal" th:text="${contact.nombre}"></h4>
+                                                    </div>
+                                                    <div class="col">
+                                                        
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="card-body">
+                                                <h4 class="card-title pricing-card-title" th:text="${contact.descripcion}"></h4>
+                                                <h4 class="card-title pricing-card-title" th:text="${contact.telefono}"></h4>
+                                                 <a sec:authorize="hasRole('ROLE_EMPLOYEE')"  class="btn" role="button" th:href="@{/editarcontacto(idContacto=${contact.idContacto})}" aria-label="Editar"><i class="fa-solid fa-pen-to-square"></i></a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+
+                </div>
+            </main>
+            <!--footer th:replace="layout/plantilla :: footer"></footer-->  
+            <th:block th:replace="~{layout/plantilla :: footer}"></th:block>
+        </div>
+    </div>
+    <script src="js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+    <script src="js/scripts.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
+    <script src="assets/demo/chart-area-demo.js"></script>
+    <script src="assets/demo/chart-bar-demo.js"></script>
+    <script src="js/simple-datatables.min.js" crossorigin="anonymous"></script>
+    <script src="js/datatables-simple-demo.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="js/mensajes.js"></script>
+</body>
+</html>

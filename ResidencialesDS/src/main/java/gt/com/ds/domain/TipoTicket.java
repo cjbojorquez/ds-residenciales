@@ -7,8 +7,11 @@ import lombok.Data;
 
 
 /**
+ * Esta entidad se utiliza para maperar la tabla ticket_type que es la que contiene
+ * los tipos de ticket que se utilizan en la aplicación
  *
  * @author cjbojorquez
+ * 
  */
 
 @Data

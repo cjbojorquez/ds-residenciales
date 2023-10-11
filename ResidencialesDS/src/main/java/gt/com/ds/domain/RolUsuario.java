@@ -6,8 +6,10 @@ import lombok.Data;
 
 
 /**
+ * Esta entidad almacena los roles asignados a un usuario, se mapea de la tabla role_user
  *
  * @author cjbojorquez
+ * 
  */
 
 @Data

@@ -1,5 +1,6 @@
 package gt.com.ds.servicio;
 
+import gt.com.ds.domain.Conteo;
 import gt.com.ds.domain.Ticket;
 import java.util.List;
 
@@ -10,6 +11,8 @@ import java.util.List;
 public interface TicketService {
     
     public List<Ticket> ticketsPorTipo(Long idTipo,Long idResidencial);
+    
+    public List<Ticket> porResidencial(Long idResidencial);
     
     public List<Ticket> ticketPorEstado(Long idEstado,Long idResidencial);
     
@@ -24,4 +27,8 @@ public interface TicketService {
     public Ticket encontrarTicket(Ticket ticket);
     
     public Ticket encontrarTicket(Long idTicket);
+    
+    public List<Object[]> conteoActivos(Long idResidencial);
+    
+    public List<Object[]> conteoPorEstado(int mes, Long idResidencial);
 }

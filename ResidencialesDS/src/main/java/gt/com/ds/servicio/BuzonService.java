@@ -1,6 +1,9 @@
 package gt.com.ds.servicio;
 
 import gt.com.ds.domain.Buzon;
+import gt.com.ds.domain.EstadoTicket;
+import gt.com.ds.domain.Ticket;
+import gt.com.ds.domain.Usuario;
 import java.util.List;
 
 /**
@@ -20,4 +23,6 @@ public interface BuzonService {
     public Buzon encontrarBuzon(Buzon buzon);
     
     public List<Buzon> buzonNoLeidos(Long idUsuario);
+    
+    public void cambioEstadoTicket(EstadoTicket actual,Ticket nuevo,Usuario destino,Usuario remite);
 }

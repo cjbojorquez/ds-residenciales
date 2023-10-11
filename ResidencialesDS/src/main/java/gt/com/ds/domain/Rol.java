@@ -9,8 +9,10 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 
 /**
+ * Esta entidad mapea la tabla role, la cual contiene los roles creados
  *
  * @author cjbojorquez
+ * 
  */
 
 @Data

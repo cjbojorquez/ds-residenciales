@@ -55,7 +55,7 @@
                             <li><a class="dropdown-item" href="#!"><b>Usuario</b> <span sec:authentication="name"></span></a></li>
                             <li><a class="dropdown-item" th:href="@{/perfil}">Perfil</a></li>
                             <li><a class="dropdown-item" th:href="@{/cambiapass}">Cambiar contrase&ntilde;a</a></li>
-                            <li><a class="dropdown-item" href="#!"></a></li>
+                            <li><a class="dropdown-item" th:href="@{/contacto}">Contactos</a></li>
                             <li><hr class="dropdown-divider" /></li>
                             <li><form method="POST" th:action="@{/logout}"><a class="dropdown-item" onclick="this.parentNode.submit();" href="#!">Logout</a></form></li>
                         </ul>
@@ -72,7 +72,8 @@
                     </div>
                     <div class="sb-sidenav-menu">
                         <div class="nav">
-                            <div class="sb-sidenav-menu-heading">Cat&aacute;logos</div>
+                            <!--<!-- CATÁLOGO -->
+                            <div sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_EMPLOYEE')" class="sb-sidenav-menu-heading">Cat&aacute;logos</div>
                             <a sec:authorize="hasRole('ROLE_ADMIN')" class="nav-link" href="/residencial">
                                 <div class="sb-nav-link-icon"><i class="fas fa-city fa-xl"></i></div>
                                 <span class="text-success">Residenciales</span>
@@ -105,7 +106,8 @@
                                 <div class="sb-nav-link-icon"><i class="fa-solid fa-screwdriver-wrench fa-xl"></i></div>
                                 <span class="text-success">Servicios</span>
                             </a>
-                            <div  class="sb-sidenav-menu-heading">Operaciones</div>
+                            <!--<!-- OPERACIONES -->
+                            <div sec:authorize="hasAnyRole('ROLE_USER','ROLE_EMPLOYEE')"  class="sb-sidenav-menu-heading">Operaciones</div>
 
                             <a sec:authorize="hasAnyRole('ROLE_USER','ROLE_EMPLOYEE')" class="nav-link" href="/solicitud">
                                 <div class="sb-nav-link-icon"><i class="fa-solid fa-wrench fa-xl"></i></div>
@@ -121,7 +123,7 @@
                             </a>
                             <a sec:authorize="hasAnyRole('ROLE_USER','ROLE_EMPLOYEE')" class="nav-link" href="/anomalia">
                                 <div class="sb-nav-link-icon"><i class="fa-solid fa-pen-clip fa-xl"></i></div>
-                                <span class="text-success">Ingresar Anomalia</span>
+                                <span class="text-success">Ingresar Anomal&iacute;a</span>
                             </a>
 
                             <a sec:authorize="hasRole('ROLE_EMPLOYEE')" class="nav-link" href="/general">
@@ -135,6 +137,12 @@
                             <a sec:authorize="hasRole('ROLE_USER')" class="nav-link" href="/buzon">
                                 <div class="sb-nav-link-icon"><i class="fa-solid fa-envelope fa-xl"></i></div>
                                 <span class="text-success">Buzon</span>
+                            </a>
+                            <!--<!-- REPORTES -->
+                            <div sec:authorize="hasRole('ROLE_EMPLOYEE')"  class="sb-sidenav-menu-heading">Reportes</div>
+                            <a sec:authorize="hasRole('ROLE_EMPLOYEE')" class="nav-link" href="/reporte1">
+                                <div class="sb-nav-link-icon"><i class="fa-solid fa-file fa-xl"></i></div>
+                                <span class="text-success">Reporte de Eventos</span>
                             </a>
                         </div>
                     </div>

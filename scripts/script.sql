@@ -368,6 +368,29 @@ CREATE TABLE IF NOT EXISTS `mailbox` (
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
+-- -----------------------------------------------------
+-- Table `dssoluti_residenciales`.`contact`
+-- -----------------------------------------------------
+DROP TABLE `contact`;
+CREATE TABLE IF NOT EXISTS `contact` (
+  `idcontact` INT NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(100) NULL,
+  `description` VARCHAR(500) NULL,
+  `phone` VARCHAR(12) NULL,
+  `idresidential` INT NOT NULL,
+   `status` INT NULL,
+  `create_time` DATETIME NULL,
+  `create_user` INT NULL,
+  `modify_time` DATETIME NULL,
+  `modify_user` INT NULL,
+  INDEX `fk_contact_residential1_idx` (`idresidential` ASC) ,
+  PRIMARY KEY (`idcontact`),
+  CONSTRAINT `fk_contact_residential1`
+    FOREIGN KEY (`idresidential`)
+    REFERENCES `residential` (`idresidential`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;

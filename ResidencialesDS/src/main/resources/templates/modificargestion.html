@@ -46,34 +46,40 @@
                         <div class="col-lg-7">
                             <div class="card">
                                 <div class="card-header" >
+                                    <a class="btn-close" th:href="@{/gestion}"></a>
                                     <div  class="text-center mx-auto" th:utext="'<b>' + ${ticket.asunto} + '</b>'"></div>
+
                                 </div>
                                 <div class="card-body">
-                                    <div  th:utext="${ticket.descripcion}"></div>
-                                    <br>
-                                    
-                                    <form th:action="@{estadoTicket}" enctype="multipart/form-data"  method="post" th:object="${ticket}">
-                                        <input type="hidden" id="idTicket" th:field="*{idTicket}"/>
+                                    <div>
+                                        <div  th:utext="${ticket.descripcion}"></div>
                                         <div class="row">
-                                            <div class="col-4" ></div>
-                                            <div class="col-2">
-                                                <label>Estado:</label>
-                                            </div>
-                                            <div class="col-6">
-                                                <select class="form-control" id="cmbServ" aria-label="Tipo servicio" width="100%" th:field="*{estado}">
-                                                    <option th:each="status : ${estadosTicket}" th:value="${status.idEstado}" th:text="${status.nombre}"></option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <br>
-                                        <div class="row">
-                                            <div class="col-9"></div>
-                                            <div class="col-2">
-                                                <button type="submit" class="btn btn-outline-primary btn-lg">Guardar</button>
-                                            </div>
-                                        </div>
 
-                                    </form>
+                                            <form th:action="@{estadoTicket}" enctype="multipart/form-data"  method="post" th:object="${ticket}">
+                                                <input type="hidden" id="idTicket" th:field="*{idTicket}"/>
+                                                <div class="container">
+                                                    <div class="row">
+                                                        <div class="col-4" ></div>
+                                                        <div class="col-2">
+                                                            <label>Estado:</label>
+                                                        </div>
+                                                        <div class="col-6">
+                                                            <select class="form-control" id="cmbServ" aria-label="Tipo servicio" width="100%" th:field="*{estado}">
+                                                                <option th:each="status : ${estadosTicket}" th:value="${status.idEstado}" th:text="${status.nombre}"></option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <br>
+                                                    <div class="row">
+                                                        <button type="submit" class="btn btn-outline-primary btn-lg" width="100%">Guardar</button>
+                                                        <div class="col-9"></div>
+                                                        <div class="col-2">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <div>
@@ -107,23 +113,24 @@
                                             </div>
                                             <div  class="row">
                                                 <input type="hidden" id="idticket" name="idticket" th:value="${ticket.idTicket}"/>
-                                                <div class="col-8">
-                                                    <textarea id="txtcomentario" name="txtcomentario" placeholder="Escribe acá" style="width: 90%; height: 100px;"></textarea>
+                                                <div class="container">
+                                                    <div class="row">
+                                                        <div class="col-8">
+                                                            <textarea id="txtcomentario" name="txtcomentario" placeholder="Escribe acá" style="width: 100%; height: 100px;"></textarea>
 
+                                                        </div>
+                                                        <div class="col-1">
+                                                            <label class="custom-file-label" for="customFile" style="margin-left: 10px;">
+                                                                <i class="fas fa-paperclip"></i>
+                                                                <input type="file" class="form-control border border-primary" id="customFile" name="file" style="display: none;">
+
+                                                            </label>
+                                                        </div>
+                                                        <div class="col-2">
+                                                            <button type="submit" style="margin-left: 10px;">Enviar</button>
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                                <div class="col-1">
-                                                    <label class="custom-file-label" for="customFile" style="margin-left: 10px;">
-                                                        <i class="fas fa-paperclip"></i>
-                                                        <input type="file" class="form-control border border-primary" id="customFile" name="file" style="display: none;">
-
-                                                    </label>
-                                                </div>
-                                                <div class="col-2">
-                                                    <button type="submit" style="margin-left: 10px;">Enviar</button>
-
-
-                                                </div>
-
                                             </div>
                                             <div class="row">
                                                 <div class="col-9">
@@ -199,6 +206,6 @@
     <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>
     <script src="js/datatables-simple-demo.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-        <script src="js/mensajes.js"></script>
+    <script src="js/mensajes.js"></script>
 </body>
 </html>

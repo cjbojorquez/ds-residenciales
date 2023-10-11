@@ -7,8 +7,10 @@ package gt.com.ds.domain;
 import lombok.Data;
 
 /**
+ * Esta clase se utiliza para crear objetos que se utilizan en las notificaciones de alertas
  *
  * @author cjbojorquez
+ * 
  */
 @Data
 public class Mensaje {

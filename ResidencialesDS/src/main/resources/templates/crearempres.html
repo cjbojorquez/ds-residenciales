@@ -33,7 +33,7 @@
                                     </div>
 
                                     <div class="card-body">
-                                        <form class="was-validated" th:action="@{guardarusres}" method="post" enctype="multipart/form-data" th:object="${usuario}">
+                                        <form class="was-validated" th:action="@{guardarempres}" method="post" enctype="multipart/form-data" th:object="${usuario}">
                                             <input class="form-control" id="id" type="hidden" th:field="*{idUsuario}"/>
                                             <div class="form-floating mb-3">
                                                 <input class="form-control is-invalid" id="nombre" type="text" placeholder="Ingrese el nombre" th:field="*{nombre}" required/>
@@ -41,7 +41,7 @@
                                                 <span th:if="${#fields.hasErrors('nombre')}" th:errors="*{name}">Error en nombre</span>
                                             </div>
                                             <div class="form-floating mb-3">
-                                                <input class="form-control is-invalid" id="usuario" type="text" placeholder="Ingrese el nombre" th:field="*{nombreUsuario}" required/>
+                                                <input class="form-control is-invalid" id="usuario" type="text" placeholder="Ingrese el nombre" th:field="*{nombreUsuario}"/>
                                                 <label for="inputFirstName">Usuario</label>
                                                 <span th:if="${#fields.hasErrors('nombreUsuario')}" th:errors="*{nombreUsuario}" style="color:red">Error en usuario</span>
                                             </div>
@@ -59,9 +59,18 @@
                                                 <label for="inputTelefono">Tel&eacute;fono</label>
                                             </div>
                                             <div class="form-floating mb-3">
+                                                <input class="form-control" id="puesto" type="text" placeholder="Ingrese Puesto" th:field="*{cargo}"/>
+                                                <label for="inputEmail">Puesto</label>
+                                            </div>
+                                            <div class="custom-file mb-3">
+                                                <label class="custom-file-label" for="customFile">Seleccionar Foto</label>
+                                                <input type="file" class="form-control border border-primary" id="customFile" name="file" accept="image/">
+
+                                            </div>
+                                            <!--div class="form-floating mb-3">
                                                 <input class="form-control" id="codigo" type="text" placeholder="Ingrese telefono" th:field="*{codigo}"   />
                                                 <label for="inputCodigo">C&oacute;digo</label>
-                                            </div>
+                                            </div-->
                                             <!--div class="form-floating mb-3">
                                                 <input class="form-control" id="direccion" type="text" placeholder="Ingrese direccion" th:field="*{direccion}" required/>
                                                 <label for="inputLastName">Direcci&oacute;n</label>

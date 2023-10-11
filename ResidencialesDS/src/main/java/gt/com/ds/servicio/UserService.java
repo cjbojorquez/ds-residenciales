@@ -13,10 +13,14 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
+ * esta clase es una implementacion de UserDetailService que permite la gestion de la
+ * seguridad de la aplicacion
  *
  * @author cjbojorquez
+ * 
  */
 @Service("userDetailsService")
 @Slf4j
@@ -25,7 +29,15 @@ public class UserService implements UserDetailsService{
     @Autowired
     private RolUsuarioDao rolUsuarioDao;
     
+    /**
+     * Esta función permite hacer construir el mapeo de usuarios y sus credenciales
+     * en el formato que le permite a spring security realizar la autenticacion
+     * @param username por medio de este parametro se recibe el nombre del usuario que se logueará
+     * @return una vez encontrado el usuario en la base de datos, se retorna el objeto UserDetails 
+     * para que lo use spring security
+     */
     @Override
+    @Transactional(readOnly = true)
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         RolUsuario rolUsuario = rolUsuarioDao.findByUsername(username);
         log.info("usuario:"+username+" rol "+rolUsuario);

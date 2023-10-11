@@ -10,8 +10,10 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 
 /**
+ * Esta entidad mapea la tabla residential, la cual contiene las residenciales creadas
  *
  * @author cjbojorquez
+ * 
  */
 
 @Data

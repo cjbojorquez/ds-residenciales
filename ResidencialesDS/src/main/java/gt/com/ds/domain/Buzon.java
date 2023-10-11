@@ -7,8 +7,11 @@ import java.util.Date;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 /**
+ * Esta entidad mapea la tabla mailbox, en donde se guardan las notificaciones que se envian a los 
+ * usuarios y las notificaciones de cambios de estado
  *
  * @author cjbojorquez
+ * 
  */
 
 @Data

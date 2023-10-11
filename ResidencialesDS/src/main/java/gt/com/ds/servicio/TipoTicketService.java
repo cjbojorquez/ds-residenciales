@@ -15,5 +15,5 @@ public interface TipoTicketService {
     
     public void eliminar(TipoTicket tipoTicket);
     
-    public TipoTicket encontrarRol(TipoTicket tipoTicket);
+    public TipoTicket encontrarTipoTicket(TipoTicket tipoTicket);
 }

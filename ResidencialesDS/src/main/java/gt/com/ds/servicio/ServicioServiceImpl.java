@@ -17,6 +17,11 @@ public class ServicioServiceImpl implements ServicioService{
     @Autowired
     private ServicioDao servicioDao;
     
+    /**
+     * Esta función lista todos los servicios filtrados por estado
+     * @param estado
+     * @return 
+     */
     @Override
     @Transactional(readOnly = true)
     public List<Servicio> listarServicios(Long estado) {
@@ -24,6 +29,11 @@ public class ServicioServiceImpl implements ServicioService{
         return (List<Servicio>)servicioDao.buscarPorEstado(estado);
     }
 
+    /**
+     * Esta función lista los servicios filtrados por id de la residencial
+     * @param idResidencial
+     * @return 
+     */
     @Override
     @Transactional(readOnly = true)
     public List<Servicio> listarPorResidencial(Long idResidencial) {
@@ -31,6 +41,10 @@ public class ServicioServiceImpl implements ServicioService{
         return (List<Servicio>)servicioDao.buscarPorResidencial(idResidencial);
     }
     
+    /**
+     * Por medio de esta función se guardan los serivicios en la base de datos
+     * @param servicio 
+     */
     @Override
     @Transactional
     public void guardar(Servicio servicio) {
@@ -43,13 +57,21 @@ public class ServicioServiceImpl implements ServicioService{
         servicioDao.delete(servicio);
     }
 
-    
+    /**
+     * Esta fincion lista todos los servicios creados
+     * @return 
+     */
     @Override
     @Transactional(readOnly = true)
     public List<Servicio> listarServicios() {
         return (List<Servicio>)servicioDao.findAll();
     }
 
+    /**
+     * Esta funcio encuentra un servicio buscandolo por el objeto
+     * @param servicio
+     * @return 
+     */
     @Override
     @Transactional(readOnly = true)
     public Servicio encontrarServicio(Servicio servicio) {

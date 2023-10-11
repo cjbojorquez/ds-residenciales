@@ -6,7 +6,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="description" content="" />
         <meta name="author" content="" />
-        <title>Dashboard - DS Admin</title>
+        <title>DS-Residenciales</title>
         <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min1.css" rel="stylesheet" />
         <link href="css/styles.css" rel="stylesheet" />
         <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
@@ -24,9 +24,9 @@
             <div id="layoutSidenav_content">
                 <main>
                     <div class="container-fluid px-4">
-                        <h1 class="mt-4">Dashboard</h1>
+                        <h1 class="mt-4">Usuario</h1>
                         <ol class="breadcrumb mb-4">
-                            <li class="breadcrumb-item active">Usuario</li>
+                            <li class="breadcrumb-item active"></li>
                         </ol>
 
                         <nav class="navbar navbar-light bg-light">
@@ -48,7 +48,6 @@
                                             <tr>
                                                 <th>Nombre</th>
                                                 <th>Usuario</th>
-                                                <th>Password</th>
                                                 <th>Email</th>
                                                 <th>Tel&eacute;fono</th>
                                                 <th>C&oacute;digo</th>
@@ -69,7 +68,6 @@
                                             <tr>
                                                 <th>Nombre</th>
                                                 <th>Usuario</th>
-                                                <th>Password</th>
                                                 <th>Email</th>
                                                 <th>Tel&eacute;fono</th>
                                                 <th>C&oacute;digo</th>
@@ -89,7 +87,6 @@
                                             <tr th:each="usuario : ${usuarios}">
                                                 <td th:text="${usuario.nombre}">Mostrar Nombre</td>
                                                 <td th:text="${usuario.nombreUsuario}">Mostrar usuario</td>
-                                                <td th:text="${usuario.password}">Mostrar password</td>
                                                 <td th:text="${usuario.email}">Mostrar Email</td>
                                                 <td th:text="${usuario.telefono}">Mostrar Telefono</td>
                                                 <td th:text="${usuario.codigo}">Mostrar C&oacute;digo</td>
@@ -106,7 +103,7 @@
                                                 <td th:text="${usuario.fechaModifica}">Mostrar fecha de modificacion</td>
                                                 <td th:text="${usuario.usuarioModifica}">Mostrar quien modifico el registro</td>
                                                 <td><a class="btn btn-info" role="button"  th:href="@{/editarus(idUsuario=${usuario.idUsuario})}" th:text="Editar"/></td>
-                                                <td><a class="btn btn-danger" role="button" th:onclick="confirmarEliminacion([[(${usuario.idUsuario})]],'//eliminarus?idUsuario=');" th:text="Eliminar"/></td>
+                                                <td><a class="btn btn-danger" role="button" th:onclick="confirmarEliminacion([[(${usuario.idUsuario})]],'/eliminarus?idUsuario=');" th:text="Eliminar"/></td>
                                             </tr>
 
                                         </tbody>

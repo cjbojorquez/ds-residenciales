@@ -19,4 +19,10 @@ public interface SolicitudServicioService {
     public void eliminar(SolicitudServicio solicitudServicio);
     
     public SolicitudServicio encontrarServicio(SolicitudServicio solicitudServicio);
+    
+    public List<Object[]> porResidencial(Long idResidencial);
+    
+    public Object conteoActivos(Long idResidencial);
+    
+    public List<Object[]> conteoPorEstado(int mes, Long idResidencial);
 }

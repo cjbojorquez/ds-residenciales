@@ -7,8 +7,11 @@ import java.util.Date;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 /**
+ * Esta entidad se utiliza para registrar los tipos de servicio que una residencial provee,
+ * esta entidad mapea la tabla service
  *
  * @author cjbojorquez
+ * 
  */
 
 @Data

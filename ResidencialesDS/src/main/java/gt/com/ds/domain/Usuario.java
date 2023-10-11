@@ -8,8 +8,10 @@ import java.util.Date;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 /**
+ * Esta entidad mapea la tabla user, que lleva el control de usuarios y empleados
  *
  * @author cjbojorquez
+ * 
  */
 
 @Data

@@ -7,8 +7,12 @@ import java.util.Date;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 /**
+ * Esta entidad se utiliza para mapear la tabla ticket, que es donde se registran las 
+ * gestiones y las anomalias
  *
  * @author cjbojorquez
+ * 
+ * 
  */
 
 @Data

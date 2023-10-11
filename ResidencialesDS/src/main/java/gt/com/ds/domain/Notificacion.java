@@ -7,8 +7,11 @@ import java.util.Date;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 /**
+ * Esta entidad mapea la tabla menssage, que es la tabla que registra todas las notificaciones
+ * tanto generales como específicas
  *
  * @author cjbojorquez
+ * 
  */
 
 @Data

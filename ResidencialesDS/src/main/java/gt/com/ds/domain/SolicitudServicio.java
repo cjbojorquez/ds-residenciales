@@ -7,8 +7,11 @@ import java.util.Date;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 /**
+ * Esta entidad permite registrar las solicitudes de servicio realizadas por el usuario, 
+ * esta entidad mapea la tabla service_request
  *
  * @author cjbojorquez
+ * 
  */
 
 @Data

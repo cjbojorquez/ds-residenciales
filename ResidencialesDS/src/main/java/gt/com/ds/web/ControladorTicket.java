@@ -4,6 +4,7 @@ import gt.com.ds.domain.Comentario;
 import gt.com.ds.domain.EstadoTicket;
 import gt.com.ds.domain.Ticket;
 import gt.com.ds.domain.Usuario;
+import gt.com.ds.servicio.BuzonService;
 import gt.com.ds.servicio.ComentarioService;
 import gt.com.ds.servicio.EstadoTicketService;
 import lombok.extern.slf4j.Slf4j;
@@ -37,8 +38,11 @@ import java.util.logging.Logger;
 import org.springframework.web.bind.annotation.PathVariable;
 
 /**
+ * Este controlador es el encargado del manejo tanto de las gestiones como de las anomalias.
+ * Tipo de ticket 1 = Gestion ; 2 = Anomalias
  *
  * @author cjbojorquez
+ * 
  */
 @Controller
 @Slf4j
@@ -46,6 +50,9 @@ public class ControladorTicket {
 
     @Autowired
     private TicketService ticketService;
+    
+    @Autowired
+    private BuzonService buzonService;
 
     @Autowired
     private ComentarioService comentarioService;
@@ -63,10 +70,13 @@ public class ControladorTicket {
     private Long tipoGestion=1L;
     private Long tipoAnomalia=2L;
 
+    /**
+     * Esta función lista las gestiones activas
+     * 
+     */
     @GetMapping("/gestion")
     public String Inicio(Model model) {
-        // Tipo de ticket 1 = Gestion ; 2 = Anomalias
-        //Long tipoTicket = 1L;
+        
         Usuario us=varios.getUsuarioLogueado();
         List<Ticket> gestiones;
          if(varios.getRolLogueado().equals("ROLE_USER"))
@@ -88,6 +98,7 @@ public class ControladorTicket {
         return "mi_gestion";
     }*/
 
+    
     @GetMapping("/agregargestion")
     public String agregar(Ticket ticket, Model model) {
         var estadoTicket = estadoTicketService.encontrarEstado(1L);
@@ -95,6 +106,10 @@ public class ControladorTicket {
         return "creargestion";
     }
 
+    /**
+     * Esta función permite guardar gestiones nuevas o existentes que se han editado
+     * @param ticket este parametro es el objeto que contiene la informacion del la gestión
+     */
     @PostMapping("/guardargestion")
     public String guardar(@Valid Ticket ticket, Errors errors) {
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
@@ -123,22 +138,30 @@ public class ControladorTicket {
         return "redirect:/gestion";
     }
     
+    /**
+     * Por medio de esta función se pueden manejar los cambios de estado de los tickets, tanto 
+     * anomalias como gestiones
+     * @param nuevo este parametro contiene el nuevo estado del ticket
+     * @return  luego del cambio se redirecciona a la pagina de edicion correspondiente,
+     * ya sea de gestiones o anomalias
+     */
     @PostMapping("/estadoTicket")
-    public String guardarEstadoTicket(@Valid Ticket ticket,Model model, Errors errors) {
+    public String guardarEstadoTicket(@Valid Ticket nuevo,Model model, Errors errors) {
         Usuario us = varios.getUsuarioLogueado();
-        Ticket tk = ticketService.encontrarTicket(ticket.getIdTicket());
-        
-        tk.setEstado(ticket.getEstado());
+        Ticket tk = ticketService.encontrarTicket(nuevo.getIdTicket());
+        EstadoTicket actual= tk.getEstado();
+        tk.setEstado(nuevo.getEstado());
         ticketService.guardar(tk);
         
-        var comentarios = comentarioService.comentarioPorTicket(ticket.getIdTicket());
+        buzonService.cambioEstadoTicket(actual, tk,tk.getUsuario(), us);
+        
+        var comentarios = comentarioService.comentarioPorTicket(nuevo.getIdTicket());
         var estadosTicket = estadoTicketService.listarEstadoTicket();
         model.addAttribute("comentarios", comentarios);
         model.addAttribute("estadosTicket", estadosTicket);
-        model.addAttribute("ticket", ticket);
-        log.info("se envia ticket " + ticket.toString());
+        model.addAttribute("ticket", tk);
         String id="?idTicket=" + tk.getIdTicket();
-        if(tk.getIdTipo()==1){
+        if(tk.getIdTipo()==1L){
             return "redirect:/editargestion" + id;
         }else{
             return "redirect:/editaranomalia" + id;
@@ -146,6 +169,16 @@ public class ControladorTicket {
         
     }
 
+    /**
+     * Esta función carga los datos de una gestión específica para proceder con su edición
+     * @param ticket este parametro contiene el id del ticket que se editará
+     * @param model es una interfaz en Spring Framework que se utiliza en el
+     * contexto de aplicaciones web basadas en Spring MVC
+     * (Model-View-Controller) para pasar datos desde el controlador a la vista
+     * (la plantilla HTML) de una manera organizada y eficiente
+     * @return se redirecciona hacia la pagina modificargestion.html donde se carga la informacion de la
+     * gestion a editar
+     */
     @GetMapping("/editargestion")
     public String editar(Ticket ticket, Model model) {
         Usuario us = varios.getUsuarioLogueado();
@@ -157,6 +190,12 @@ public class ControladorTicket {
             ticketService.guardar(ticket);
         }
         var comentarios = comentarioService.comentarioPorTicket(ticket.getIdTicket());
+        for(Comentario comentario:comentarios){
+            if(!Objects.equals(comentario.getUsuario().getIdUsuario(), us.getIdUsuario())){
+                comentario.setIdEstado(2L);
+                comentarioService.guardar(comentario);
+            }
+        }
         model.addAttribute("comentarios", comentarios);
         model.addAttribute("estadosTicket", estadosTicket);
         model.addAttribute("ticket", ticket);
@@ -164,6 +203,9 @@ public class ControladorTicket {
         return "modificargestion";
     }
 
+    /**
+     * Esta función permite cambiar el estado del ticket de activo a cerrado
+     */
     @GetMapping("/cerrargestion")
     public String eliminar(Ticket ticket, Model model) {
         //ticket = ticketService.encontrarTicket(ticket);
@@ -184,6 +226,11 @@ public class ControladorTicket {
      * ANOMALIAS
      *
      *************
+     */
+    
+    /**
+     * Esta función lista las anomalias activas
+     * 
      */
     @GetMapping("/anomalia")
     public String InicioAnomalia(Model model) {
@@ -247,6 +294,16 @@ public class ControladorTicket {
         return "redirect:/anomalia";
     }
 
+    /**
+     * Esta función carga los datos de una anomalia específica para proceder con su edición
+     * @param ticket este parametro contiene el id del ticket que se editará
+     * @param model es una interfaz en Spring Framework que se utiliza en el
+     * contexto de aplicaciones web basadas en Spring MVC
+     * (Model-View-Controller) para pasar datos desde el controlador a la vista
+     * (la plantilla HTML) de una manera organizada y eficiente
+     * @return se redirecciona hacia la pagina modificargestion.html donde se carga la informacion de la
+     * anomalia a editar
+     */
     @GetMapping("/editaranomalia")
     public String editarAnomalia(Ticket ticket, Model model) {
         ticket = ticketService.encontrarTicket(ticket);
@@ -273,6 +330,9 @@ public class ControladorTicket {
         return "modificaranomalia";
     }
 
+    /**
+     * Esta función permite cambiar el estado del ticket de activo a cerrado
+     */
     @GetMapping("/cerraranomalia")
     public String eliminarAnomalia(Ticket ticket, Model model) {
         //ticket = ticketService.encontrarTicket(ticket);
@@ -288,6 +348,19 @@ public class ControladorTicket {
 
     /**
      * COMENTARIOS
+     */
+    
+    /**
+     * Para los tickets se pueden agregar comentarios, tanto para Gestiones como para Anomalias, y esto se realiza
+     * por medio de esta función.
+     * 
+     * @param comentario este parametro de tipo Comentario es el que se utilizará para cargar la informacion del mismo
+     * @param txtComentario este parametro es el que contiene el comentario a agregar, luego se copiará al objeto comentario para su
+     * persistencia en la base de datos
+     * @param idTicket este parametro contiene el id del ticket al que pertenece el comentario a agregar
+     * @param imagen si se adjunta algun documento se utiliza este parametro
+     * @param model
+     * @return luego de agregar el comentario se procede a redireccionar a la pagina correspondiente
      */
     @PostMapping("/guardarcomentario")
     public String guardarComentario(Comentario comentario, @RequestParam("txtcomentario") String txtComentario, @RequestParam("idticket") String idTicket, Model model, @RequestParam("file") MultipartFile imagen, Errors errors) {

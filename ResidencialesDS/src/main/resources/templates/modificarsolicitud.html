@@ -11,7 +11,7 @@
         <link href="css/styles.css" rel="stylesheet" />
         <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
         <!-- jQuery CDN -->
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="js/jquery-3.6.0.min.js"></script>
 
         <!-- jQuery UI CSS -->
         <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
@@ -20,7 +20,7 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-timepicker/1.13.18/jquery.timepicker.min.css">
 
         <!-- jQuery UI JavaScript -->
-        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+        <script src="js/jquery-ui.js"></script>
 
         <!-- jQuery Timepicker JavaScript -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-timepicker/1.13.18/jquery.timepicker.min.js"></script>
@@ -40,92 +40,96 @@
                     <div class="row justify-content-center">
                         <div class="col-lg-7">
                             <div class="card shadow-lg border-0 rounded-lg mt-5">
-                                
-                                
-                                    <div class="card-header">
-                                        <div class="row">
-                                            <a class="btn-close" th:href="@{/solicitud}"></a>
-                                        </div>
-                                        <div class="row">
-                                            <h3 class="text-center font-weight-light my-4">Solicitud de Servicio</h3>
-                                        </div>
+
+
+                                <div class="card-header">
+                                    <div class="row">
+                                        <a class="btn-close" th:href="@{/solicitud}"></a>
                                     </div>
-                                    <div class="card-body">
-                                        <form class="was-validated" th:action="@{guardarsolicitud}" enctype="multipart/form-data"  method="post" th:object="${solicitud}">
-                                            <input class="form-control" id="id" type="hidden" th:field="*{idSolicitud}"/>
-                                            <div class="form-floating mb-3">
-                                                <select class="form-control" id="cmbServ" aria-label="Tipo servicio" th:field="*{servicio}" required>
-                                                    <option value="">-- seleccione tipo de servicio --</option>
-                                                    <option th:each="serv : ${servicios}" th:value="${serv.idServicio}" th:text="${serv.nombre}"></option>
-                                                </select>
-                                                
-                                            </div>
-                                            <div class="form-floating mb-3">
-                                                <input class="form-control is-valid" id="nombre" type="text" placeholder="Ingrese el nombre" th:field="*{asunto}" required/>
-                                                <label for="nombre">Asunto</label>
-                                                <span th:if="${#fields.hasErrors('asunto')}" th:errors="*{asunto}" style="color:red" >Error en asunto</span>
-                                            </div>
-                                            <div class="form-floating mb-3">
-                                                <textarea class="form-control h-50" id="descripcion" rows="3"  th:field="*{comentario}" th:readonly="${not #authorization.expression('hasRole(''ROLE_EMPLOYEE'')')}"></textarea>
-                                                <label for="descripcion">Comentario</label>
-                                                <span th:if="${#fields.hasErrors('comentario')}" th:errors="*{comentario}">Error en descripcion</span>
-                                            </div>
-                                            <div class="form-floating mb-3">
-                                                <select class="form-control" id="cmbEmp" aria-label="Tipo servicio" th:field="*{empleado}" th:if="${#authorization.expression('hasRole(''ROLE_EMPLOYEE'')')}">
-                                                    <option value="">-- seleccione Empleado --</option>
-                                                    <option th:each="emp : ${empleados}" th:value="${emp.idUsuario}" th:text="${emp.nombre}"></option>
-                                                </select>
-                                                
-                                            </div>
-                                            <div class="form-control mb-3">
+                                    <div class="row">
+                                        <h3 class="text-center font-weight-light my-4">Solicitud de Servicio</h3>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <form class="was-validated" th:action="@{guardarsolicitud}" enctype="multipart/form-data"  method="post" th:object="${solicitud}">
+                                        <input class="form-control" id="id" type="hidden" th:field="*{idSolicitud}"/>
+                                        <div class="form-floating mb-3">
+                                            <select class="form-control" id="cmbServ" aria-label="Tipo servicio" th:field="*{servicio}" required>
+                                                <option value="">-- seleccione tipo de servicio --</option>
+                                                <option th:each="serv : ${servicios}" th:value="${serv.idServicio}" th:text="${serv.nombre}"></option>
+                                            </select>
+
+                                        </div>
+                                        <div class="form-floating mb-3">
+                                            <input class="form-control is-valid" id="nombre" type="text" placeholder="Ingrese el nombre" th:field="*{asunto}" required/>
+                                            <label for="nombre">Asunto</label>
+                                            <span th:if="${#fields.hasErrors('asunto')}" th:errors="*{asunto}" style="color:red" >Error en asunto</span>
+                                        </div>
+                                        <div class="form-floating mb-3">
+                                            <textarea class="form-control h-50" id="descripcion" rows="3"  th:field="*{comentario}" ></textarea>
+                                            <label for="descripcion">Comentario</label>
+                                            <span th:if="${#fields.hasErrors('comentario')}" th:errors="*{comentario}">Error en descripcion</span>
+                                        </div>
+                                        <div class="form-floating mb-3">
+                                            <select class="form-control" id="cmbEmp" aria-label="Tipo servicio" th:field="*{empleado}" th:if="${#authorization.expression('hasRole(''ROLE_EMPLOYEE'')')}">
+                                                <option value="">-- seleccione Empleado --</option>
+                                                <option th:each="emp : ${empleados}" th:value="${emp.idUsuario}" th:text="${emp.nombre}"></option>
+                                            </select>
+
+                                        </div>
+                                        <div class="form-control mb-3">
+                                            <div class="row">
+                                                <div class="col-6 input-group mb-3">
+                                                    <input type="hidden" id="desde" name="desde" th:field="*{fecha}"/>
+                                                    <span class="input-group-text" id="basic-addon1">Fecha:</span>
+                                                    <input type="text" id="desdeFecha" name="desdeFecha" class="form-control"  placeholder="Seleccione Fecha" readonly>
+                                                    <span class="input-group-text" id="basic-addon1">Hora:</span>
+                                                    <input  type="text" id="desdeHora" name="desdeHora" class="form-control"  placeholder="Seleccione Hora" maxlength="5" >
+
+                                                </div>
                                                 <div class="row">
-                                                    <div class="col-6 input-group mb-3">
-                                                        <input type="hidden" id="desde" name="desde" th:field="*{fecha}"/>
-                                                        <span class="input-group-text" id="basic-addon1">Fecha:</span>
-                                                        <input type="text" id="desdeFecha" name="desdeFecha" class="form-control"  placeholder="Seleccione Fecha" readonly>
-                                                        <span class="input-group-text" id="basic-addon1">Hora:</span>
-                                                        <input  type="text" id="desdeHora" name="desdeHora" class="form-control"  placeholder="Seleccione Hora" maxlength="5" >
-
-                                                    </div>
-                                                    <div class="row">
-                                                        <span th:if="${#fields.hasErrors('fecha')}" th:errors="*{fecha}" style="color:red">Error en descripcion</span>
-                                                    </div>
-
-                                                </div>
-                                            </div>
-                                            
-                                            <div class="custom-file mb-3">
-                                                <!--label class="custom-file-label" for="customFile">Seleccionar Adjunto</label-->
-                                                <input type="file" class="form-control border border-primary" id="customFile" name="file" accept="image/" style="display:none">
-                                                <!--span th:text="'Archivo adjunto: ' + ${notificacion.adjunto}" style="font-size:12pt; font-variant: simplified; display:none "></span-->
-                                            </div>
-                                            <div class="form-floating mb-3">
-
-                                                <input class="form-control" id="asunto" type="hidden" th:field="*{estado}"/>
-                                                <input class="form-control" id="residencial" type="hidden" th:field="*{residencial}"/>
-                                                <input class="form-control" id="usuario" type="hidden" th:field="*{usuario}"/>
-                                                <input class="form-control" id="empleado" type="hidden" th:field="*{empleado}" th:if="${not #authorization.expression('hasRole(''ROLE_EMPLOYEE'')')}"/>
-                                                <input class="form-control" id="fecha_crea" type="hidden" th:field="*{fechaCrea}"/>
-                                                <input class="form-control" id="usuario_crea" type="hidden" th:field="*{usuarioCrea}"/>
-                                                <input class="form-control" id="fecha_modifica" type="hidden" th:field="*{fechaModifica}"/>
-                                                <input class="form-control" id="usuario_modifica" type="hidden" th:field="*{usuarioModifica}"/>
-                                                <div class="mt-4 mb-0">
-                                                    <div class="d-grid">
-                                                        <input type="submit" class="btn btn-primary" value="Guardar">
-                                                    <a class="btn btn-danger" role="button" th:onclick="confirmarEliminacion([[(${solicitud.idSolicitud})]],'/cerrarsolicitud?idSolicitud=');" th:text="'Cerrar Solicitud'"/>
-                                                    </div>
+                                                    <span th:if="${#fields.hasErrors('fecha')}" th:errors="*{fecha}" style="color:red">Error en descripcion</span>
                                                 </div>
 
                                             </div>
-                                        </form>
-                                    </div>
-                                    <div class="card-footer text-center py-3">
-                                        <div class="small"></div>
-                                    </div>
+                                        </div>
+
+                                        <div class="custom-file mb-3">
+                                            <!--label class="custom-file-label" for="customFile">Seleccionar Adjunto</label-->
+                                            <input type="file" class="form-control border border-primary" id="customFile" name="file" accept="image/" style="display:none">
+                                            <!--span th:text="'Archivo adjunto: ' + ${notificacion.adjunto}" style="font-size:12pt; font-variant: simplified; display:none "></span-->
+                                        </div>
+                                        <div class="form-floating mb-3">
+
+                                            <input class="form-control" id="asunto" type="hidden" th:field="*{estado}"/>
+                                            <input class="form-control" id="residencial" type="hidden" th:field="*{residencial}"/>
+                                            <input class="form-control" id="usuario" type="hidden" th:field="*{usuario}"/>
+                                            <input class="form-control" id="empleado" type="hidden" th:field="*{empleado}" th:if="${not #authorization.expression('hasRole(''ROLE_EMPLOYEE'')')}"/>
+                                            <input class="form-control" id="fecha_crea" type="hidden" th:field="*{fechaCrea}"/>
+                                            <input class="form-control" id="usuario_crea" type="hidden" th:field="*{usuarioCrea}"/>
+                                            <input class="form-control" id="fecha_modifica" type="hidden" th:field="*{fechaModifica}"/>
+                                            <input class="form-control" id="usuario_modifica" type="hidden" th:field="*{usuarioModifica}"/>
+                                            <div class="mt-4 mb-0 text-center">
+                                                <div class="row">
+                                                    <div class="col-6">
+                                                        <input type="submit" class="btn btn-outline-primary btn-block" value="Guardar Solicitud" >
+                                                    </div>
+                                                    <div class="col-6" >
+                                                        <a class="btn btn-outline-danger btn-block" role="button" th:onclick="confirmarEliminacion([[(${solicitud.idSolicitud})]],'/cerrarsolicitud?idSolicitud=');" th:text="'Cerrar Solicitud'" />
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="card-footer text-center py-3">
+                                    <div class="small"></div>
                                 </div>
                             </div>
                         </div>
                     </div>
+                </div>
             </main>
             <th:block th:replace="~{layout/plantilla :: footer}"></th:block>
         </div>
@@ -137,7 +141,7 @@
     <script src="js/scripts.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>
     <script src="js/datatables-simple-demo.js"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-        <script src="js/mensajes.js"></script>
+    <!--script src="https://code.jquery.com/jquery-3.6.0.min.js"></script-->
+    <script src="js/mensajes.js"></script>
 </body>
 </html>

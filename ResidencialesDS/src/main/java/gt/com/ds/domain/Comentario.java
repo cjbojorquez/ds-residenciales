@@ -6,8 +6,10 @@ import java.util.Date;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 /**
+ * Esta entidad permite agregar comentarios a los tickets, mapea la tabla comment
  *
  * @author cjbojorquez
+ * 
  */
 
 @Data

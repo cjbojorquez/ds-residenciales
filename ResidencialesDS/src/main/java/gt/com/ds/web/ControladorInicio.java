@@ -18,8 +18,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
+ * Esta clase contiene le controlador que maneja la pagina inicial
  *
  * @author cjbojorquez
+ * 
  */
 @Controller
 @Slf4j
@@ -40,6 +42,11 @@ public class ControladorInicio {
     @Autowired
     private UsuarioService usuarioService;
     
+    /**
+     * Con este controlador se maneja la pagina de inicio index.html
+     * @param model
+     * @return 
+     */
     @GetMapping("/")
     public String Inicio(Model model){
         Usuario usuarioLogueado = varios.getUsuarioLogueado();
