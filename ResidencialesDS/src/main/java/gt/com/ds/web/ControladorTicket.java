@@ -121,6 +121,7 @@ public class ControladorTicket {
         if (ticket.getIdTicket() == null) {
             EstadoTicket estadoTicket = estadoTicketService.encontrarEstado(1L);
             ticket.setEstado(estadoTicket);
+            
             ticket.setIdResidencial(us.getResidencial().getIdResidential());//cambiar a dinamico
             ticket.setIdTipo(tipoGestion);
             ticket.setFechaCrea(Tools.now());

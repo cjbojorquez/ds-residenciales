@@ -111,18 +111,18 @@
                                                 <div class="container">
                                                     <div class="row">
                                                         <div class="col-8">
-                                                            <textarea id="txtcomentario" name="txtcomentario" placeholder="Escribe acá" style="width: 100%; height: 100px;"></textarea>
+                                                            <textarea id="txtcomentario" name="txtcomentario" placeholder="Escribe acá" style="width: 100%; height: 100px;" th:readonly="${ticket.estado.idEstado == 4}"></textarea>
 
                                                         </div>
                                                         <div class="col-1">
                                                             <label class="custom-file-label" for="customFile" style="margin-left: 10px;">
                                                                 <i class="fas fa-paperclip"></i>
-                                                                <input type="file" class="form-control border border-primary" id="customFile" name="file" style="display: none;">
+                                                                <input type="file" class="form-control border border-primary" id="customFile" name="file" style="display: none;" />
 
                                                             </label>
                                                         </div>
                                                         <div class="col-2">
-                                                            <button type="submit" style="margin-left: 10px;">Enviar</button>
+                                                            <button type="submit" style="margin-left: 10px;" th:disabled="${ticket.estado.idEstado == 4}">Enviar</button>
                                                         </div>
                                                     </div>
                                                 </div>

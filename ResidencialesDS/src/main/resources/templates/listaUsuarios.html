@@ -60,7 +60,7 @@
                                             <td th:text="${usuarioRol.usuario.nombreUsuario}">Mostrar usuario</td>
                                             <td th:text="${usuarioRol.rol.nombre}">Mostrar Rol</td>
                                             <td th:text="${usuarioRol.usuario.residencial.name}">Mostrar Rol</td>
-                                            <td><a class="btn btn-light" role="button"  th:href="@{/asignarol(idUsuario=${usuarioRol.usuario.idUsuario})}" th:text="'Asignar Rol'"/></td>
+                                            <td><a class="btn btn-outline-success" role="button"  th:href="@{/asignarol(idUsuario=${usuarioRol.usuario.idUsuario})}" th:text="'Asignar Rol'"/></td>
                                         </tr>
 
                                     </tbody>

@@ -94,7 +94,7 @@
                                                 <td th:text="${residencial.modify_time}">Mostrar fecha de modificacion</td>
                                                 <td th:text="${residencial.modify_user}">Mostrar quien modifico el registro</td>
                                                 <td><a class="btn btn-info" role="button"  th:href="@{/editarres(idResidential=${residencial.idResidential})}" th:text="Editar"/></td>
-                                                <td><a class="btn btn-danger" role="button"  th:href="@{/eliminarres(idResidential=${residencial.idResidential})}" th:onclick="confirmarEliminacion([[(${residencial.idResidential})]],'/eliminarres?idResidential=');" th:text="Eliminar"/></td>
+                                                <td><a class="btn btn-danger" role="button"   th:onclick="confirmarEliminacion([[(${residencial.idResidential})]],'/eliminarres?idResidential=');" th:text="Eliminar"/></td>
                                             </tr>
 
                                         </tbody>

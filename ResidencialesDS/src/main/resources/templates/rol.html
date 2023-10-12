@@ -74,7 +74,7 @@
                                             <td th:text="${rol.fechaModifica}">Mostrar fecha de modificacion</td>
                                             <td th:text="${rol.usuarioModifica}">Mostrar quien modifico el registro</td>
                                             <td><a class="btn btn-info" role="button"  th:href="@{/editarrol(idRol=${rol.idRol})}" th:text="Editar"/></td>
-                                            <td><a class="btn btn-danger" role="button"  th:href="@{/eliminarrol(idRol=${rol.idRol})}" th:text="Eliminar"/></td>
+                                            <td><a class="btn btn-danger" role="button" th:onclick="confirmarEliminacion([[(${rol.idRol})]],'/eliminarrol?idRol=');" th:text="Eliminar"/></td>
                                         </tr>
 
                                     </tbody>

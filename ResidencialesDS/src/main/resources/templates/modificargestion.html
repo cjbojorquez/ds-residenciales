@@ -52,7 +52,12 @@
                                 </div>
                                 <div class="card-body">
                                     <div>
-                                        <div  th:utext="${ticket.descripcion}"></div>
+                                        <div class="row">
+                                            <div  th:utext="${ticket.descripcion}"></div>
+                                        </div>
+                                        <div class="row my-2">
+                                            
+                                        </div>
                                         <div class="row">
 
                                             <form th:action="@{estadoTicket}" enctype="multipart/form-data"  method="post" th:object="${ticket}">
@@ -116,7 +121,7 @@
                                                 <div class="container">
                                                     <div class="row">
                                                         <div class="col-8">
-                                                            <textarea id="txtcomentario" name="txtcomentario" placeholder="Escribe acá" style="width: 100%; height: 100px;"></textarea>
+                                                            <textarea id="txtcomentario" name="txtcomentario" placeholder="Escribe acá" style="width: 100%; height: 100px;" th:readonly="${ticket.estado.idEstado == 4}"></textarea>
 
                                                         </div>
                                                         <div class="col-1">
@@ -127,7 +132,7 @@
                                                             </label>
                                                         </div>
                                                         <div class="col-2">
-                                                            <button type="submit" style="margin-left: 10px;">Enviar</button>
+                                                            <button type="submit" style="margin-left: 10px;" th:disabled="${ticket.estado.idEstado == 4}">Enviar</button>
                                                         </div>
                                                     </div>
                                                 </div>

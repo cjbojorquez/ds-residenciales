@@ -63,7 +63,7 @@
                                             <td th:text="${servicio.descripcion}">Mostrar Descripcion</td>
                                             
                                             <td><a class="btn btn-info" role="button"  th:href="@{/editarserv(idServicio=${servicio.idServicio})}" th:text="Editar"/></td>
-                                            <td><a class="btn btn-danger" role="button"  th:href="@{/eliminarserv(idServicio=${servicio.idServicio})}" th:text="Eliminar"/></td>
+                                            <td><a class="btn btn-danger" role="button" th:onclick="confirmarEliminacion([[(${servicio.idServicio})]],'/eliminarserv?idServicio=');" th:text="Eliminar"/></td>
                                         </tr>
 
                                     </tbody>

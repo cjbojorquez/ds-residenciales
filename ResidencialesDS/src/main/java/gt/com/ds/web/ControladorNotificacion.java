@@ -294,7 +294,8 @@ public class ControladorNotificacion {
         notificacion.setEstado(estadoTicketService.encontrarEstado(3L));//cerrar notificacion
 
         log.info("Se envio correo con los siguientes datos: Mensaje=" + mensaje + " destinatarios=" + mails + " notificacion=" + notificacion);
-
+        notificacion.setEstado(estadoTicketService.encontrarEstado(4L));
+        notificacionService.guardar(notificacion);
         var notificaciones = notificacionService.notificacionPorTipo(varNotiGeneral, usuarioLogueado.getResidencial().getIdResidential());//agregar residencial
         model.addAttribute("notificaciones", notificaciones);
         return "general";
@@ -441,7 +442,7 @@ public class ControladorNotificacion {
         Usuario us =  varios.getUsuarioLogueado();
         notificacion = notificacionService.encontrarNotificacion(notificacion);
         var estadosTicket = estadoTicketService.listarEstadoTicket();
-        var usuarios = usuarioService.listarEmpleadosResidencial(1L, us.getIdUsuario());
+        var usuarios = usuarioService.listarUsuariosResidencial(1L, us.getIdUsuario());
         if (notificacion.getEstado().getIdEstado() == 1L) {
             EstadoTicket estadoTicket = estadoTicketService.encontrarEstado(2L);
             notificacion.setEstado(estadoTicket);
@@ -532,7 +533,8 @@ public class ControladorNotificacion {
         notificacion.setEstado(estadoTicketService.encontrarEstado(3L));//cerrar notificacion
 
         log.info("Se envio correo con los siguientes datos: Mensaje=" + mensaje + " destinatarios=" + mails + " notificacion=" + notificacion);
-
+        notificacion.setEstado(estadoTicketService.encontrarEstado(4L));
+        notificacionService.guardar(notificacion);
         var notificaciones = notificacionService.notificacionPorTipo(varNotiEspecifica, usuarioLogueado.getResidencial().getIdResidential());//agregar residencial
         model.addAttribute("notificaciones", notificaciones);
         return "especifica";

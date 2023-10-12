@@ -10,92 +10,101 @@
         <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
         <link href="css/styles.css" rel="stylesheet" />
         <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+        <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+        <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+        <script>
+            $(document).ready(function () {
+                $('#seleccionarUsuario').select2();
+            });
+        </script>
     </head>
     <body class="sb-nav-fixed">
 
-        <th:block th:replace="~{layout/plantilla :: header}"></th:block>
-        <!-- barra vertical -->
-        <div id="layoutSidenav">
-            <th:block th:replace="~{layout/plantilla :: menu}"></th:block>
+    <th:block th:replace="~{layout/plantilla :: header}"></th:block>
+    <!-- barra vertical -->
+    <div id="layoutSidenav">
+        <th:block th:replace="~{layout/plantilla :: menu}"></th:block>
 
-            <div id="layoutSidenav_content">
-                <main>
-                    <div class="container">
-                        <div class="row justify-content-center">
-                            <div class="col-lg-7">
-                                <div class="card shadow-lg border-0 rounded-lg mt-5">
-                                    
-                                    <div class="card-header">
-                                        <div class="row">
-                                            <a class="btn-close" th:href="@{/especifica}"></a>
-                                        </div>
-                                        <div class="row">
-                                            <h3 class="text-center font-weight-light my-4">Notificaci&oacute;n Espec&iacute;fica</h3>
-                                        </div>
+        <div id="layoutSidenav_content">
+            <main>
+                <div class="container">
+                    <div class="row justify-content-center">
+                        <div class="col-lg-7">
+                            <div class="card shadow-lg border-0 rounded-lg mt-5">
+
+                                <div class="card-header">
+                                    <div class="row">
+                                        <a class="btn-close" th:href="@{/especifica}"></a>
                                     </div>
-                                    <div class="card-body">
-                                        <form class="was-validated" th:action="@{guardarespecifica}" enctype="multipart/form-data"  method="post" th:object="${notificacion}">
-                                            <input class="form-control" id="id" type="hidden" th:field="*{idNotificacion}"/>
-                                            <div class="form-floating mb-3">
-                                                <input class="form-control is-valid" id="nombre" type="text" placeholder="Ingrese el nombre" th:field="*{asunto}" required/>
-                                                <label for="inputFirstName">Asunto</label>
-                                                <span th:if="${#fields.hasErrors('asunto')}" th:errors="*{nombre}">Error en asunto</span>
-                                            </div>
-                                            <div class="form-floating mb-3">
-                                                <input class="form-control is-valid" id="nombre" type="text" placeholder="Ingrese el Descripcion" th:field="*{descripcion}" required/>
-                                                <label for="inputFirstName">Descripci&oacute;n</label>
-                                                <span th:if="${#fields.hasErrors('descripcion')}" th:errors="*{nombre}">Error en asunto</span>
-                                            </div>
-
-                                            <div class="custom-file mb-3">
-                                                <label class="custom-file-label" for="customFile">Seleccionar Adjunto</label>
-                                                <input type="file" class="form-control border border-primary" id="customFile" name="file" accept="image/">
-
-                                            </div>
-                                            <div class="form-floating mb-3">
-                                                <select class="form-control" aria-label="Asigne un empleado" th:field="*{usuario}" required>
-                                                    <option value="">--- Seleccione un destinatario ---</option>
-                                                    <option th:each="us : ${usuarios}" th:value="${us.idUsuario}" th:text="${us.nombre}">
-                                                    </option>
-                                                </select>
-                                                <div class="form-floating mb-3">
-
-                                                    <input class="form-control" id="asunto" type="hidden" th:field="*{estado}"/>
-                                                    <input class="form-control" id="descripcion" type="hidden" th:field="*{tipo}"/>
-                                                    <input class="form-control" id="foto" type="hidden" th:field="*{adjunto}"/>
-                                                    <input class="form-control" id="residencial" type="hidden" th:field="*{idResidencial}"/>
-                                                    <input class="form-control" id="usuario" type="hidden" th:field="*{usuario}"/>
-                                                    <input class="form-control" id="fecha_crea" type="hidden" th:field="*{fechaCrea}"/>
-                                                    <input class="form-control" id="usuario_crea" type="hidden" th:field="*{usuarioCrea}"/>
-                                                    <input class="form-control" id="fecha_modifica" type="hidden" th:field="*{fechaModifica}"/>
-                                                    <input class="form-control" id="usuario_modifica" type="hidden" th:field="*{usuarioModifica}"/>
-                                                    <div class="mt-4 mb-0">
-                                                        <div class="d-grid"><input type="submit" class="btn btn-primary" value="Guardar"></div>
-                                                    </div>
-
-
-                                                    </form>
-                                                </div>
-                                                <div class="card-footer text-center py-3">
-                                                    <div class="small"></div>
-                                                </div>
-                                            </div>
+                                    <div class="row">
+                                        <h3 class="text-center font-weight-light my-4">Notificaci&oacute;n Espec&iacute;fica</h3>
                                     </div>
                                 </div>
-                            </div>
-                            </main>
-                            <th:block th:replace="~{layout/plantilla :: footer}"></th:block> 
-                        </div>
+                                <div class="card-body">
+                                    <form class="was-validated" th:action="@{guardarespecifica}" enctype="multipart/form-data"  method="post" th:object="${notificacion}">
+                                        <input class="form-control" id="id" type="hidden" th:field="*{idNotificacion}"/>
+                                        <div class="form-floating mb-3">
+                                            <input class="form-control is-valid" id="asunto" type="text" placeholder="Ingrese el nombre" th:field="*{asunto}" required/>
+                                            <label for="asunto">Asunto</label>
+                                            <span th:if="${#fields.hasErrors('asunto')}" th:errors="*{nombre}">Error en asunto</span>
+                                        </div>
+                                        <div class="form-floating mb-3">
+                                            <input class="form-control is-valid" id="nombre" type="text" placeholder="Ingrese el Descripcion" th:field="*{descripcion}" required/>
+                                            <label for="nombre">Descripci&oacute;n</label>
+                                            <span th:if="${#fields.hasErrors('descripcion')}" th:errors="*{nombre}">Error en asunto</span>
+                                        </div>
 
+                                        <div class="custom-file mb-3">
+                                            <label class="custom-file-label" for="customFile">Seleccionar Adjunto</label>
+                                            <input type="file" class="form-control border border-primary" id="customFile" name="file" accept="image/">
+
+                                        </div>
+                                        <div class="form-floating mb-3">
+                                            <select class="form-control" aria-label="Asigne un empleado" th:field="*{usuario}" id="selectUsuario" required>
+                                                <option value="">--- Seleccione un destinatario ---</option>
+                                                <option th:each="us : ${usuarios}" th:value="${us.idUsuario}" th:text="${us.nombre}">
+                                                </option>
+                                            </select>
+
+
+                                            <div class="form-floating mb-3">
+
+                                                <input class="form-control" id="asunto" type="hidden" th:field="*{estado}"/>
+                                                <input class="form-control" id="descripcion" type="hidden" th:field="*{tipo}"/>
+                                                <input class="form-control" id="foto" type="hidden" th:field="*{adjunto}"/>
+                                                <input class="form-control" id="residencial" type="hidden" th:field="*{idResidencial}"/>
+                                                <input class="form-control" id="usuario" type="hidden" th:field="*{usuario}"/>
+                                                <input class="form-control" id="fecha_crea" type="hidden" th:field="*{fechaCrea}"/>
+                                                <input class="form-control" id="usuario_crea" type="hidden" th:field="*{usuarioCrea}"/>
+                                                <input class="form-control" id="fecha_modifica" type="hidden" th:field="*{fechaModifica}"/>
+                                                <input class="form-control" id="usuario_modifica" type="hidden" th:field="*{usuarioModifica}"/>
+                                                <div class="mt-4 mb-0">
+                                                    <div class="d-grid"><input type="submit" class="btn btn-primary" value="Guardar"></div>
+                                                </div>
+
+
+                                                </form>
+                                            </div>
+                                            <div class="card-footer text-center py-3">
+                                                <div class="small"></div>
+                                            </div>
+                                        </div>
+                                </div>
+                            </div>
+                        </div>
+                        </main>
+                        <th:block th:replace="~{layout/plantilla :: footer}"></th:block> 
                     </div>
 
+                </div>
 
-                    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
-                    <script src="js/scripts.js"></script>
-                    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
-                    <script src="assets/demo/chart-area-demo.js"></script>
-                    <script src="assets/demo/chart-bar-demo.js"></script>
-                    <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>
-                    <script src="js/datatables-simple-demo.js"></script>
-                    </body>
-                    </html>
+
+                <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+                <script src="js/scripts.js"></script>
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
+                <script src="assets/demo/chart-area-demo.js"></script>
+                <script src="assets/demo/chart-bar-demo.js"></script>
+                <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>
+                <script src="js/datatables-simple-demo.js"></script>
+                </body>
+                </html>
