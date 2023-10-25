@@ -44,10 +44,9 @@
                                     <thead>
                                         <tr>
                                             <th>Asunto</th>
-                                            <th>Descripcion</th>
+                                            <th>Descripción</th>
                                             <th>Desde</th>
                                             <th>Hasta</th>
-                                            <th>Adjunto</th>
                                             <th>Modificar</th>
                                             <th>Eliminar</th>
                                         </tr>
@@ -55,11 +54,9 @@
                                     <tfoot>
                                         <tr>
                                             <th>Asunto</th>
-                                            <th>Descripcion</th>
+                                            <th>Descripción</th>
                                             <th>Desde</th>
                                             <th>Hasta</th>
-                                            <th>Adjunto</th>
-                                            <th>Adjunto</th>
                                             <th>Modificar</th>
                                             <th>Eliminar</th>
                                         </tr>
@@ -70,7 +67,6 @@
                                             <td th:text="${notificacion.descripcion}"></td>
                                             <td th:text="${#dates.format(notificacion.desde, 'dd/MM/yyyy HH:mm')}"></td>
                                             <td th:text="${#dates.format(notificacion.hasta, 'dd/MM/yyyy HH:mm')}"></td>
-                                            <td th:text="${notificacion.adjunto}"></td>
                                             <td><a class="btn btn-info" role="button"  th:href="@{/modificargeneral(idNotificacion=${notificacion.idNotificacion})}" th:text="Editar"/></td>
                                             <td><a class="btn btn-danger" role="button"  th:onclick="confirmarEliminacion([[(${notificacion.idNotificacion})]],'/cerrargeneral?idNotificacion=');" th:text="Eliminar"/></td>
                                         </tr>

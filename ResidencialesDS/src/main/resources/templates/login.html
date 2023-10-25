@@ -1,97 +1,162 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
     <head>
-        <meta charset="utf-8" />
-        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-        <meta name="description" content="" />
-        <meta name="author" content="" />
-
-
-
-
-        <title>DS-Residenciales - Login</title>
-        <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min1.css" rel="stylesheet" />
-        <link href="css/styles.css" rel="stylesheet" />
-        <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
-
-
-        <style>
-            .bd-placeholder-img {
-                font-size: 1.125rem;
-                text-anchor: middle;
-                -webkit-user-select: none;
-                -moz-user-select: none;
-                -ms-user-select: none;
-                user-select: none;
-            }
-
-            @media (min-width: 768px) {
-                .bd-placeholder-img-lg {
-                    font-size: 3.5rem;
-                }
-            }
-        </style>
-        <link href="css/signin.css" rel="stylesheet">
+        <meta http-equiv="x-ua-compatible" content="ie=edge" />
+        <title>DS-RESIDENCIALES</title>
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="css/fa_all.css" />
+        <!-- Google Fonts Roboto -->
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" />
+        <!-- MDB -->
+        <!--link rel="stylesheet" href="css/mdb.min.css" /-->
+        <!-- Custom styles -->
+        <link rel="stylesheet" href="css/loginstyle.css" />
+        <link rel="icon" href="images/casa.png" type="image/x-icon">
     </head>
-    <body class="text-center">
+    <body>
+        <!--Main Navigation-->
+        <header>
+            <style>
+                #intro {
+                    /*background-image: url(https://mdbootstrap.com/img/new/fluid/city/008.jpg);*/
+                    background-image: url('images/bg.jpg');
+                    height: 100vh;
+                }
 
-        <form class="form-signin" th:action="@{/login}" method="post">
-            <div class="row bg-white rounded p-5 bg-primary">
-                <div class="col-1"></div>
-                <div class="col10">
-                <img src="images/logo4.jpeg" alt="" width="140" >
-                <h1 class="h3 mb-3 font-weight-normal">Ingresar</h1>
-                <label for="inputEmail" class="sr-only">usuario</label>
-                <input type="text" id="username" name="username" class="form-control" placeholder="usuario" required autofocus>
-                <label for="inputPassword" class="sr-only">Password</label>
-                <input type="password" id="password" name="password" class="form-control" placeholder="Password" required>
-                <div th:if="${param.error}" class="alert alert-danger" role="alert">
-                    Usuario/Password invalido
-                </div>
-                <div th:if="${param.logout}" class="alert alert-primary" role="alert" >
-                    Has sido deslogueado
-                </div>
-                <div class="checkbox mb-3">
-                    <label>
-                        <a href="recupera">Olvide mi contrase&ntilde;a</a>
-                    </label>
-                </div>
-                <button class="btn btn-lg btn-primary btn-block" type="submit">Ingresar</button>
-                <p class="mt-5 mb-3 text-muted">&copy; 2023</p>
+                /* Height for devices larger than 576px */
+                @media (min-width: 992px) {
+                    #intro {
+                        margin-top: -58.59px;
+                    }
+                }
+
+                .navbar .nav-link {
+                    color: #fff !important;
+                }
+                .custom-style {
+                    background-color: #f7f7f7; /* bg-gray-50 */
+                    border: 1px solid #ccc; /* border border-gray-300 */
+                    color: #333; /* text-gray-900 */
+                    border-radius: 0.25rem; /* rounded-lg */
+                    outline: 2px solid #007BFF; /* focus:ring-primary-600 */
+                    border: 2px solid #007BFF; /* focus:border-primary-600 */
+                    display: block; /* block */
+                    width: 100%; /* w-full */
+                    padding: 10px; /* p-2.5 */
+                }
+
+                .custom-style.dark {
+                    background-color: #333; /* dark:bg-gray-700 */
+                    border: 1px solid #666; /* dark:border-gray-600 */
+                    color: #fff; /* dark:text-white */
+                    outline: 2px solid #0055E0; /* dark:focus:ring-blue-500 */
+                    border: 2px solid #0055E0; /* dark:focus:border-blue-500 */
+                }
+
+                .custom-style:focus {
+                    outline: 2px solid #007BFF; /* Añade el estilo del contorno en foco */
+                }
+
+                .custom-style::placeholder {
+                    color: #999; /* Establece el color del placeholder */
+                }
+            </style>
+
+
+
+            <!-- Background image -->
+            <div id="intro" class="bg-image shadow-2-strong">
+
+                <div class="mask d-flex align-items-center h-100" style="background-color: rgba(0, 0, 0, 0.8);">
+                    <div class="container">
+                        <div class="row justify-content-center">
+                            <div class="col-xl-5 col-md-8">
+
+                                <form class="bg-white rounded shadow-5-strong p-5" th:action="@{/login}" method="post">
+                                    <div class="h3 fw-bold lh-1 tracking-tight text-gray-900 text-md" th:text="'Iniciar sesión'"></div>
+                                    <br>
+                                    <!-- Email input -->
+                                    <div class="form-outline mb-4">
+                                        <label for="username" class="block mb-2 text-sm font-medium">Usuario</label>
+                                        <input type="text" id="username" name="username" class="form-control custom-style" placeholder="Usuario" required autofocus />
+                                    </div>
+
+
+                                    <!-- Password input -->
+                                    <div class="form-outline mb-4">
+                                        <label for="password" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Contraseña</label>
+                                        <input type="password" id="password" name="password" class="form-control custom-style" placeholder="Contraseña" required />
+                                    </div>
+
+                                    <!-- 2 column grid layout for inline styling -->
+                                    <div class="row mb-4">
+                                        <div class="col d-flex justify-content-center">
+                                            <!-- Checkbox -->
+                                            <!--div class="form-check">
+                                              <input class="form-check-input" type="checkbox" value="" id="form1Example3" checked />
+                                              <label class="form-check-label" for="form1Example3">
+                                                Remember me
+                                              </label>
+                                            </div-->
+                                        </div>
+
+                                        <div class="col text-center">
+                                            <!-- Simple link -->
+                                            <a href="recupera">Olvide mi contrase&ntilde;a</a>
+                                        </div>
+                                    </div>
+
+                                    <!-- Submit button -->
+                                    <button type="submit" class="btn btn-primary btn-block">Ingresar</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </form>
+            <!-- Background image -->
+        </header>
+        <!--Main Navigation-->
 
-        <!--form th:action="@{/login}" method="post">
-     <div><label> User Name : <input type="text" name="username"/> </label></div>
-     <div><label> Password: <input type="password" name="password"/> </label></div>
-     <div><input type="submit" value="Sign In"/></div>
-     <select id="empresasSelect"></select>
- </form>
-        <!--script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-        <!--script>
-            $(document).ready(function () {
-            // Asegúrese de que el usuario esté autenticado antes de cargar los datos
-            // Aquí puede verificar si el usuario está autenticado o realizar una redirección a una página de inicio de sesión si es necesario.
-       
-            // Luego, realice una llamada AJAX para obtener los datos de la base de datos
-            $.ajax({
-            url: '/getresidenciales', // Ruta para obtener datos de empresas (debe ser manejada en su controlador Spring)
-                    type: 'GET',
-                    dataType: 'json',
-                    success: function (data) {
-                    // Llene el select con los datos obtenidos
-                    var select = $('#empresasSelect');
-                            $.each(data, function (index, empresa) {
-                            select.append($('<option>').val(empresa.idResidential).text(empresa.name));
-                            });
-                    },
-                    error: function () {
-                    alert('Error al cargar las empresas.');
-                    },
-            });
-            });
-                    </script-->
+        <!--Footer-->
+        <footer class="bg-light text-lg-start">
+
+
+            <!--div class="text-center py-4 align-items-center">
+              <p>Follow MDB on social media</p>
+              <a href="https://www.youtube.com/channel/UC5CF7mLQZhvx8O5GODZAhdA" class="btn btn-primary m-1" role="button"
+                rel="nofollow" target="_blank">
+                <i class="fab fa-youtube"></i>
+              </a>
+              <a href="https://www.facebook.com/mdbootstrap" class="btn btn-primary m-1" role="button" rel="nofollow"
+                target="_blank">
+                <i class="fab fa-facebook-f"></i>
+              </a>
+              <a href="https://twitter.com/MDBootstrap" class="btn btn-primary m-1" role="button" rel="nofollow"
+                target="_blank">
+                <i class="fab fa-twitter"></i>
+              </a>
+              <a href="https://github.com/mdbootstrap/mdb-ui-kit" class="btn btn-primary m-1" role="button" rel="nofollow"
+                target="_blank">
+                <i class="fab fa-github"></i>
+              </a>
+            </div-->
+
+            <!-- Copyright -->
+            <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
+                © 2023 Copyright:
+                <a class="text-dark" href="#">DS-Residencial</a>
+            </div>
+            <!-- Copyright -->
+        </footer>
+        <!--Footer-->
+        <!-- MDB -->
+        <!--script type="text/javascript" src="js/mdb.min.js"></script-->
+        <!-- Custom scripts -->
+        <!--script type="text/javascript" src="js/script.js"></script-->
     </body>
 </html>
+
+

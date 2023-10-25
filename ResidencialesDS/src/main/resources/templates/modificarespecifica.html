@@ -53,10 +53,14 @@
                                             <label for="nombre">Descripci&oacute;n</label>
                                             <span th:if="${#fields.hasErrors('descripcion')}" th:errors="*{nombre}">Error en asunto</span>
                                         </div>
-
+                                        <div class="form-floating mb-3 justify-content-center">
+                                            <span th:if="${notificacion.adjunto != null and not #strings.isEmpty(notificacion.adjunto)}">
+                                                <img  th:src="${notificacion.adjunto}" alt="archivo adjunto"  style="max-width: 50%; max-height: 50%;border: 1px solid #ccc; border-radius: 5px;">
+                                            </span>
+                                        </div>
                                         <div class="custom-file mb-3">
                                             <label class="custom-file-label" for="customFile">Seleccionar Adjunto</label>
-                                            <input type="file" class="form-control border border-primary" id="customFile" name="file" accept="image/">
+                                            <input type="file" class="form-control border border-primary" id="customFile" name="file" accept="image/*">
 
                                         </div>
                                         <div class="form-floating mb-3">

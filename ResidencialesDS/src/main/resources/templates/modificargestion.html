@@ -43,7 +43,7 @@
                 <div class="container">
 
                     <div class="row justify-content-center">
-                        <div class="col-lg-7">
+                        <div class="col-lg-7 col-md-12">
                             <div class="card">
                                 <div class="card-header" >
                                     <a class="btn-close" th:href="@{/gestion}"></a>
@@ -51,115 +51,110 @@
 
                                 </div>
                                 <div class="card-body">
-                                    <div>
-                                        <div class="row">
-                                            <div  th:utext="${ticket.descripcion}"></div>
-                                        </div>
-                                        <div class="row my-2">
-                                            
-                                        </div>
-                                        <div class="row">
+                                    <div class="row">
+                                        <div  th:utext="'Descripción: ' + ${ticket.descripcion}"></div>
+                                    </div>
 
-                                            <form th:action="@{estadoTicket}" enctype="multipart/form-data"  method="post" th:object="${ticket}">
-                                                <input type="hidden" id="idTicket" th:field="*{idTicket}"/>
-                                                <div class="container">
-                                                    <div class="row">
-                                                        <div class="col-4" ></div>
-                                                        <div class="col-2">
-                                                            <label>Estado:</label>
-                                                        </div>
-                                                        <div class="col-6">
-                                                            <select class="form-control" id="cmbServ" aria-label="Tipo servicio" width="100%" th:field="*{estado}">
-                                                                <option th:each="status : ${estadosTicket}" th:value="${status.idEstado}" th:text="${status.nombre}"></option>
-                                                            </select>
+
+                                    <div class="row">
+                                        <div class="chat col-10">
+                                            <div th:if="${comentarios != null and !comentarios.empty}">
+                                                <table>
+                                                    <tr th:each="comment : ${comentarios}">
+                                                    <div class="conversacion">
+                                                        <div th:if="${comment.comentario}!=''" th:class="${comment.usuario.nombreUsuario == #authentication.principal.getUsername() ? 'mensaje pregunta' : 'mensaje respuesta'}" th:text="${comment.comentario}"></div>
+                                                        <div th:if="${comment.adjunto}!='' and ${comment.adjunto}!=null" th:class="${comment.usuario.nombreUsuario == #authentication.principal.getUsername() ? 'mensaje pregunta' : 'mensaje respuesta'}" >
+                                                            <!-- Verificar si el archivo adjunto es una imagen -->
+                                                            <div th:if="${comment.adjunto.endsWith('.jpg') or comment.adjunto.endsWith('.jpeg') or comment.adjunto.endsWith('.png') or comment.adjunto.endsWith('.gif')}">
+                                                                <img th:src="@{/__${comment.adjunto}__}" alt="Vista previa" style="max-width: 100px; max-height: 100px;">
+                                                            </div>
+                                                            <!-- Verificar si el archivo adjunto es un documento -->
+                                                            <div th:if="${comment.adjunto.endsWith('.pdf') or comment.adjunto.endsWith('.doc') or comment.adjunto.endsWith('.docx')}">
+                                                                <img th:src="@{/images/doc.png}" alt="Vista previa de documento" style="max-width: 100px; max-height: 80px;">
+                                                            </div>
+                                                            <!-- Enlaces para descargar el archivo -->
+                                                            <a th:href="@{/__${comment.adjunto}__}" download ><i class="fa-solid fa-download"></i></a>
                                                         </div>
                                                     </div>
-                                                    <br>
-                                                    <div class="row">
-                                                        <button type="submit" class="btn btn-outline-primary btn-lg" width="100%">Guardar</button>
-                                                        <div class="col-9"></div>
-                                                        <div class="col-2">
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </form>
+                                                    </tr>
+                                                </table>
+                                            </div>
+
                                         </div>
                                     </div>
-                                </div>
-                            </div>
-                            <div>
+                                    <div class="row">
 
-                            </div>
-                            <div class="chat">
-
-                                <div th:if="${comentarios != null and !comentarios.empty}">
-                                    <table>
-                                        <tr th:each="comment : ${comentarios}">
-                                        <div class="conversacion">
-                                            <div th:if="${comment.comentario}!=''" th:class="${comment.usuario.nombreUsuario == #authentication.principal.getUsername() ? 'mensaje pregunta' : 'mensaje respuesta'}" th:text="${comment.comentario}">
-                                            </div>
-                                            <div th:if="${comment.adjunto}!='' and ${comment.adjunto}!=null" th:class="${comment.usuario.nombreUsuario == #authentication.principal.getUsername() ? 'mensaje pregunta' : 'mensaje respuesta'}" >
-                                                <a th:href="@{/__${comment.adjunto}__}" download th:text="'Descargar Adjunto'"></a>
-                                            </div>
-                                        </div>
-                                        </tr>
-                                    </table>
-                                </div>
-                            </div>
-                            <div class="caja-mensaje">
-                                <form th:action="@{guardarcomentario}" method="post" enctype="multipart/form-data" width="90%">
-                                    <div class="row justify-content-center">
-
-                                        <div class="row">
-                                            <div class="col-lg-12">
-                                                <div class="col-lg-12">
-
-                                                </div>
-                                            </div>
-                                            <div  class="row">
-                                                <input type="hidden" id="idticket" name="idticket" th:value="${ticket.idTicket}"/>
-                                                <div class="container">
-                                                    <div class="row">
-                                                        <div class="col-8">
-                                                            <textarea id="txtcomentario" name="txtcomentario" placeholder="Escribe acá" style="width: 100%; height: 100px;" th:readonly="${ticket.estado.idEstado == 4}"></textarea>
-
-                                                        </div>
-                                                        <div class="col-1">
-                                                            <label class="custom-file-label" for="customFile" style="margin-left: 10px;">
+                                        <form th:action="@{guardarcomentario}" method="post" enctype="multipart/form-data" width="100%">
+                                            <div class="caja-mensaje ">
+                                                <div  class="row">
+                                                    <input type="hidden" id="idticket" name="idticket" th:value="${ticket.idTicket}"/>
+                                                    <div class="col-8">
+                                                        <textarea id="txtcomentario" name="txtcomentario" placeholder="Escribe acá" style="width: 100%; height: 100px;" th:readonly="${ticket.estado.idEstado == 4}"></textarea>
+                                                    </div>
+                                                    <div class="col-4">
+                                                        <div class="row">
+                                                            <label class="custom-file-label small d-flex justify-content-center align-items-center mb-0 mb-md-2" for="customFile">
+                                                                <span class="mr-2">Adjuntar <span style="visibility: hidden;">.</span></span>
                                                                 <i class="fas fa-paperclip"></i>
                                                                 <input type="file" class="form-control border border-primary" id="customFile" name="file" style="display: none;">
-
                                                             </label>
                                                         </div>
-                                                        <div class="col-2">
-                                                            <button type="submit" style="margin-left: 10px;" th:disabled="${ticket.estado.idEstado == 4}">Enviar</button>
+                                                        <div class="row mt-4">
+                                                            <button class="btn btn-primary" id="btnEnviar" type="submit" th:disabled="${ticket.estado.idEstado == 4}">
+                                                                <i class="fas fa-paper-plane"></i> Enviar
+                                                            </button>
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-9">
-                                                    <div id="preview-container" style="display: none;">
-                                                        <img id="file-preview" src="#" alt="Vista previa" style="max-width: 25%; max-height: 75px;">
-                                                        <span id="name-preview"></span>
+                                                <div class="row">
+                                                    <div class="col-9">
+                                                        <div id="preview-container" style="display: none;">
+                                                            <img id="file-preview" src="#" alt="Vista previa" style="max-width: 25%; max-height: 75px;">
+                                                            <span id="name-preview"></span>
+
+                                                        </div>
 
                                                     </div>
-
+                                                    <div class="col-1">
+                                                        <a class="btn btn-danger"  id="clearFileInput" type="button" style="display: none;width: 50px;height: 30px;"><i class="fas fa-times"> </i></a>
+                                                    </div>
+                                                    <div class="col-2"></div>
                                                 </div>
-                                                <div class="col-1">
-                                                    <a class="btn btn-danger"  id="clearFileInput" type="button" style="display: none;width: 50px;height: 30px;"><i class="fas fa-times"> </i></a>
-                                                </div>
-                                                <div class="col-2"></div>
                                             </div>
+                                        </form>
 
-                                        </div>
                                     </div>
-                                </form>
+                                </div>
                             </div>
-
                         </div>
+                        <div class="col-lg-3 col-md-12 mb-4">
+                            <div class="card">
+                                <div class="card-header">
 
+                                </div>
+                                <div class="card-body">
+                                    <form th:action="@{estadoTicket}" enctype="multipart/form-data"  method="post" th:object="${ticket}">
+                                        <input type="hidden" id="idTicket" th:field="*{idTicket}"/>
+                                        <div class="row">
+                                            <label>Estado:</label>
+                                        </div>
+                                        <div class="row"></div>
+                                        <div class="row">
+                                            <select class="form-control" id="cmbServ" aria-label="Tipo servicio" width="100%" th:field="*{estado}">
+                                                <option th:each="status : ${estadosTicket}" th:value="${status.idEstado}" th:text="${status.nombre}"></option>
+                                            </select>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="card-footer">
+                                    <div class="row">
+                                        <button type="submit" id="btnGuardar" class="btn btn-outline-primary" >Guardar</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
+                </div>
             </main>
             <th:block th:replace="~{layout/plantilla :: footer}"></th:block>    
         </div>

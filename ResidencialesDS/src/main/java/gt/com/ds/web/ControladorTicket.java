@@ -84,6 +84,8 @@ public class ControladorTicket {
         else
             gestiones = ticketService.listarTicketsAbiertos(tipoGestion, us.getResidencial().getIdResidential());
         
+        var estadosTicket = estadoTicketService.listarEstadoTicket();
+        model.addAttribute("estadosTicket", estadosTicket);
         model.addAttribute("gestiones", gestiones);
         return "gestion";
     }
@@ -134,7 +136,6 @@ public class ControladorTicket {
 
         log.info("Se crea gestion " + ticket);
         ticketService.guardar(ticket);
-        
         
         return "redirect:/gestion";
     }
@@ -200,7 +201,7 @@ public class ControladorTicket {
         model.addAttribute("comentarios", comentarios);
         model.addAttribute("estadosTicket", estadosTicket);
         model.addAttribute("ticket", ticket);
-        log.info("se envia ticket " + ticket.toString());
+        log.info("Editar gestion - se envia ticket " + ticket.toString());
         return "modificargestion";
     }
 
@@ -244,6 +245,8 @@ public class ControladorTicket {
         else
             anomalias = ticketService.listarTicketsAbiertos(tipoAnomalia, us.getResidencial().getIdResidential());
         
+        var estadosTicket = estadoTicketService.listarEstadoTicket();
+        model.addAttribute("estadosTicket", estadosTicket); 
         model.addAttribute("anomalias", anomalias);
         return "anomalia";
     }

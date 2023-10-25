@@ -10,14 +10,9 @@
         <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
         <link href="css/styles.css" rel="stylesheet" />
         <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
-        <script src="https://d3js.org/d3.v4.min.js"></script>
-        <script src=
-        "https://cdn.jsdelivr.net/npm/billboard.js/dist/billboard.min.js"></script>
-        <link
-            rel="stylesheet"
-            href=
-            "https://cdn.jsdelivr.net/npm/billboard.js/dist/billboard.min.css"
-            />
+        <script src="js/d3.v6.min.js"></script>
+        <script src="js/billboard.min.js"></script>
+        <link rel="stylesheet"   href= "css/billboard.min.css" />
         <link
             rel=
             "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"
@@ -38,13 +33,25 @@
         <style>
             body {
                 text-align: center;
-                color: green;
+
             }
             h2 {
                 text-align: center;
                 font-family: "Verdana", sans-serif;
                 font-size: 40px;
+                color: green;
             }
+            h4 {
+
+                color: green;
+            }
+            h5 {
+
+                color: green;
+            }
+            #donut-chart .bb-chart-arc text {fill: #ffffff;font-size: 15px;font-weight: bold;}
+            #ticketsMes .bb-chart-arc text {fill: #00008B;font-size: 15px;font-weight: bold;}
+            #ticketsAnterior .bb-chart-arc text {fill: #0000FF;font-size: 15px;font-weight: bold;}
         </style>
     </head>
     <body class="sb-nav-fixed">
@@ -61,21 +68,29 @@
                 <div class="row">
                     <div class="col-xs-12 text-center">
                         <h2>Reporte de eventos</h2>
-                        <h5 th:text="'Eventos activos de la residencial ' + ${residencial.name} + ' a la fecha '+${strFecha}"></h5>
+                        <h4 th:text="'Eventos activos de la residencial ' + ${residencial.name} + ' a la fecha '"></h4>
+                        <h5 th:text="${strFecha}"></h5>
                     </div>
-
-                    <div id="donut-chart" ></div>
                 </div>
                 <div class="row">
-                    <!-- Gráfica de tickets abiertos y cerrados -->
-                    <div class="row">
-                        <div class="col-md-6" id="ticketsMes" style="width: 50%;">
-                        </div>
 
-                        <!-- Otras gráficas aquí -->
-                        <div class="col-md-6" id="ticketsAnterior" style="width: 50%;">
-                        </div>
+                    <div id="donut-chart" ></div>
+                    <span style="black">Tickets abiertos a la fecha, agrupados por tipo</span>
+                </div>
+                <br>
+                <br>
+                <div class="row">
+                    <!-- Gráfica de tickets abiertos y cerrados -->
+                    <div  class="col-md-6"  style="width: 50%;">
+                        <div id="ticketsMes"></div>
+                        <span style="black">Total de tickets creados el mes actual, abiertos y cerrados</span>
                     </div>
+
+                    <div class="col-md-6"   style="width: 50%;">
+                        <div id="ticketsAnterior"></div>
+                        <span style="black">Total de tickets creados el mes anterior, abiertos y cerrados</span>
+                    </div>
+
                 </div>
 
                 <script th:inline="javascript">
@@ -84,7 +99,7 @@
                     var tickets = /*[[${tickets}]]*/ [];
                     var total = /*[[${total}]]*/[];
                     /* Generar los datos del gráfico donut */
-                    
+
                     var datos = /*[[${datos}]]*/[];
                     var datosMesAnt = /*[[${ticketMesAnterior}]]*/[];
                     var totalMesActual = /*[[${totalMes}]]*/[];
@@ -92,11 +107,11 @@
                     // Obtener los datos para la gráfica de tickets por usuario
                     var datosUsuarios = 5; ///* Obtener tus datos de tickets por usuario */;
 
-                    // Obtener el contexto de los canvas de las gráficas
-                    /*var ctxAbiertosCerrados = document.getElementById('ticketsAbiertosCerradosDiv').getContext('2d');
-                    var ctxUsuarios = document.getElementById('grafica3').getContext('2d');*/
-                    /* Crear el gráfico donut */
+
                     var chart = bb.generate({
+                        title: {
+                            text: ""
+                        },
                         data: {
                             columns: tickets,
                             type: "donut",
@@ -108,16 +123,24 @@
                             },
                             onout: function (d, i) {
                                 console.log("onout", d, i);
-                            },
+                            }
                         },
                         donut: {
-                            title: "Tickets abiertos: " + total.toString()
+                            title: "Tickets abiertos: " + total.toString(),
+                            label: {
+                                format: function (value, ratio, id) {
+                                    return (ratio * 100) + "%\n(" + value + ")";
+                                }
+                            }
                         },
-                        bindto: "#donut-chart"
+                        bindto: "#donut-chart",
+
                     });
 
-                    // Crear la gráfica de tickets abiertos y cerrados
                     var chart2 = bb.generate({
+                        title: {
+                            text: ""
+                        },
                         data: {
                             columns: datos,
                             type: "donut",
@@ -131,19 +154,30 @@
                                 console.log("onout", d, i);
                             },
                             colors: {
-                                
-                                Cerrado: 'green',   // Color para "Cerrados"
+
+                                Cerrado: 'green', // Color para "Cerrados"
                                 Abierto: 'red' // Color para "Abiertos"
                             }
                         },
                         donut: {
-                            title: "Mes Actual: " + totalMesActual.toString()
+                            startingAngle: 0.7,
+                            title: "Mes Actual: " + totalMesActual.toString(),
+                            label: {
+                                format: function (value, ratio, id) {
+                                    return (ratio * 100) + "%\n(" + value + ")";
+                                },
+                                ratio: 1.5
+                                
+                            }
                         },
                         bindto: "#ticketsMes"
                     });
-                    
+
                     // Crear la gráfica de tickets abiertos y cerrados
                     var chart3 = bb.generate({
+                        title: {
+                            text: ""
+                        },
                         data: {
                             columns: datosMesAnt,
                             type: "donut",
@@ -157,38 +191,25 @@
                                 console.log("onout", d, i);
                             },
                             colors: {
-                                
-                                Cerrado: 'green',   // Color para "Cerrados"
+
+                                Cerrado: 'green', // Color para "Cerrados"
                                 Abierto: 'red' // Color para "Abiertos"
                             }
                         },
                         donut: {
-                            title: "Mes Anterior: " + totalMesAnterior.toString()
+                            startingAngle: 0.2,
+                            title: "Mes Anterior: " + totalMesAnterior.toString(),
+                            label: {
+                                format: function (value, ratio, id) {
+                                    return (ratio * 100) + "%\n(" + value + ")";
+                                },
+                                ratio: 1.5
+                            }
                         },
                         bindto: "#ticketsAnterior"
                     });
-                    /*var ticketsAbiertosCerradosChart = new Chart(ctxAbiertosCerrados, {
-                        type: 'pie',
-                        data: {
-                            labels: ['Abiertos', 'Cerrados'],
-                            datasets: [{
-                                    data: [datosTicketsAbiertos, datosTicketsCerrados],
-                                    backgroundColor: ['rgba(255, 99, 132, 0.7)', 'rgba(75, 192, 192, 0.7)']
-                                }]
-                        }
-                    });
 
-                    // Crear la gráfica de tickets por usuario
-                    var ticketsPorUsuarioChart = new Chart(ctxUsuarios, {
-                        type: 'pie',
-                        data: {
-                            labels: [['Usuario']], ///* Etiquetas de usuarios ,
-                            datasets: [{
-                                    data: datosUsuarios,
-                                    backgroundColor: ['rgba(255, 99, 132, 0.7)', 'rgba(75, 192, 192, 0.7)']///* Colores para los usuarios 
-                                }]
-                        }
-                    });*/
+
                 </script>
             </div>
 

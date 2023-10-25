@@ -53,14 +53,9 @@
                                             <th>Email</th>
                                             <th>Tel&eacute;fono</th>
                                             <th>C&oacute;digo</th>
-                                            <th>Direcci&oacute;n</th>
                                             <th>Residencial</th>
                                             <th>Foto</th>
                                             <th>Estado</th>
-                                            <th>Fecha Creaci&oacute;n</th>
-                                            <th>Usuario Crea</th>
-                                            <th>Fecha Modifica</th>
-                                            <th>Usuario Modifica</th>
                                             <th></th>
                                             <th></th>
                                             <th></th>
@@ -73,14 +68,9 @@
                                             <th>Email</th>
                                             <th>Tel&eacute;fono</th>
                                             <th>C&oacute;digo</th>
-                                            <th>Direcci&oacute;n</th>
                                             <th>Residencial</th>
                                             <th>Foto</th>
                                             <th>Estado</th>
-                                            <th>Fecha Creaci&oacute;n</th>
-                                            <th>Usuario Crea</th>
-                                            <th>Fecha Modifica</th>
-                                            <th>Usuario Modifica</th>
                                             <th></th>
                                             <th></th>
                                             <th></th>
@@ -93,18 +83,16 @@
                                             <td th:text="${usuario.email}">Mostrar Email</td>
                                             <td th:text="${usuario.telefono}">Mostrar Telefono</td>
                                             <td th:text="${usuario.codigo}">Mostrar C&oacute;digo</td>
-                                            <td th:text="${usuario.direccion}">Mostrar Direcci&oacute;n</td>
                                             <td th:text="${usuario.residencial.name}"></td>
                                             <td>
                                                 <span th:if="${usuario.foto != null and not #strings.isEmpty(usuario.foto)}">
                                                     <img th:src="${usuario.foto}" alt="Foto de Perfil" height="100">
                                                 </span>
+                                                <span th:if="${usuario.foto == null or #strings.isEmpty(usuario.foto)}">
+                                                    <img src="images/sinimagen.jpeg" alt="Foto de Perfil" height="100" />
+                                                </span>
                                             </td>
-                                            <td th:text="${usuario.estado}">Mostrar Estado</td>
-                                            <td th:text="${usuario.fechaCrea}">Mostrar fecha de creacion</td>
-                                            <td th:text="${usuario.usuarioCrea}">Mostrar quien ingreso el registro</td>
-                                            <td th:text="${usuario.fechaModifica}">Mostrar fecha de modificacion</td>
-                                            <td th:text="${usuario.usuarioModifica}">Mostrar quien modifico el registro</td>
+                                            <td th:text="${usuario.estado==1L?'Activo':'Inactivo'}">Mostrar Estado</td>
                                             <td><a class="btn btn-info" role="button"  th:href="@{/editarusres(idUsuario=${usuario.idUsuario})}" th:text="Editar"/></td>
                                             <td><a class="btn btn-danger" role="button"  th:onclick="confirmarEliminacion([[(${usuario.idUsuario})]],'/eliminarusres?idUsuario=');" th:text="Eliminar"/></td>
                                             <td><a class="btn btn-success" role="button"  th:href="@{/invitacion(idUsuario=${usuario.idUsuario})}"  th:text="'Invitar'"/></td>

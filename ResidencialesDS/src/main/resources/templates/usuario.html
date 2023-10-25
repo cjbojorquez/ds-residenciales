@@ -14,117 +14,107 @@
     </head>
     <body class="sb-nav-fixed">
         <!--header th:replace="layout/plantilla :: header"></header-->
-        
-            <th:block th:replace="~{layout/plantilla :: header}"></th:block>
-        
-        <!-- barra vertical -->
-        <div id="layoutSidenav">
-            <!--div th:replace="layout/plantilla :: menu" id="layoutSidenav_nav"></div-->
-            <th:block th:replace="~{layout/plantilla :: menu}"></th:block>
-            <div id="layoutSidenav_content">
-                <main>
-                    <div class="container-fluid px-4">
-                        <h1 class="mt-4">Usuario</h1>
-                        <ol class="breadcrumb mb-4">
-                            <li class="breadcrumb-item active"></li>
-                        </ol>
 
-                        <nav class="navbar navbar-light bg-light">
-                            <form class="container-fluid justify-content-start">
-                                <a class="btn btn-outline-success me-2" role="button" th:href="@{/agregarus}">Crear Usuario        <i class="fa-solid fa-user-plus"></i></a>
+    <th:block th:replace="~{layout/plantilla :: header}"></th:block>
 
-                            </form>
-                        </nav>
-                        <div class="card mb-4">
-                            <div class="card-header">
-                                <i class="fas fa-table me-1"></i>
-                                Usuarios
-                            </div>
+    <!-- barra vertical -->
+    <div id="layoutSidenav">
+        <!--div th:replace="layout/plantilla :: menu" id="layoutSidenav_nav"></div-->
+        <th:block th:replace="~{layout/plantilla :: menu}"></th:block>
+        <div id="layoutSidenav_content">
+            <main>
+                <div class="container-fluid px-4">
+                    <h1 class="mt-4">Usuario</h1>
+                    <ol class="breadcrumb mb-4">
+                        <li class="breadcrumb-item active"></li>
+                    </ol>
 
-                            <div class="card-body">
-                                <div th:if="${usuarios != null and !usuarios.empty}">
-                                    <table id="datatablesSimple">
-                                        <thead>
-                                            <tr>
-                                                <th>Nombre</th>
-                                                <th>Usuario</th>
-                                                <th>Email</th>
-                                                <th>Tel&eacute;fono</th>
-                                                <th>C&oacute;digo</th>
-                                                <th>Direcci&oacute;n</th>
-                                                <th>Residencial</th>
-                                                <th>Foto</th>
-                                                <th>Estado</th>
-                                                <th>Fecha Creaci&oacute;n</th>
-                                                <th>Usuario Crea</th>
-                                                <th>Fecha Modifica</th>
-                                                <th>Usuario Modifica</th>
+                    <nav class="navbar navbar-light bg-light">
+                        <form class="container-fluid justify-content-start">
+                            <a class="btn btn-outline-success me-2" role="button" th:href="@{/agregarus}">Crear Usuario        <i class="fa-solid fa-user-plus"></i></a>
 
-                                                <th></th>
-                                                <th></th>
-                                            </tr>
-                                        </thead>
-                                        <tfoot>
-                                            <tr>
-                                                <th>Nombre</th>
-                                                <th>Usuario</th>
-                                                <th>Email</th>
-                                                <th>Tel&eacute;fono</th>
-                                                <th>C&oacute;digo</th>
-                                                <th>Direcci&oacute;n</th>
-                                                <th>Residencial</th>
-                                                <th>Foto</th>
-                                                <th>Estado</th>
-                                                <th>Fecha Creaci&oacute;n</th>
-                                                <th>Usuario Crea</th>
-                                                <th>Fecha Modifica</th>
-                                                <th>Usuario Modifica</th>
-                                                <th></th>
-                                                <th></th>
-                                            </tr>
-                                        </tfoot>
-                                        <tbody>
-                                            <tr th:each="usuario : ${usuarios}">
-                                                <td th:text="${usuario.nombre}">Mostrar Nombre</td>
-                                                <td th:text="${usuario.nombreUsuario}">Mostrar usuario</td>
-                                                <td th:text="${usuario.email}">Mostrar Email</td>
-                                                <td th:text="${usuario.telefono}">Mostrar Telefono</td>
-                                                <td th:text="${usuario.codigo}">Mostrar C&oacute;digo</td>
-                                                <td th:text="${usuario.direccion}">Mostrar Direcci&oacute;n</td>
-                                                <td th:text="${usuario.residencial.name}"></td>
-                                                <td>
-                                                    <span th:if="${usuario.foto != null and not #strings.isEmpty(usuario.foto)}">
-                                                        <img th:src="${usuario.foto}" alt="Foto de Perfil" height="100">
-                                                    </span>
-                                                </td>
-                                                <td th:text="${usuario.estado}">Mostrar Estado</td>
-                                                <td th:text="${usuario.fechaCrea}">Mostrar fecha de creacion</td>
-                                                <td th:text="${usuario.usuarioCrea}">Mostrar quien ingreso el registro</td>
-                                                <td th:text="${usuario.fechaModifica}">Mostrar fecha de modificacion</td>
-                                                <td th:text="${usuario.usuarioModifica}">Mostrar quien modifico el registro</td>
-                                                <td><a class="btn btn-info" role="button"  th:href="@{/editarus(idUsuario=${usuario.idUsuario})}" th:text="Editar"/></td>
-                                                <td><a class="btn btn-danger" role="button" th:onclick="confirmarEliminacion([[(${usuario.idUsuario})]],'/eliminarus?idUsuario=');" th:text="Eliminar"/></td>
-                                            </tr>
+                        </form>
+                    </nav>
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <i class="fas fa-table me-1"></i>
+                            Usuarios
+                        </div>
 
-                                        </tbody>
-                                    </table>
-                                </div>
+                        <div class="card-body">
+                            <div th:if="${usuarios != null and !usuarios.empty}">
+                                <table id="datatablesSimple">
+                                    <thead>
+                                        <tr>
+                                            <th>Nombre</th>
+                                            <th>Usuario</th>
+                                            <th>Email</th>
+                                            <th>Tel&eacute;fono</th>
+                                            <th>C&oacute;digo</th>
+                                            <th>Direcci&oacute;n</th>
+                                            <th>Residencial</th>
+                                            <th>Foto</th>
+                                            <th>Estado</th>
+                                            <th></th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tfoot>
+                                        <tr>
+                                            <th>Nombre</th>
+                                            <th>Usuario</th>
+                                            <th>Email</th>
+                                            <th>Tel&eacute;fono</th>
+                                            <th>C&oacute;digo</th>
+                                            <th>Direcci&oacute;n</th>
+                                            <th>Residencial</th>
+                                            <th>Foto</th>
+                                            <th>Estado</th>
+                                            <th></th>
+                                            <th></th>
+                                        </tr>
+                                    </tfoot>
+                                    <tbody>
+                                        <tr th:each="usuario : ${usuarios}">
+                                            <td th:text="${usuario.nombre}">Mostrar Nombre</td>
+                                            <td th:text="${usuario.nombreUsuario}">Mostrar usuario</td>
+                                            <td th:text="${usuario.email}">Mostrar Email</td>
+                                            <td th:text="${usuario.telefono}">Mostrar Telefono</td>
+                                            <td th:text="${usuario.codigo}">Mostrar C&oacute;digo</td>
+                                            <td th:text="${usuario.direccion}">Mostrar Direcci&oacute;n</td>
+                                            <td th:text="${usuario.residencial.name}"></td>
+                                            <td>
+                                                <span th:if="${usuario.foto != null and not #strings.isEmpty(usuario.foto)}">
+                                                    <img th:src="${usuario.foto}" alt="Foto de Perfil" height="100">
+                                                </span>
+                                                <span th:if="${usuario.foto == null or #strings.isEmpty(usuario.foto)}">
+                                                    <img src="images/sinimagen.jpeg" alt="Foto de Perfil" height="100" />
+                                                </span>
+                                            </td>
+                                            <td th:text="${usuario.estado==1L?'Activo':'Inactivo'}">Mostrar Estado</td>
+                                            <td><a class="btn btn-info" role="button"  th:href="@{/editarus(idUsuario=${usuario.idUsuario})}" th:text="Editar"/></td>
+                                            <td><a class="btn btn-danger" role="button" th:onclick="confirmarEliminacion([[(${usuario.idUsuario})]],'/eliminarus?idUsuario=');" th:text="Eliminar"/></td>
+                                        </tr>
+
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>
-                </main>
-                <!--footer th:replace="layout/plantilla :: footer"></footer-->  
-                <th:block th:replace="~{layout/plantilla :: footer}"></th:block>
-            </div>
+                </div>
+            </main>
+            <!--footer th:replace="layout/plantilla :: footer"></footer-->  
+            <th:block th:replace="~{layout/plantilla :: footer}"></th:block>
         </div>
-        <script src="js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
-        <script src="js/scripts.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
-        <script src="assets/demo/chart-area-demo.js"></script>
-        <script src="assets/demo/chart-bar-demo.js"></script>
-        <script src="js/simple-datatables.min.js" crossorigin="anonymous"></script>
-        <script src="js/datatables-simple-demo.js"></script>
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-        <script src="js/mensajes.js"></script>
-    </body>
+    </div>
+    <script src="js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+    <script src="js/scripts.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
+    <script src="assets/demo/chart-area-demo.js"></script>
+    <script src="assets/demo/chart-bar-demo.js"></script>
+    <script src="js/simple-datatables.min.js" crossorigin="anonymous"></script>
+    <script src="js/datatables-simple-demo.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="js/mensajes.js"></script>
+</body>
 </html>

@@ -44,9 +44,7 @@
                                     <thead>
                                         <tr>
                                             <th>Asunto</th>
-                                            <th>Descripcion</th>
-                                            
-                                            <th>Adjunto</th>
+                                            <th>Descripción</th>
                                             <th>Usuario</th>
                                             <th>Modificar</th>
                                             <th>Eliminar</th>
@@ -55,9 +53,7 @@
                                     <tfoot>
                                         <tr>
                                             <th>Asunto</th>
-                                            <th>Descripcion</th>
-                                            
-                                            <th>Adjunto</th>
+                                            <th>Descripción</th>
                                             <th>Usuario</th>
                                             <th>Modificar</th>
                                             <th>Eliminar</th>
@@ -67,8 +63,6 @@
                                         <tr th:each="notificacion : ${notificaciones}">
                                             <td th:text="${notificacion.asunto}"></td>
                                             <td th:text="${notificacion.descripcion}"></td>
-                                           
-                                            <td th:text="${notificacion.adjunto}"></td>
                                             <td th:text="${notificacion.usuario.nombre}"></td>
                                             <td><a class="btn btn-info" role="button"  th:href="@{/modificarespecifica(idNotificacion=${notificacion.idNotificacion})}" th:text="Editar"/></td>
                                             

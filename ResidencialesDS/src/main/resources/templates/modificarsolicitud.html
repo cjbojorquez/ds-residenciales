@@ -53,6 +53,7 @@
                                 <div class="card-body">
                                     <form class="was-validated" th:action="@{guardarsolicitud}" enctype="multipart/form-data"  method="post" th:object="${solicitud}">
                                         <input class="form-control" id="id" type="hidden" th:field="*{idSolicitud}"/>
+                                        <label for="cmbServ">Tipo Servicio</label>
                                         <div class="form-floating mb-3">
                                             <select class="form-control" id="cmbServ" aria-label="Tipo servicio" th:field="*{servicio}" required>
                                                 <option value="">-- seleccione tipo de servicio --</option>
@@ -73,7 +74,7 @@
                                         <div class="form-floating mb-3">
                                             <select class="form-control" id="cmbEmp" aria-label="Tipo servicio" th:field="*{empleado}" th:if="${#authorization.expression('hasRole(''ROLE_EMPLOYEE'')')}">
                                                 <option value="">-- seleccione Empleado --</option>
-                                                <option th:each="emp : ${empleados}" th:value="${emp.idUsuario}" th:text="${emp.nombre}"></option>
+                                                <option th:each="emp : ${empleados}" th:value="${emp.idUsuario}" th:text="${emp.nombre} + ' - ' + ${emp.cargo}"></option>
                                             </select>
 
                                         </div>
@@ -96,7 +97,7 @@
 
                                         <div class="custom-file mb-3">
                                             <!--label class="custom-file-label" for="customFile">Seleccionar Adjunto</label-->
-                                            <input type="file" class="form-control border border-primary" id="customFile" name="file" accept="image/" style="display:none">
+                                            <!--input type="file" class="form-control border border-primary" id="customFile" name="file"  style="display:none"-->
                                             <!--span th:text="'Archivo adjunto: ' + ${notificacion.adjunto}" style="font-size:12pt; font-variant: simplified; display:none "></span-->
                                         </div>
                                         <div class="form-floating mb-3">

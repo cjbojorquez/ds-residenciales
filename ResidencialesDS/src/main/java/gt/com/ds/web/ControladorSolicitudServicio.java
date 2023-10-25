@@ -75,6 +75,7 @@ public class ControladorSolicitudServicio {
     private Varios varios;
 
     private Long varEstadoActivo=1L;
+    private Long varEstadoCerrado=4L;
 
     /**
      * Este controler mustra todas las solicitudes activas ingresadas por los usuarios, si el usuario logueado
@@ -85,13 +86,17 @@ public class ControladorSolicitudServicio {
     public String InicioSolicitud(Model model) {
         Usuario us=varios.getUsuarioLogueado();
         List<SolicitudServicio> solicitudes;
-         if(varios.getRolLogueado().equals("ROLE_USER"))
+        List<SolicitudServicio> solicitudesCerradas;
+         if(varios.getRolLogueado().equals("ROLE_USER")){
             solicitudes = solicitudServicioService.listarPorUsuario(varEstadoActivo,us.getIdUsuario());
-        else
+            solicitudesCerradas = solicitudServicioService.listarPorUsuario(varEstadoCerrado,us.getIdUsuario());
+         }
+         else{
             solicitudes = solicitudServicioService.listarSolicitudes(varEstadoActivo, us.getResidencial().getIdResidential());
-        
+            solicitudesCerradas = solicitudServicioService.listarSolicitudes(varEstadoCerrado, us.getResidencial().getIdResidential());
+         }
         model.addAttribute("solicitudes", solicitudes);
-
+        model.addAttribute("solicitudesCerradas", solicitudesCerradas);
         return "solicitud";
     }
 

@@ -38,57 +38,39 @@
                             Anomalias
                         </div>
 
-                        <!--div class="card-body">
-                            <div th:if="${anomalias != null and !anomalias.empty}">
-                                <table id="datatablesSimple">
-                                    <thead>
-                                        <tr>
-                                            <th>Asunto</th>
-                                            <th>Creador</th>
-                                            <th>Estado</th>
-                                            
-                                            <th></th>
-                                        </tr>
-                                    </thead>
-                                    <tfoot>
-                                        <tr>
-                                            <th>Asunto</th>
-                                            <th>Creador</th>
-                                            <th>Estado</th>
-                                            
-                                            <th></th>
-                                        </tr>
-                                    </tfoot>
-                                    <tbody>
-                                        <tr th:each="anomalia : ${anomalias}">
-
-                                            <td th:text="${anomalia.asunto}"></td>
-                                            <td th:text="${anomalia.usuario.nombre}">Mostrar Usuario</td>
-
-                                            <td th:text="${anomalia.estado.nombre}">Mostrar Estado</td>
-                                            
-                                            <td><a class="btn btn-success" role="button"  th:href="@{/editaranomalia(idTicket=${anomalia.idTicket})}">Leer     <i class="fa-regular fa-eye"></i></a></td>
-                                        </tr>
-
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div-->
                         <div class="card-body">
+                            
+                            <ul class="nav nav-tabs" id="myTabs">
+                                <li th:each="estado : ${estadosTicket}" class="nav-item">
+                                    <a th:class="'nav-link ' + ${estado.idEstado==1?'active':''}" data-bs-toggle="tab" th:href="'#id_'+${estado.idEstado}" th:text="${estado.nombre}" style="font-size: 14px;"></a>
+                                </li>
+                            </ul>
                             <div th:if="${anomalias != null and !anomalias.empty}">
-                                <ol class="list-group list-group-numbered">
-                                    <li th:each="ticket : ${anomalias}" class="list-group-item d-flex justify-content-between align-items-start" >
-                                        <div class="ms-2 me-auto">
-                                            <div class="fw-bold" th:text="${ticket.asunto}"></div>
-                                            <span th:text="${ticket.descripcion}"></span>
-                                            <p class="mb-1" th:text="'Usuario:' + ${ticket.usuario.nombre}"></p>   
-                                            <p class="mb-1" th:text="'Estado:' + ${ticket.estado.nombre}"></p>
-                                            <a class="btn btn-outline-success" role="button" th:href="@{/editaranomalia(idTicket=${ticket.idTicket})}"  data-bs-dismiss="collapse">Leer</i></a>
-                                            
-                                        </div>
-                                        <span class="badge bg-primary rounded-pill" th:text="'#' + ${ticket.idTicket}"></span>
-                                    </li>
-                                </ol>
+                                <div class="tab-content" id="myTabsContent">
+                                    <div th:each="estado : ${estadosTicket}" class="tab-pane" th:id="'id_'+${estado.idEstado}" >
+                                        <ol class="list-group list-group-numbered">
+                                            <li th:each="ticket : ${anomalias}" class="list-group-item d-flex justify-content-between align-items-start" th:if="${estado.idEstado}==${ticket.estado.idEstado}">
+                                                <div class="ms-2 me-auto">
+                                                    <div class="fw-bold" th:text="${ticket.asunto}"></div>
+                                                    <span th:text="${ticket.descripcion}"></span>
+                                                    <table>
+                                                        <tr>
+                                                            <td width='100px'>Usuario:</td>
+                                                            <td><p class="mb-1" th:text="' ' + ${ticket.usuario.nombre}"></p>  </td> 
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Estado:</td>
+                                                            <td><p class="mb-1" th:text="' ' + ${ticket.estado.nombre}"></p></td>
+                                                        </tr>
+                                                    </table>
+                                                    <a class="btn btn-outline-success" role="button" th:href="@{/editaranomalia(idTicket=${ticket.idTicket})}"  data-bs-dismiss="collapse">Leer</i></a>
+
+                                                </div>
+                                                <span class="badge bg-primary rounded-pill" th:text="'#' + ${ticket.idTicket}"></span>
+                                            </li>
+                                        </ol>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -98,18 +80,18 @@
             <th:block th:replace="~{layout/plantilla :: footer}"></th:block>
         </div>
     </div>
-    
-    </script>
-    <script src="js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
-    <script src="js/scripts.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
-    <script src="assets/demo/chart-area-demo.js"></script>
-    <script src="assets/demo/chart-bar-demo.js"></script>
-    <script src="js/simple-datatables.min.js" crossorigin="anonymous"></script>
-    <script src="js/datatables-simple-demo.js"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="js/mensajes.js"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-        <script src="js/mensajes.js"></script>
+
+</script>
+<script src="js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+<script src="js/scripts.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
+<script src="assets/demo/chart-area-demo.js"></script>
+<script src="assets/demo/chart-bar-demo.js"></script>
+<script src="js/simple-datatables.min.js" crossorigin="anonymous"></script>
+<script src="js/datatables-simple-demo.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="js/mensajes.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="js/mensajes.js"></script>
 </body>
 </html>

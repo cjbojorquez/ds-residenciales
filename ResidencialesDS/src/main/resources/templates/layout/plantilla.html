@@ -10,7 +10,7 @@
         <title>DS-Residenciales</title>
         <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
         <!--link th:href="@{/css/styles.css}" rel="stylesheet" /-->
-
+        <link rel="icon" href="images/casa.png" type="image/x-icon">
         <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
 
     </head>
@@ -36,31 +36,47 @@
                 <ul  class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            
+
                             <i id="alerta" class="fas fa-bell fa-fw"></i>
                             <!--i class="fa-solid fa-bell fa-shake" th:if="${mensajes != null and !mensajes.empty}"></i-->
                         </a>
                         <ul id="mensajeList" class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                            
+
                             <!--li th:each="mensaje : ${mensajes}">
-                                <!--a class="dropdown-item" href="" th:text="${mensaje.descripcion} + ${mensaje.asunto}"></a-->
+                            <!--a class="dropdown-item" href="" th:text="${mensaje.descripcion} + ${mensaje.asunto}"></a-->
                             </li-->
                         </ul>
                     </li>
                 </ul>
                 <ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
                     <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <span class="fas fa-user fa-fw"></span> <span sec:authentication="name"></span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" th:href="@{/perfil}">Perfil</a></li>
+                            <li><a class="dropdown-item" th:href="@{/cambiapass}">Cambiar contraseña</a></li>
+                            <li><a class="dropdown-item" th:href="@{/contacto}">Contactos</a></li>
+                            <li><form method="POST" th:action="@{/logout}">
+                                    <button class="dropdown-item" type="submit">Cerrar Sesión</button>
+                                </form></li>
+                        </ul>
+                    </li>
+                </ul>
+                <!--ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
+                    <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                            <li><a class="dropdown-item" href="#!"><b>Usuario</b> <span sec:authentication="name"></span></a></li>
+                            <li><a class="dropdown-item" href="#!"><span sec:authentication="name"></span></a></li>
+                            <li><hr class="dropdown-divider" /></li>
                             <li><a class="dropdown-item" th:href="@{/perfil}">Perfil</a></li>
                             <li><a class="dropdown-item" th:href="@{/cambiapass}">Cambiar contrase&ntilde;a</a></li>
                             <li><a class="dropdown-item" th:href="@{/contacto}">Contactos</a></li>
                             <li><hr class="dropdown-divider" /></li>
-                            <li><form method="POST" th:action="@{/logout}"><a class="dropdown-item" onclick="this.parentNode.submit();" href="#!">Logout</a></form></li>
+                            <li><form method="POST" th:action="@{/logout}"><a class="dropdown-item" onclick="this.parentNode.submit();" href="#!">Cerrar Sesion</a></form></li>
                         </ul>
                     </li>
-                </ul>
+                </ul-->
             </nav>
         </header>
         <div th:fragment="menu">
@@ -111,7 +127,7 @@
 
                             <a sec:authorize="hasAnyRole('ROLE_USER','ROLE_EMPLOYEE')" class="nav-link" href="/solicitud">
                                 <div class="sb-nav-link-icon"><i class="fa-solid fa-wrench fa-xl"></i></div>
-                                <span class="text-success">Solicitud de Servicio</span>
+                                <span class="text-success" th:text="${#authorization.expression('hasRole(''ROLE_USER'')') ? 'Solicitud de Servicio' : 'Atender Servicio'}">Solicitud de Servicio</span>
                             </a>
                             <a sec:authorize="hasRole('ROLE_USER')" class="nav-link" href="/gestion">
                                 <div class="sb-nav-link-icon"><i class="fa-solid fa-clipboard fa-xl"></i></div>
@@ -123,7 +139,7 @@
                             </a>
                             <a sec:authorize="hasAnyRole('ROLE_USER','ROLE_EMPLOYEE')" class="nav-link" href="/anomalia">
                                 <div class="sb-nav-link-icon"><i class="fa-solid fa-pen-clip fa-xl"></i></div>
-                                <span class="text-success">Ingresar Anomal&iacute;a</span>
+                                <span class="text-success" th:text="${#authorization.expression('hasRole(''ROLE_USER'')') ? 'Ingresar Anomalía' : 'Atender Anomalía'}">Ingresar Anomal&iacute;a</span>
                             </a>
 
                             <a sec:authorize="hasRole('ROLE_EMPLOYEE')" class="nav-link" href="/general">
@@ -169,24 +185,24 @@
         </footer>
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script>
-                                /*function actualizarMensajes() {
-                                    $.get("/obtenerMensajes", function (data) {
-                                        alert("actualiza");
-                                        // Limpiar la lista de mensajes existente
-                                        $("#mensajeList").empty();
-
-                                        // Iterar sobre los nuevos mensajes y agregarlos a la lista
-                                        $.each(data, function (index, mensaje) {
-                                            $("#mensajeList").append(
-                                                    '<li><a class="dropdown-item" href="#!" th:text="' +
-                                                    mensaje.asunto + '">Notificaciones</a></li>'
-                                                    );
-                                        });
-                                    });
-                                }
-
-                                // Actualizar los mensajes cada cierto intervalo de tiempo (por ejemplo, cada 10 segundos)
-                                setInterval(actualizarMensajes, 10000); // 10000 milisegundos = 10 segundos*/
+            /*function actualizarMensajes() {
+             $.get("/obtenerMensajes", function (data) {
+             alert("actualiza");
+             // Limpiar la lista de mensajes existente
+             $("#mensajeList").empty();
+             
+             // Iterar sobre los nuevos mensajes y agregarlos a la lista
+             $.each(data, function (index, mensaje) {
+             $("#mensajeList").append(
+             '<li><a class="dropdown-item" href="#!" th:text="' +
+             mensaje.asunto + '">Notificaciones</a></li>'
+             );
+             });
+             });
+             }
+             
+             // Actualizar los mensajes cada cierto intervalo de tiempo (por ejemplo, cada 10 segundos)
+             setInterval(actualizarMensajes, 10000); // 10000 milisegundos = 10 segundos*/
         </script>
     </body>
 </html>

@@ -10,6 +10,18 @@
         <link href="css/styles.css" rel="stylesheet" />
         <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
         <!--script src="js/util.js"></script-->
+        <style>
+            @media (max-width: 768px) {
+                #estadoSelect {
+                    width: 95%; /* Cambia el ancho del select para pantallas más pequeñas */
+                }
+            }
+            @media (min-width: 769px) {
+                #estadoSelect {
+                    width: 60%; /* Cambia el ancho del select para pantallas más pequeñas */
+                }
+            }
+        </style>
     </head>
     <body class="sb-nav-fixed">
         <!--header th:replace="layout/plantilla :: header"></header-->
@@ -31,27 +43,63 @@
                             <a sec:authorize="hasRole('ROLE_USER')"  class="btn btn-outline-success me-2" role="button" th:href="@{/agregargestion}">Crear Gestion        <i class="fa-solid fa-person-circle-plus"></i></a>
                         </form>
                     </nav>
-                    <div class="card mb-4">
-                        <div class="card-header">
-                            <i class="fas fa-table me-1"></i>
-                            Gestiones
+                    <div class="card">
+                        <div class="card-header ">
+                            <div class="row">
+
+                                <div class="col-12 ">
+                                    <i class="fas fa-table me-1"></i> Gestiones
+                                </div>
+                                <div class="col-md-6 col-sm-5" >
+                                    <select class="form-select" id="estadoSelect" width="90%">
+    
+                                        <div th:each="estado : ${estadosTicket}">
+                                            <option th:value="${estado.idEstado}" th:text="${estado.nombre}"></option>
+                                        </div>
+                                    </select>
+                                </div>
+                            </div>
                         </div>
 
                         <div class="card-body">
+                            <!-- menu panel -->
+                            <!--ul class="nav nav-tabs" id="myTabs">
+                                <li th:each="estado : ${estadosTicket}" class="nav-item">
+                                    <a th:class="'nav-link ' + ${estado.idEstado==1?'active':''}" data-bs-toggle="tab" th:href="'#id_'+${estado.idEstado}" th:text="${estado.nombre}" style="font-size: 14px;"></a>
+                                </li>
+                            </ul-->
                             <div th:if="${gestiones != null and !gestiones.empty}">
-                                <ol class="list-group list-group-numbered">
-                                    <li th:each="ticket : ${gestiones}" class="list-group-item d-flex justify-content-between align-items-start" >
-                                        <div class="ms-2 me-auto">
-                                            <div class="fw-bold" th:text="${ticket.asunto}"></div>
-                                            <span th:text="${ticket.descripcion}"></span>
-                                            <p class="mb-1" th:text="'Usuario:' + ${ticket.usuario.nombre}"></p>   
-                                            <p class="mb-1" th:text="'Estado:' + ${ticket.estado.nombre}"></p>
-                                            <a class="btn btn-outline-success" role="button" th:href="@{/editargestion(idTicket=${ticket.idTicket})}"  data-bs-dismiss="collapse">Leer</i></a>
-                                            
-                                        </div>
-                                        <span class="badge bg-primary rounded-pill" th:text="'#' + ${ticket.idTicket}"></span>
-                                    </li>
-                                </ol>
+                                <div class="tab-content" id="myTabsContent">
+                                    <div th:each="estado : ${estadosTicket}" class="tab-pane" th:id="'id_'+${estado.idEstado}" >
+                                        <ol class="list-group list-group-numbered">
+                                            <li th:each="ticket : ${gestiones}" class="list-group-item d-flex justify-content-between align-items-start" th:if="${estado.idEstado}==${ticket.estado.idEstado}">
+                                                <div class="ms-2 me-auto">
+                                                    <div class="fw-bold" th:text="${ticket.asunto}"></div>
+
+                                                    <!--p class="mb-1" th:text="'Usuario: ' + ${ticket.usuario.nombre}"></p>   
+                                                    <p class="mb-1" th:text="'Estado: ' + ${ticket.estado.nombre}"></p-->
+                                                    <table>
+                                                        <tr>
+                                                            <td width='100px'>Descripción:</td>
+                                                            <td><p class="mb-1" th:text="' ' + ${ticket.descripcion}"></p>  </td> 
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Usuario:</td>
+                                                            <td><p class="mb-1" th:text="' ' + ${ticket.usuario.nombre}"></p>  </td> 
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Estado:</td>
+                                                            <td><p class="mb-1" th:text="' ' + ${ticket.estado.nombre}"></p></td>
+                                                        </tr>
+                                                    </table>
+                                                    <a class="btn btn-outline-success" role="button" th:href="@{/editargestion(idTicket=${ticket.idTicket})}"  data-bs-dismiss="collapse">Leer</i></a>
+
+                                                </div>
+                                                <span class="badge bg-primary rounded-pill" th:text="'#' + ${ticket.idTicket}"></span>
+                                            </li>
+                                        </ol>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -67,5 +115,19 @@
 <script src="js/scripts.js"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="js/mensajes.js"></script>
+<script>
+    document.getElementById("estadoSelect").addEventListener("change", function () {
+        var selectedEstado = this.value;
+        var tabPanes = document.querySelectorAll(".tab-pane");
+
+        tabPanes.forEach(function (pane) {
+            if (pane.id === "id_" + selectedEstado) {
+                pane.style.display = "block";
+            } else {
+                pane.style.display = "none";
+            }
+        });
+    });
+</script>
 </body>
 </html>

@@ -44,10 +44,6 @@
                                         <tr>
                                             <th>Nombre</th>
                                             <th>Estado</th>
-                                            <th>Fecha Creaci&oacute;n</th>
-                                            <th>Usuario Crea</th>
-                                            <th>Fecha Modifica</th>
-                                            <th>Usuario Modifica</th>
                                             <th>Modificar</th>
                                             <th>Eliminar</th>
                                         </tr>
@@ -56,10 +52,6 @@
                                         <tr>
                                             <th>Nombre</th>
                                             <th>Estado</th>
-                                            <th>Fecha Creaci&oacute;n</th>
-                                            <th>Usuario Crea</th>
-                                            <th>Fecha Modifica</th>
-                                            <th>Usuario Modifica</th>
                                             <th>Modificar</th>
                                             <th>Eliminar</th>
                                         </tr>
@@ -67,12 +59,7 @@
                                     <tbody>
                                         <tr th:each="rol : ${roles}">
                                             <td th:text="${rol.nombre}">Mostrar Nombre</td>
-                                            
-                                            <td th:text="${rol.estado}">Mostrar Estado</td>
-                                            <td th:text="${rol.fechaCrea}">Mostrar fecha de creacion</td>
-                                            <td th:text="${rol.usuarioCrea}">Mostrar quien ingreso el registro</td>
-                                            <td th:text="${rol.fechaModifica}">Mostrar fecha de modificacion</td>
-                                            <td th:text="${rol.usuarioModifica}">Mostrar quien modifico el registro</td>
+                                            <td th:text="${rol.estado==1L?'Activo':'Inactivo'}">Mostrar Estado</td>
                                             <td><a class="btn btn-info" role="button"  th:href="@{/editarrol(idRol=${rol.idRol})}" th:text="Editar"/></td>
                                             <td><a class="btn btn-danger" role="button" th:onclick="confirmarEliminacion([[(${rol.idRol})]],'/eliminarrol?idRol=');" th:text="Eliminar"/></td>
                                         </tr>

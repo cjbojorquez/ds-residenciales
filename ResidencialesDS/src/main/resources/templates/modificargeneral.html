@@ -38,93 +38,102 @@
                     <div class="row justify-content-center">
                         <div class="col-lg-7">
                             <div class="card shadow-lg border-0 rounded-lg mt-5">
-                                
-                                
-                                    <div class="card-header">
-                                        <div class="row">
-                                            <a class="btn-close" th:href="@{/general}"></a>
+
+
+                                <div class="card-header">
+                                    <div class="row">
+                                        <a class="btn-close" th:href="@{/general}"></a>
+                                    </div>
+                                    <div class="row">
+                                        <h3 class="text-center font-weight-light my-4">Notificaci&oacute;n General</h3>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <form class="was-validated" th:action="@{guardargeneral}" enctype="multipart/form-data"  method="post" th:object="${notificacion}">
+                                        <input class="form-control" id="id" type="hidden" th:field="*{idNotificacion}"/>
+                                        <div class="form-floating mb-3">
+                                            <input class="form-control is-valid" id="nombre" type="text" placeholder="Ingrese el nombre" th:field="*{asunto}" required/>
+                                            <label for="inputFirstName">Asunto</label>
+                                            <span th:if="${#fields.hasErrors('asunto')}" th:errors="*{asunto}" style="color:red" >Error en asunto</span>
                                         </div>
-                                        <div class="row">
-                                            <h3 class="text-center font-weight-light my-4">Notificaci&oacute;n General</h3>
+                                        <div class="form-floating mb-3">
+                                            <!--input class="form-control is-valid" id="nombre" type="text" placeholder="Ingrese el Descripcion" th:field="*{descripcion}" required/-->
+                                            <textarea class="form-control h-50" id="descripcion" rows="3"  th:field="*{descripcion}"></textarea>
+                                            <label for="inputFirstName">Descripci&oacute;n</label>
+                                            <span th:if="${#fields.hasErrors('descripcion')}" th:errors="*{descripcion}">Error en descripcion</span>
                                         </div>
-                                    </div>
-                                    <div class="card-body">
-                                        <form class="was-validated" th:action="@{guardargeneral}" enctype="multipart/form-data"  method="post" th:object="${notificacion}">
-                                            <input class="form-control" id="id" type="hidden" th:field="*{idNotificacion}"/>
-                                            <div class="form-floating mb-3">
-                                                <input class="form-control is-valid" id="nombre" type="text" placeholder="Ingrese el nombre" th:field="*{asunto}" required/>
-                                                <label for="inputFirstName">Asunto</label>
-                                                <span th:if="${#fields.hasErrors('asunto')}" th:errors="*{asunto}" style="color:red" >Error en asunto</span>
-                                            </div>
-                                            <div class="form-floating mb-3">
-                                                <!--input class="form-control is-valid" id="nombre" type="text" placeholder="Ingrese el Descripcion" th:field="*{descripcion}" required/-->
-                                                <textarea class="form-control h-50" id="descripcion" rows="3"  th:field="*{descripcion}"></textarea>
-                                                <label for="inputFirstName">Descripci&oacute;n</label>
-                                                <span th:if="${#fields.hasErrors('descripcion')}" th:errors="*{descripcion}">Error en descripcion</span>
-                                            </div>
-                                            <div class="form-control mb-3">
-                                                <!--input class="form-control is-valid" id="nombre" type="text" placeholder="Ingrese el Descripcion" th:field="*{desde}" required/>
-                                                <label for="inputFirstName">Desde</label>
-                                                <span th:if="${#fields.hasErrors('descripcion')}" th:errors="*{nombre}">Error en Desde</span-->
+                                        <div class="form-control mb-3">
+                                            <!--input class="form-control is-valid" id="nombre" type="text" placeholder="Ingrese el Descripcion" th:field="*{desde}" required/>
+                                            <label for="inputFirstName">Desde</label>
+                                            <span th:if="${#fields.hasErrors('descripcion')}" th:errors="*{nombre}">Error en Desde</span-->
+                                            <div class="row">
+                                                <div class="col-6 input-group mb-3">
+                                                    <input type="hidden" id="desde" name="desde" th:field="*{desde}"/>
+                                                    <span class="input-group-text" id="basic-addon1">Desde:</span>
+                                                    <input type="text" id="desdeFecha" name="desdeFecha" class="form-control"  placeholder="Seleccione Fecha" readonly>
+                                                    <span class="input-group-text" id="basic-addon1">Hora:</span>
+                                                    <input  type="text" id="desdeHora" name="desdeHora" class="form-control"  placeholder="Seleccione Hora" maxlength="5" >
+
+                                                </div>
                                                 <div class="row">
-                                                    <div class="col-6 input-group mb-3">
-                                                        <input type="hidden" id="desde" name="desde" th:field="*{desde}"/>
-                                                        <span class="input-group-text" id="basic-addon1">Desde:</span>
-                                                        <input type="text" id="desdeFecha" name="desdeFecha" class="form-control"  placeholder="Seleccione Fecha" readonly>
-                                                        <span class="input-group-text" id="basic-addon1">Hora:</span>
-                                                        <input  type="text" id="desdeHora" name="desdeHora" class="form-control"  placeholder="Seleccione Hora" maxlength="5" >
-
-                                                    </div>
-                                                    <div class="row">
-                                                        <span th:if="${#fields.hasErrors('desde')}" th:errors="*{desde}" style="color:red">Error en descripcion</span>
-                                                    </div>
-
+                                                    <span th:if="${#fields.hasErrors('desde')}" th:errors="*{desde}" style="color:red">Error en descripcion</span>
                                                 </div>
+
                                             </div>
-                                            <div class="form-control mb-3">
+                                        </div>
+                                        <div class="form-control mb-3">
+                                            <div class="row">
+                                                <div class="col-6 input-group mb-3">
+                                                    <input type="hidden" id="hasta" name="hasta" th:field="*{hasta}"/>
+                                                    <span class="input-group-text" id="basic-addon1">Hasta</span>
+                                                    <input type="text" id="hastaFecha" name="hastaFecha" class="form-control"  placeholder="Seleccione Fecha" readonly>
+                                                    <span class="input-group-text" id="basic-addon1">Hora:</span>
+                                                    <input  type="text" id="hastaHora" name="hastaHora" class="form-control"  placeholder="Seleccione Hora" maxlength="5">
+                                                </div>
                                                 <div class="row">
-                                                    <div class="col-6 input-group mb-3">
-                                                        <input type="hidden" id="hasta" name="hasta" th:field="*{hasta}"/>
-                                                        <span class="input-group-text" id="basic-addon1">Hasta</span>
-                                                        <input type="text" id="hastaFecha" name="hastaFecha" class="form-control"  placeholder="Seleccione Fecha" readonly>
-                                                        <span class="input-group-text" id="basic-addon1">Hora:</span>
-                                                        <input  type="text" id="hastaHora" name="hastaHora" class="form-control"  placeholder="Seleccione Hora" maxlength="5">
-                                                    </div>
-                                                    <div class="row">
-                                                        <span th:if="${#fields.hasErrors('hasta')}" th:errors="*{hasta}" style="color:red">Error en descripcion</span>
-                                                    </div>
+                                                    <span th:if="${#fields.hasErrors('hasta')}" th:errors="*{hasta}" style="color:red">Error en descripcion</span>
                                                 </div>
                                             </div>
-                                            <div class="custom-file mb-3">
-                                                <label class="custom-file-label" for="customFile">Seleccionar Adjunto</label>
-                                                <input type="file" class="form-control border border-primary" id="customFile" name="file" accept="image/">
-                                                <span th:text="'Archivo adjunto: ' + ${notificacion.adjunto}" style="font-size:12pt; font-variant: simplified  "></span>
-                                            </div>
-                                            <div class="form-floating mb-3">
+                                        </div>
 
-                                                <input class="form-control" id="asunto" type="hidden" th:field="*{estado}"/>
-                                                <input class="form-control" id="descripcion" type="hidden" th:field="*{tipo}"/>
-                                                <input class="form-control" id="residencial" type="hidden" th:field="*{idResidencial}"/>
-                                                <input class="form-control" id="foto" type="hidden" th:field="*{adjunto}"/>
-                                                <input class="form-control" id="usuario" type="hidden" th:field="*{usuario}"/>
-                                                <input class="form-control" id="fecha_crea" type="hidden" th:field="*{fechaCrea}"/>
-                                                <input class="form-control" id="usuario_crea" type="hidden" th:field="*{usuarioCrea}"/>
-                                                <input class="form-control" id="fecha_modifica" type="hidden" th:field="*{fechaModifica}"/>
-                                                <input class="form-control" id="usuario_modifica" type="hidden" th:field="*{usuarioModifica}"/>
-                                                <div class="mt-4 mb-0">
-                                                    <div class="d-grid"><input type="submit" class="btn btn-primary" value="Guardar"></div>
-                                                </div>
+                                        <div class="form-floating mb-3 justify-content-center">
+                                            <span th:if="${notificacion.adjunto != null and not #strings.isEmpty(notificacion.adjunto)}">
+                                                <img  th:src="${notificacion.adjunto}" alt="archivo adjunto"  style="max-width: 50%; max-height: 50%;border: 1px solid #ccc; border-radius: 5px;">
+                                            </span>
+                                        </div>
 
+                                        <div class="custom-file mb-3">
+
+                                            <label class="custom-file-label" for="customFile">Seleccionar Adjunto</label>
+                                            <input type="file" class="form-control border border-primary" id="customFile" name="file" accept="image/*">
+                                            <!--span th:text="'Archivo adjunto: ' + ${notificacion.adjunto}" style="font-size:12pt; font-variant: simplified  "></span-->
+
+                                        </div>
+                                        <div class="form-floating mb-3">
+
+                                            <input class="form-control" id="asunto" type="hidden" th:field="*{estado}"/>
+                                            <input class="form-control" id="descripcion" type="hidden" th:field="*{tipo}"/>
+                                            <input class="form-control" id="residencial" type="hidden" th:field="*{idResidencial}"/>
+                                            <input class="form-control" id="foto" type="hidden" th:field="*{adjunto}"/>
+                                            <input class="form-control" id="usuario" type="hidden" th:field="*{usuario}"/>
+                                            <input class="form-control" id="fecha_crea" type="hidden" th:field="*{fechaCrea}"/>
+                                            <input class="form-control" id="usuario_crea" type="hidden" th:field="*{usuarioCrea}"/>
+                                            <input class="form-control" id="fecha_modifica" type="hidden" th:field="*{fechaModifica}"/>
+                                            <input class="form-control" id="usuario_modifica" type="hidden" th:field="*{usuarioModifica}"/>
+                                            <div class="mt-4 mb-0">
+                                                <div class="d-grid"><input type="submit" class="btn btn-primary" value="Guardar"></div>
                                             </div>
-                                        </form>
-                                    </div>
-                                    <div class="card-footer text-center py-3">
-                                        <div class="small"></div>
-                                    </div>
+
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="card-footer text-center py-3">
+                                    <div class="small"></div>
                                 </div>
                             </div>
                         </div>
                     </div>
+                </div>
             </main>
             <th:block th:replace="~{layout/plantilla :: footer}"></th:block>
         </div>
@@ -140,6 +149,6 @@
     <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>
     <script src="js/datatables-simple-demo.js"></script>
     <!--script src="https://code.jquery.com/jquery-3.6.0.min.js"></script-->
-        <script src="js/mensajes.js"></script>
+    <script src="js/mensajes.js"></script>
 </body>
 </html>
