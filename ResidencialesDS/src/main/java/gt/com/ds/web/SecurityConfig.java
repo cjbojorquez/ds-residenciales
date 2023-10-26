@@ -78,7 +78,7 @@ public class SecurityConfig {// extends WebSecurityConfigurerAdapter{
                 .requestMatchers("/modificargestion", "/creargestion", "/verbuzon").hasRole("USER")
                 .requestMatchers("/", "/perfil", "/userconfauth","/obtenerMensajes").hasAnyRole("ADMIN", "EMPLOYEE", "USER")
                 .requestMatchers("/anomalia", "/crearanomalia", "/modificaranomalia", "/gestion", "/solicitud","/contacto").hasAnyRole("EMPLOYEE", "USER")
-                .requestMatchers("/css/**", "/js/**", "/images/**", "/adjunto/**", "/assets/**").permitAll()
+                .requestMatchers("/css/**", "/js/**", "/images/**", "/adjunto/**", "/assets/**", "/","/error").permitAll()
                 .requestMatchers("/getresidenciales", "/registro", "/userconf", "/guardarcontrasena", "/recupera", "/recuperacontrasena").permitAll()
                 .anyRequest().authenticated()
                 )

@@ -13,7 +13,7 @@
         <!--link rel="stylesheet" href="css/mdb.min.css" /-->
         <!-- Custom styles -->
         <link rel="stylesheet" href="css/loginstyle.css" />
-        <link rel="icon" href="images/casa.png" type="image/x-icon">
+        <!--link rel="icon" href="images/casa.png" type="image/x-icon"-->
     </head>
     <body>
         <!--Main Navigation-->
@@ -82,7 +82,7 @@
                                         <label for="username" class="block mb-2 text-sm font-medium">Usuario</label>
                                         <input type="text" id="username" name="username" class="form-control custom-style" placeholder="Usuario" required autofocus />
                                     </div>
-
+                                    
 
                                     <!-- Password input -->
                                     <div class="form-outline mb-4">
@@ -107,7 +107,12 @@
                                             <a href="recupera">Olvide mi contrase&ntilde;a</a>
                                         </div>
                                     </div>
-
+                                    <div th:if="${param.error}" class="alert alert-danger" role="alert">
+                                        Usuario/Password invalido
+                                    </div>
+                                    <div th:if="${param.logout}" class="alert alert-primary" role="alert" >
+                                        Has sido deslogueado
+                                    </div>
                                     <!-- Submit button -->
                                     <button type="submit" class="btn btn-primary btn-block">Ingresar</button>
                                 </form>
