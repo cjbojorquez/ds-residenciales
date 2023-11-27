@@ -54,6 +54,23 @@ public class ControladorResidencial {
     @Autowired
     private ContactoService contactoService;
     
+    @Value("${host.name}")
+    String dominio;
+    
+    @Value("${static.ruta}")
+    String stRuta;
+    
+    @Value("${static.imagen}")
+    String stImagen;
+    
+    @Value("${static.perfil}")
+    String stPerfil;
+    
+    @Value("${static.adjunto}")
+    String stAdjunto;
+    
+    @Value("${static.logo}")
+    String stLogo;
     //Tools tool = new Tools();
     
     /**
@@ -97,24 +114,24 @@ public class ControladorResidencial {
         if(errors.hasErrors()){
             return "modificarres";
         }
-        if(!imagen.isEmpty()){
-            Path directorioImagenes = Paths.get("src//main//resources//static//images//logos");
-            
-            String rutaAbsoluta=directorioImagenes.toFile().getAbsolutePath();
-            log.info("Ruta absoluta "+rutaAbsoluta + " " + directorioImagenes.toString());
-            try {
-                byte[] byteImg = imagen.getBytes();
-                String nombreArchivo = Tools.newName(imagen.getOriginalFilename()); 
-                Path rutaCompleta = Paths.get(rutaAbsoluta + "/" + nombreArchivo);
-                residencial.setLogo("images/logos/" + nombreArchivo);
-                log.info("Se intenta guardar imagen "+rutaCompleta.toString());
-                Files.write(rutaCompleta,byteImg);
-            } catch (IOException ex) {
-                Logger.getLogger(ControladorResidencial.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            
-        }
-        
+//        if(!imagen.isEmpty()){
+//            Path directorioImagenes = Paths.get("src//main//resources//static//images//logos");
+//            
+//            String rutaAbsoluta=directorioImagenes.toFile().getAbsolutePath();
+//            log.info("Ruta absoluta "+rutaAbsoluta + " " + directorioImagenes.toString());
+//            try {
+//                byte[] byteImg = imagen.getBytes();
+//                String nombreArchivo = Tools.newName(imagen.getOriginalFilename()); 
+//                Path rutaCompleta = Paths.get(rutaAbsoluta + "/" + nombreArchivo);
+//                residencial.setLogo("images/logos/" + nombreArchivo);
+//                log.info("Se intenta guardar imagen "+rutaCompleta.toString());
+//                Files.write(rutaCompleta,byteImg);
+//            } catch (IOException ex) {
+//                Logger.getLogger(ControladorResidencial.class.getName()).log(Level.SEVERE, null, ex);
+//            }
+//            
+//        }
+        residencial.setLogo(Tools.saveArchivo(stLogo,imagen,stRuta+"/images/logos"));
         residencial.setStatus(1L);
         if (residencial.getIdResidential() == null) {
             residencial.setCreate_time(Tools.now());

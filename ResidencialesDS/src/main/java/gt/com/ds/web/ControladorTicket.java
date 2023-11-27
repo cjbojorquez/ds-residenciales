@@ -35,6 +35,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.PathVariable;
 
 /**
@@ -63,6 +64,23 @@ public class ControladorTicket {
     @Autowired
     private UsuarioService usuarioService;
 
+    @Value("${host.name}")
+    String dominio;
+    
+    @Value("${static.ruta}")
+    String stRuta;
+    
+    @Value("${static.imagen}")
+    String stImagen;
+    
+    @Value("${static.perfil}")
+    String stPerfil;
+    
+    @Value("${static.adjunto}")
+    String stAdjunto;
+    
+    @Value("${static.logo}")
+    String stLogo;
         
     @Autowired
     private Varios varios;
@@ -156,7 +174,7 @@ public class ControladorTicket {
         ticketService.guardar(tk);
         
         buzonService.cambioEstadoTicket(actual, tk,tk.getUsuario(), us);
-        
+        log.info("ingresa a cambiar estado");
         var comentarios = comentarioService.comentarioPorTicket(nuevo.getIdTicket());
         var estadosTicket = estadoTicketService.listarEstadoTicket();
         model.addAttribute("comentarios", comentarios);
@@ -388,24 +406,25 @@ public class ControladorTicket {
             comentario.setComentario(txtComentario);
             comentario.setIdEstado(1L);
             System.out.println("Ingresa antes de img");
-            if (!imagen.isEmpty()) {
-                Path directorioImagenes = Paths.get("src//main//resources//static//adjunto");
-
-                String rutaAbsoluta = directorioImagenes.toFile().getAbsolutePath();
-                log.info("Ruta absoluta " + rutaAbsoluta + " " + directorioImagenes.toString());
-                try {
-                    byte[] byteImg = imagen.getBytes();
-                    String nombreArchivo = Tools.newName(imagen.getOriginalFilename()); // cambiar por dinamica
-                    Path rutaCompleta = Paths.get(rutaAbsoluta + "/" + nombreArchivo);
-                    //notificacion.setAdjunto("adjunto/" + nombreArchivo);
-                    comentario.setAdjunto("adjunto/" + nombreArchivo);
-                    log.info("Se intenta guardar imagen " + rutaCompleta.toString());
-                    Files.write(rutaCompleta, byteImg);
-                } catch (IOException ex) {
-                    Logger.getLogger(ControladorUsuario.class.getName()).log(Level.SEVERE, null, ex);
-                }
-
-            }
+//            if (!imagen.isEmpty()) {
+//                Path directorioImagenes = Paths.get("src//main//resources//static//adjunto");
+//
+//                String rutaAbsoluta = directorioImagenes.toFile().getAbsolutePath();
+//                log.info("Ruta absoluta " + rutaAbsoluta + " " + directorioImagenes.toString());
+//                try {
+//                    byte[] byteImg = imagen.getBytes();
+//                    String nombreArchivo = Tools.newName(imagen.getOriginalFilename()); // cambiar por dinamica
+//                    Path rutaCompleta = Paths.get(rutaAbsoluta + "/" + nombreArchivo);
+//                    //notificacion.setAdjunto("adjunto/" + nombreArchivo);
+//                    comentario.setAdjunto("adjunto/" + nombreArchivo);
+//                    log.info("Se intenta guardar imagen " + rutaCompleta.toString());
+//                    Files.write(rutaCompleta, byteImg);
+//                } catch (IOException ex) {
+//                    Logger.getLogger(ControladorUsuario.class.getName()).log(Level.SEVERE, null, ex);
+//                }
+//
+//            }
+            comentario.setAdjunto(Tools.saveArchivo(stAdjunto,imagen,stRuta+"/adjunto"));
 
             log.info("Se crea comentario " + comentario);
             comentarioService.guardar(comentario);

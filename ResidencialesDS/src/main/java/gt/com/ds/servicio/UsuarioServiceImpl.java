@@ -145,7 +145,7 @@ public class UsuarioServiceImpl implements UsuarioService{
     @Override
     @Transactional(readOnly = true)
     public List<Usuario> listarUsuariosxResidencial(Long estado,Long idResidencial) {
-        return (List<Usuario>)usuarioDao.listarUsuariosResidencial(estado,idResidencial);
+        return (List<Usuario>)usuarioDao.listarUsuariosResidencialU(estado,idResidencial);
     }
     
 }

@@ -39,6 +39,19 @@
 
                                     <div class="card-body">
                                         <form class="was-validated" th:action="@{guardarperfil}" method="post" enctype="multipart/form-data" th:object="${usuario}">
+                                            
+                                            <div class="align-content-center" th:if="${usuario.idUsuario != null and not #strings.isEmpty(usuario.idUsuario)}" heigth="25%">
+                                            <span th:if="${usuario.foto != null and not #strings.isEmpty(usuario.foto)}">
+                                                <div class="text-center">
+                                                    <img th:src="${usuario.foto}" alt="Foto usuario" class="logo-image" style="width: 30%;"/>
+                                                </div>
+                                            </span>
+                                            <span th:if="${usuario.foto == null or  #strings.isEmpty(usuario.foto)}">
+                                                <div class="text-center">
+                                                    <img src="images/sinimagen.jpeg" alt="Foto usuario" class="logo-image" style="width: 30%;"/>
+                                                </div>
+                                            </span>
+                                            </div>
                                             <input class="form-control" id="id" type="hidden" th:field="*{idUsuario}"/>
                                             <div class="form-floating mb-3">
                                                 <input class="form-control is-invalid" id="nombre" type="text" placeholder="Ingrese el nombre" th:field="*{nombre}" required/>
@@ -54,8 +67,8 @@
                                                 <input class="form-control is-invalid" id="newpassword" name="newpassword" type="password" placeholder="Ingrese el nombre" value="" />
                                                 <label for="inputFirstName">Password</label>
                                             </div-->
-                                            <input class="form-control" id="nombreUsuario" type="hidden" th:field="*{nombreUsuario}"/>
-                                            <input class="form-control" id="password" type="hidden" th:field="*{password}"/>
+                                            <!--input class="form-control" id="nombreUsuario" type="hidden" th:field="*{nombreUsuario}"/>
+                                            <input class="form-control" id="password" type="hidden" th:field="*{password}"/-->
                                             <div class="form-floating mb-3">
                                                 <input class="form-control" id="email" type="email" placeholder="nombre@ejemplo.com" th:field="*{email}" required />
                                                 <label for="inputEmail">e-mail</label>
@@ -87,11 +100,12 @@
                                                     </option>
                                                 </select>
                                             </div-->
-                                            <input class="form-control" id="status" type="hidden" value="1"/>
+                                            <input class="form-control" id="status" type="hidden" th:field="*{estado}"/>
                                             <input class="form-control" id="residencial" type="hidden" th:field="*{residencial}"/>
                                             <input class="form-control" id="password" type="hidden" th:field="*{password}"/>
                                             <input class="form-control" id="esEmpleado" type="hidden" th:field="*{esEmpleado}"/>
                                             <input class="form-control" id="foto" type="hidden" th:field="*{foto}"/>
+                                            
                                             <input class="form-control" id="fecha_crea" type="hidden" th:field="*{fechaCrea}"/>
                                             <input class="form-control" id="usuario_crea" type="hidden" th:field="*{usuarioCrea}"/>
                                             <input class="form-control" id="fecha_modifica" type="hidden" th:field="*{fechaModifica}"/>

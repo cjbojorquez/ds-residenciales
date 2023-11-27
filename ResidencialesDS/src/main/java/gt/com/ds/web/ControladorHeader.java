@@ -15,14 +15,23 @@ import gt.com.ds.servicio.ResidencialService;
 import gt.com.ds.servicio.TicketService;
 import gt.com.ds.servicio.UsuarioService;
 import gt.com.ds.servicio.Varios;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -110,5 +119,81 @@ public class ControladorHeader {
         model.addAttribute("mensajes", mensajes);
         model.addAttribute("residencial", residencial);
         return mensajes;
+    }
+    
+    @GetMapping("/mostrar-imagen/{nombreImagen}")
+    public ResponseEntity<byte[]> mostrarImagen(@PathVariable String nombreImagen) throws IOException {
+        // Construye la ruta completa de la imagen
+        Path rutaImagen = Paths.get("/home/ubuntu/files/images", nombreImagen);
+        
+        // Verifica si la imagen existe
+        if (Files.exists(rutaImagen)) {
+            // Lee la imagen desde su ubicación y la devuelve en la respuesta HTTP
+            byte[] imagenBytes = Files.readAllBytes(rutaImagen);
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.IMAGE_JPEG);
+            return new ResponseEntity<>(imagenBytes, headers, HttpStatus.OK);
+        } else {
+            // Envia una respuesta 404 si la imagen no existe
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+    
+    @GetMapping("/mostrar-perfil/{nombreImagen}")
+    public ResponseEntity<byte[]> mostrarPerfil(@PathVariable String nombreImagen) throws IOException {
+        // Construye la ruta completa de la imagen
+        Path rutaImagen = Paths.get("/home/ubuntu/files/images/perfil", nombreImagen);
+        
+        // Verifica si la imagen existe
+        if (Files.exists(rutaImagen)) {
+            // Lee la imagen desde su ubicación y la devuelve en la respuesta HTTP
+            byte[] imagenBytes = Files.readAllBytes(rutaImagen);
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.IMAGE_JPEG);
+            return new ResponseEntity<>(imagenBytes, headers, HttpStatus.OK);
+        } else {
+            // Envia una respuesta 404 si la imagen no existe
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+    
+    @GetMapping("/mostrar-logo/{nombreImagen}")
+    public ResponseEntity<byte[]> mostrarLogo(@PathVariable String nombreImagen) throws IOException {
+        // Construye la ruta completa de la imagen
+        Path rutaImagen = Paths.get("/home/ubuntu/files/images/logos", nombreImagen);
+        
+        // Verifica si la imagen existe
+        if (Files.exists(rutaImagen)) {
+            // Lee la imagen desde su ubicación y la devuelve en la respuesta HTTP
+            byte[] imagenBytes = Files.readAllBytes(rutaImagen);
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.IMAGE_JPEG);
+            return new ResponseEntity<>(imagenBytes, headers, HttpStatus.OK);
+        } else {
+            // Envia una respuesta 404 si la imagen no existe
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+    
+    @GetMapping("/mostrar-adjunto/{nombreImagen}")
+    public ResponseEntity<byte[]> mostrarAdjunto(@PathVariable String nombreImagen) throws IOException {
+        // Construye la ruta completa de la imagen
+        Path rutaImagen = Paths.get("/home/ubuntu/files/adjunto", nombreImagen);
+        
+        // Verifica si la imagen existe
+        if (Files.exists(rutaImagen)) {
+            // Lee la imagen desde su ubicación y la devuelve en la respuesta HTTP
+            byte[] imagenBytes = Files.readAllBytes(rutaImagen);
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.IMAGE_JPEG);
+            return new ResponseEntity<>(imagenBytes, headers, HttpStatus.OK);
+        } else {
+            // Envia una respuesta 404 si la imagen no existe
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 }

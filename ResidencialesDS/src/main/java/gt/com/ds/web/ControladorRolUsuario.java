@@ -105,7 +105,7 @@ public class ControladorRolUsuario {
         Long vEstado = 1L;// Roles estado Activo
         Usuario us = varios.getUsuarioLogueado();
         String rolLogueado = varios.getRolLogueado();
-        log.info("ingresando a asignarol con id valor =" + idUsuario + ";");
+        //log.info("ingresando a asignarol con id valor =" + idUsuario + ";");
         var rolUsuario = new RolUsuario();
         if (!rolUsuarioService.encontrarRoles(idUsuario).isEmpty()) {
             rolUsuario = rolUsuarioService.encontrarRoles(idUsuario).get(0);

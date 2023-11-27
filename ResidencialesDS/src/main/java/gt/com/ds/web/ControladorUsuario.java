@@ -62,7 +62,25 @@ public class ControladorUsuario {
 
     @Value("${host.name}")
     String dominio;
-
+    
+    @Value("${static.ruta}")
+    String stRuta;
+    
+    @Value("${static.imagen}")
+    String stImagen;
+    
+    @Value("${static.perfil}")
+    String stPerfil;
+    
+    @Value("${static.adjunto}")
+    String stAdjunto;
+    
+    @Value("${static.logo}")
+    String stLogo;
+    
+    /*@Value("${host.name}")
+    String dominio;
+    */
     @Value("${jwt.expiracion}")
     private Long expiracionMs;
 
@@ -160,31 +178,33 @@ public class ControladorUsuario {
      * @return se retorna al formulario perfil
      */
     @PostMapping("/guardarperfil")
-    public String guardarPerfil(@Valid Usuario usuario, BindingResult bindingResult, @RequestParam("newpassword") String newPassword, @RequestParam("file") MultipartFile imagen, Model model, Errors errors) {
+    public String guardarPerfil(@Valid Usuario usuario, BindingResult bindingResult, @RequestParam("file") MultipartFile imagen, Model model, Errors errors) {
 
-        System.out.println("newPassword = " + newPassword);
+        /*System.out.println("newPassword = " + newPassword);
         log.info("newPassword = " + newPassword);
         if (!"".equals(newPassword)) {
             usuario.setPassword(newPassword);
-        }
-        if (!imagen.isEmpty()) {
-            Path directorioImagenes = Paths.get("src//main//resources//static//images//perfil");
-
-            String rutaAbsoluta = directorioImagenes.toFile().getAbsolutePath();
-            log.info("Ruta absoluta " + rutaAbsoluta + " " + directorioImagenes.toString());
-            try {
-                byte[] byteImg = imagen.getBytes();
-                String nombreArchivo = Tools.newName(imagen.getOriginalFilename()); //cambiar por dinamico
-                Path rutaCompleta = Paths.get(rutaAbsoluta + "/" + nombreArchivo);
-                usuario.setFoto("images/perfil/" + nombreArchivo);
-                log.info("Se intenta guardar imagen " + rutaCompleta.toString());
-                Files.write(rutaCompleta, byteImg);
-            } catch (IOException ex) {
-                Logger.getLogger(ControladorUsuario.class.getName()).log(Level.SEVERE, null, ex);
-            }
-
-        }
-
+        }*/
+        
+//        if (!imagen.isEmpty()) {
+//            Path directorioImagenes = Paths.get("src//main//resources//static//images//perfil");
+//
+//            String rutaAbsoluta = directorioImagenes.toFile().getAbsolutePath();
+//            log.info("Ruta absoluta " + rutaAbsoluta + " " + directorioImagenes.toString());
+//            try {
+//                byte[] byteImg = imagen.getBytes();
+//                String nombreArchivo = Tools.newName(imagen.getOriginalFilename()); //cambiar por dinamico
+//                Path rutaCompleta = Paths.get(rutaAbsoluta + "/" + nombreArchivo);
+//                usuario.setFoto(stPerfil + nombreArchivo);
+//                log.info("Se intenta guardar imagen " + rutaCompleta.toString());
+//                Files.write(rutaCompleta, byteImg);
+//            } catch (IOException ex) {
+//                Logger.getLogger(ControladorUsuario.class.getName()).log(Level.SEVERE, null, ex);
+//            }
+//
+//        }
+        //usuario.setFoto(Tools.saveArchivo(stPerfil,imagen,stRuta+"/images/perfil"));
+        usuario.setFoto(Tools.saveArchivo(stPerfil,imagen,stRuta+"/images/perfil"));
         usuario.setFechaModifica(Tools.now());
         log.info("Modifica Usuario " + usuario + " fecha " + Tools.now());
 
@@ -265,6 +285,8 @@ public class ControladorUsuario {
 
         log.info("ejecutando controlador usuario " + usuarios);
         model.addAttribute("usuarios", usuarios);
+        model.addAttribute("dominio", dominio);
+        model.addAttribute("stperfil", stPerfil);
         return "usuario";
     }
 
@@ -312,23 +334,26 @@ public class ControladorUsuario {
             model.addAttribute("usuario", usuario);
             return "crearus";
         }
-        if (!imagen.isEmpty()) {
-            Path directorioImagenes = Paths.get("src//main//resources//static//images//perfil");
-
-            String rutaAbsoluta = directorioImagenes.toFile().getAbsolutePath();
-            log.info("Ruta absoluta " + rutaAbsoluta + " " + directorioImagenes.toString());
-            try {
-                byte[] byteImg = imagen.getBytes();
-                String nombreArchivo = Tools.newName(imagen.getOriginalFilename()); //cambiar por dinamico
-                Path rutaCompleta = Paths.get(rutaAbsoluta + "/" + nombreArchivo);
-                usuario.setFoto("images/perfil/" + nombreArchivo);
-                log.info("Se intenta guardar imagen " + rutaCompleta.toString());
-                Files.write(rutaCompleta, byteImg);
-            } catch (IOException ex) {
-                Logger.getLogger(ControladorUsuario.class.getName()).log(Level.SEVERE, null, ex);
-            }
-
-        }
+//        if (!imagen.isEmpty()) {
+//            Path directorioImagenes = Paths.get("/home/ubuntu/files/images/perfil");
+//
+//            String rutaAbsoluta = directorioImagenes.toFile().getAbsolutePath();
+//            log.info("Ruta absoluta " + rutaAbsoluta + " " + directorioImagenes.toString());
+//            try {
+//                byte[] byteImg = imagen.getBytes();
+//                String nombreArchivo = Tools.newName(imagen.getOriginalFilename()); //cambiar por dinamico
+//                Path rutaCompleta = Paths.get(rutaAbsoluta + "/" + nombreArchivo);
+//                //Path rutaCompleta = Paths.get("src//main//resources//static//images//perfil//" + nombreArchivo);
+//                usuario.setFoto("images/perfil/" + nombreArchivo);
+//                log.info("Se intenta guardar imagen " + rutaCompleta.toString());
+//                //Files.write(rutaCompleta, byteImg);
+//                Files.write(rutaCompleta, byteImg);
+//            } catch (IOException ex) {
+//                Logger.getLogger(ControladorUsuario.class.getName()).log(Level.SEVERE, null, ex);
+//            }
+//
+//        }
+        usuario.setFoto(Tools.saveArchivo(stPerfil,imagen,stRuta+"/images/perfil"));
         usuario.setEsEmpleado(0L);
         usuario.setEstado(1L);
 
@@ -368,6 +393,8 @@ public class ControladorUsuario {
         var residenciales = residencialService.listarRecidencialesActivas();
         log.info("Res desde user " + residenciales);
         model.addAttribute("residenciales", residenciales);
+        model.addAttribute("dominio", dominio);
+        model.addAttribute("stperfil", stPerfil);
         return "modificarus";
     }
 
@@ -454,7 +481,7 @@ public class ControladorUsuario {
             model.addAttribute("residenciales", residenciales);
             return "crearemp";
         }
-        if (!imagen.isEmpty()) {
+        /*if (!imagen.isEmpty()) {
             Path directorioImagenes = Paths.get("src//main//resources//static//images//perfil");
 
             String rutaAbsoluta = directorioImagenes.toFile().getAbsolutePath();
@@ -470,7 +497,8 @@ public class ControladorUsuario {
                 Logger.getLogger(ControladorUsuario.class.getName()).log(Level.SEVERE, null, ex);
             }
 
-        }
+        }*/
+        usuario.setFoto(Tools.saveArchivo(stPerfil,imagen,stRuta+"/images/perfil"));
         usuario.setEsEmpleado(1L);
         usuario.setEstado(1L);
 
@@ -505,6 +533,8 @@ public class ControladorUsuario {
         var residenciales = residencialService.listarRecidencialesActivas();
         log.info("Res desde user " + residenciales);
         model.addAttribute("residenciales", residenciales);
+        model.addAttribute("dominio", dominio);
+        model.addAttribute("stperfil", stPerfil);
         return "modificaremp";
     }
 
@@ -526,6 +556,10 @@ public class ControladorUsuario {
         return "redirect:/empleado";
     }
 
+    
+    
+    
+    
     ////////////////////////////////////////////////////////////////////
     //                      USUARIO DE RESIDENCIAL
     ///////////////////////////////////////////////////////////////////
@@ -570,7 +604,7 @@ public class ControladorUsuario {
      * hacia la pagina usuariores.html
      */
     @PostMapping("/guardarusres")
-    public String guardarusres(@Valid Usuario usuario, BindingResult bindingResult, Model model, Errors errors) {
+    public String guardarusres(@Valid Usuario usuario, BindingResult bindingResult,@RequestParam("file") MultipartFile imagen, Model model, Errors errors) {
         Usuario usuarioLogueado = varios.getUsuarioLogueado();
         String pagina = "/usuariores";
         int nuevo = 0;
@@ -602,6 +636,8 @@ public class ControladorUsuario {
 
             usuario.setUsuarioModifica(usuarioLogueado.getIdUsuario());
         }
+        
+        usuario.setFoto(Tools.saveArchivo(stPerfil,imagen,stRuta+"/images/perfil"));
         log.info("Se actualiza usuario " + usuario);
         Long idUs = usuarioService.guardar(usuario);
         log.info("el valor de pagina es:" + pagina);
@@ -632,6 +668,8 @@ public class ControladorUsuario {
         var residenciales = residencialService.listarRecidencialesActivas();
         log.info("Res desde user " + residenciales);
         model.addAttribute("residenciales", residenciales);
+        model.addAttribute("dominio", dominio);
+        model.addAttribute("stperfil", stPerfil);
         return "modificarusres";
     }
 
@@ -703,7 +741,7 @@ public class ControladorUsuario {
 
             return "crearempres";
         }
-        if (!imagen.isEmpty()) {
+        /*if (!imagen.isEmpty()) {
             Path directorioImagenes = Paths.get("src//main//resources//static//images//perfil");
 
             String rutaAbsoluta = directorioImagenes.toFile().getAbsolutePath();
@@ -719,7 +757,8 @@ public class ControladorUsuario {
                 Logger.getLogger(ControladorUsuario.class.getName()).log(Level.SEVERE, null, ex);
             }
 
-        }
+        }*/
+        usuario.setFoto(Tools.saveArchivo(stPerfil,imagen,stRuta+"/images/perfil"));
         usuario.setEsEmpleado(1L);
         usuario.setEstado(1L);
 
@@ -766,6 +805,8 @@ public class ControladorUsuario {
         var residenciales = residencialService.listarRecidencialesActivas();
         log.info("Res desde user " + residenciales);
         model.addAttribute("residenciales", residenciales);
+        model.addAttribute("dominio", dominio);
+        model.addAttribute("stperfil", stPerfil);
         return "modificarempres";
     }
 

@@ -75,7 +75,7 @@
                                                 <div th:if="${solicitudesCerradas != null and !solicitudesCerradas.empty}">
                                                 
                                                     <ol class="list-group list-group-numbered">
-                                                        <li th:each="solicitud : ${solicitudes}" class="list-group-item d-flex justify-content-between align-items-start" >
+                                                        <li th:each="solicitud : ${solicitudesCerradas}" class="list-group-item d-flex justify-content-between align-items-start" >
                                                             <div class="ms-2 me-auto">
                                                                 <div class="fw-bold" th:text="${solicitud.asunto}"></div>
                                                                 <span th:text="${solicitud.servicio.descripcion}"></span>
@@ -84,7 +84,7 @@
                                                                 <a class="btn btn-outline-success" role="button" th:href="@{/modificarsolicitud(idSolicitud=${solicitud.idSolicitud})}">Leer</i></a>
                                                                 <a class="btn btn-danger" role="button" th:onclick="confirmarEliminacion([[(${solicitud.idSolicitud})]],'/cerrarsolicitud?idSolicitud=');" th:text="Cerrar"/>
                                                             </div>
-                                                            <span class="badge bg-primary rounded-pill" th:text="'#' + ${solicitud.idSolicitud}"></span>
+                                                            <span class="badge bg-primary rounded-pill" th:text="'Solicitud #' + ${solicitud.idSolicitud}"></span>
                                                         </li>
                                                     </ol>
                                                 </div>

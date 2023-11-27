@@ -13,98 +13,110 @@
     </head>
     <body class="sb-nav-fixed">
 
-        <th:block th:replace="~{layout/plantilla :: header}"></th:block>
-        <!-- barra vertical -->
-        <div id="layoutSidenav">
-            <th:block th:replace="~{layout/plantilla :: menu}"></th:block>
+    <th:block th:replace="~{layout/plantilla :: header}"></th:block>
+    <!-- barra vertical -->
+    <div id="layoutSidenav">
+        <th:block th:replace="~{layout/plantilla :: menu}"></th:block>
 
-            <div id="layoutSidenav_content">
-                <main>
-                    <div class="container">
-                        <div class="row justify-content-center">
-                            <div class="col-lg-7">
-                                <div class="card shadow-lg border-0 rounded-lg mt-5">
-                                    
-                                    <div class="card-header">
-                                        <div class="row">
-                                            <a class="btn-close" th:href="@{/usuariores}"></a>
+        <div id="layoutSidenav_content">
+            <main>
+                <div class="container">
+                    <div class="row justify-content-center">
+                        <div class="col-lg-7">
+                            <div class="card shadow-lg border-0 rounded-lg mt-5">
+
+                                <div class="card-header">
+                                    <div class="row">
+                                        <a class="btn-close" th:href="@{/usuariores}"></a>
+                                    </div>
+                                    <div class="row">
+                                        <h3 class="text-center font-weight-light my-4">Usuario</h3>
+                                    </div>
+                                </div>
+
+                                <div class="card-body">
+                                    <form class="was-validated" th:action="@{guardarusres}" method="post" enctype="multipart/form-data" th:object="${usuario}">
+                                        <div class="align-content-center" th:if="${usuario.idUsuario != null and not #strings.isEmpty(usuario.idUsuario)}" heigth="25%">
+                                            <span th:if="${usuario.foto != null and not #strings.isEmpty(usuario.foto)}">
+                                                <div class="text-center">
+                                                    <img th:src="${usuario.foto}" alt="Foto usuario" class="logo-image" style="width: 30%;"/>
+                                                </div>
+                                            </span>
+                                            <span th:if="${usuario.foto == null or  #strings.isEmpty(usuario.foto)}">
+                                                <div class="text-center">
+                                                    <img src="images/sinimagen.jpeg" alt="Foto usuario" class="logo-image" style="width: 30%;"/>
+                                                </div>
+                                            </span>
                                         </div>
-                                        <div class="row">
-                                            <h3 class="text-center font-weight-light my-4">Usuario</h3>
+                                        <input class="form-control" id="id" type="hidden" th:field="*{idUsuario}"/>
+                                        <div class="form-floating mb-3">
+                                            <input class="form-control is-invalid" id="nombre" type="text" placeholder="Ingrese el nombre" th:field="*{nombre}" required/>
+                                            <label for="inputFirstName">Nombre</label>
+                                            <span th:if="${#fields.hasErrors('nombre')}" th:errors="*{name}">Error en nombre</span>
                                         </div>
-                                    </div>
 
-                                    <div class="card-body">
-                                        <form class="was-validated" th:action="@{guardarusres}" method="post" enctype="multipart/form-data" th:object="${usuario}">
-                                            <input class="form-control" id="id" type="hidden" th:field="*{idUsuario}"/>
-                                            <div class="form-floating mb-3">
-                                                <input class="form-control is-invalid" id="nombre" type="text" placeholder="Ingrese el nombre" th:field="*{nombre}" required/>
-                                                <label for="inputFirstName">Nombre</label>
-                                                <span th:if="${#fields.hasErrors('nombre')}" th:errors="*{name}">Error en nombre</span>
-                                            </div>
+                                        <input class="form-control" id="nombreUsuario" type="hidden" th:field="*{nombreUsuario}"/>
+                                        <input class="form-control" id="password" type="hidden" th:field="*{password}"/>
+                                        <div class="form-floating mb-3">
+                                            <input class="form-control" id="email" type="email" placeholder="nombre@ejemplo.com" th:field="*{email}" required />
+                                            <label for="inputEmail">e-mail</label>
+                                        </div>
+                                        <div class="form-floating mb-3">
+                                            <input class="form-control" id="telefono" type="text" placeholder="Ingrese telefono" th:field="*{telefono}" pattern="\d{8}"  />
+                                            <label for="inputTelefono">Tel&eacute;fono</label>
+                                        </div>
+                                        <div class="form-floating mb-3">
+                                            <input class="form-control" id="codigo" type="text" placeholder="Ingrese telefono" th:field="*{codigo}"   />
+                                            <label for="inputCodigo">C&oacute;digo</label>
+                                        </div>
+                                        <div class="form-floating mb-3">
+                                            <input class="form-control" id="direccion" type="text" placeholder="Ingrese direccion" th:field="*{direccion}" />
+                                            <label for="inputLastName">Direcci&oacute;n</label>
+                                        </div>
+                                        <div class="custom-file mb-3">
+                                            <label class="custom-file-label" for="customFile">Seleccionar Foto</label>
+                                            <input type="file" class="form-control border border-primary" id="customFile" name="file" accept="image/*">
 
-                                            <input class="form-control" id="nombreUsuario" type="hidden" th:field="*{nombreUsuario}"/>
-                                            <input class="form-control" id="password" type="hidden" th:field="*{password}"/>
-                                            <div class="form-floating mb-3">
-                                                <input class="form-control" id="email" type="email" placeholder="nombre@ejemplo.com" th:field="*{email}" required />
-                                                <label for="inputEmail">e-mail</label>
-                                            </div>
-                                            <div class="form-floating mb-3">
-                                                <input class="form-control" id="telefono" type="text" placeholder="Ingrese telefono" th:field="*{telefono}" pattern="\d{8}"  />
-                                                <label for="inputTelefono">Tel&eacute;fono</label>
-                                            </div>
-                                            <div class="form-floating mb-3">
-                                                <input class="form-control" id="codigo" type="text" placeholder="Ingrese telefono" th:field="*{codigo}"   />
-                                                <label for="inputCodigo">C&oacute;digo</label>
-                                            </div>
-                                            <div class="form-floating mb-3">
-                                                <input class="form-control" id="direccion" type="text" placeholder="Ingrese direccion" th:field="*{direccion}" />
-                                                <label for="inputLastName">Direcci&oacute;n</label>
-                                            </div>
-                                            <div class="custom-file mb-3">
-                                                <label class="custom-file-label" for="customFile">Seleccionar Foto</label>
-                                                <input type="file" class="form-control border border-primary" id="customFile" name="file" accept="image/*">
+                                        </div>
 
-                                            </div>
-                                            
-                                            <input class="form-control" id="status" type="hidden" value="1"/>
-                                            <input class="form-control" id="residencial" type="hidden" th:field="*{residencial}"/>
-                                            <input class="form-control" id="esEmpleado" type="hidden" th:field="*{esEmpleado}"/>
-                                            <input class="form-control" id="foto" type="hidden" th:field="*{foto}"/>
-                                            <input class="form-control" id="fecha_crea" type="hidden" th:field="*{fechaCrea}"/>
-                                            <input class="form-control" id="usuario_crea" type="hidden" th:field="*{usuarioCrea}"/>
-                                            <input class="form-control" id="fecha_modifica" type="hidden" th:field="*{fechaModifica}"/>
-                                            <input class="form-control" id="usuario_modifica" type="hidden" th:field="*{usuarioModifica}"/>
+                                        <input class="form-control" id="status" type="hidden" value="1"/>
+                                        <input class="form-control" id="residencial" type="hidden" th:field="*{residencial}"/>
+                                        <input class="form-control" id="esEmpleado" type="hidden" th:field="*{esEmpleado}"/>
+                                        <input class="form-control" id="foto" type="hidden" th:field="*{foto}"/>
+                                        <input class="form-control" id="fecha_crea" type="hidden" th:field="*{fechaCrea}"/>
+                                        <input class="form-control" id="usuario_crea" type="hidden" th:field="*{usuarioCrea}"/>
+                                        <input class="form-control" id="fecha_modifica" type="hidden" th:field="*{fechaModifica}"/>
+                                        <input class="form-control" id="usuario_modifica" type="hidden" th:field="*{usuarioModifica}"/>
 
-                                            <div class="mt-4 mb-0">
-                                                <div class="d-grid"><input type="submit" class="btn btn-primary" value="Guardar"></div>
-                                            </div>
+                                        <div class="mt-4 mb-0">
+                                            <div class="d-grid"><input type="submit" class="btn btn-primary" value="Guardar"></div>
+                                        </div>
 
 
-                                        </form>
-                                    </div>
-                                    <div class="card-footer text-center py-3">
-                                        <div class="small"></div>
-                                    </div>
+                                    </form>
+                                </div>
+                                <div class="card-footer text-center py-3">
+                                    <div class="small"></div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </main>
-                <th:block th:replace="~{layout/plantilla :: footer}"></th:block>       
-            </div>
-
+                </div>
+            </main>
+            <th:block th:replace="~{layout/plantilla :: footer}"></th:block>       
         </div>
 
+    </div>
 
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
-        <script src="js/scripts.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
-        <script src="assets/demo/chart-area-demo.js"></script>
-        <script src="assets/demo/chart-bar-demo.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>
-        <script src="js/datatables-simple-demo.js"></script>
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-        <script src="js/mensajes.js"></script>
-    </body>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+    <script src="js/scripts.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
+    <script src="assets/demo/chart-area-demo.js"></script>
+    <script src="assets/demo/chart-bar-demo.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>
+    <script src="js/datatables-simple-demo.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="js/mensajes.js"></script>
+</body>
 </html>

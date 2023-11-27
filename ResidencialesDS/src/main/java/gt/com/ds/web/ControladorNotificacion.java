@@ -34,6 +34,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -67,6 +68,25 @@ public class ControladorNotificacion {
     @Autowired
     private Varios varios;
 
+    @Value("${host.name}")
+    String dominio;
+    
+    
+    @Value("${static.ruta}")
+    String stRuta;
+    
+    @Value("${static.imagen}")
+    String stImagen;
+    
+    @Value("${static.perfil}")
+    String stPerfil;
+    
+    @Value("${static.adjunto}")
+    String stAdjunto;
+    
+    @Value("${static.logo}")
+    String stLogo;
+    
     private String varNotiGeneral = "G";
     private String varNotiEspecifica = "E";
 
@@ -170,24 +190,24 @@ public class ControladorNotificacion {
             notificacion.setUsuarioModifica(usuarioLogueado.getIdUsuario());
         }
 
-        if (!imagen.isEmpty()) {
-            Path directorioImagenes = Paths.get("src//main//resources//static//adjunto");
-
-            String rutaAbsoluta = directorioImagenes.toFile().getAbsolutePath();
-            log.info("Ruta absoluta " + rutaAbsoluta + " " + directorioImagenes.toString());
-            try {
-                byte[] byteImg = imagen.getBytes();
-                String nombreArchivo = Tools.newName(imagen.getOriginalFilename()); // cambiar por dinamica
-                Path rutaCompleta = Paths.get(rutaAbsoluta + "/" + nombreArchivo);
-                notificacion.setAdjunto("adjunto/" + nombreArchivo);
-                log.info("Se intenta guardar imagen " + rutaCompleta.toString());
-                Files.write(rutaCompleta, byteImg);
-            } catch (IOException ex) {
-                Logger.getLogger(ControladorUsuario.class.getName()).log(Level.SEVERE, null, ex);
-            }
-
-        }
-
+//        if (!imagen.isEmpty()) {
+//            Path directorioImagenes = Paths.get("src//main//resources//static//adjunto");
+//
+//            String rutaAbsoluta = directorioImagenes.toFile().getAbsolutePath();
+//            log.info("Ruta absoluta " + rutaAbsoluta + " " + directorioImagenes.toString());
+//            try {
+//                byte[] byteImg = imagen.getBytes();
+//                String nombreArchivo = Tools.newName(imagen.getOriginalFilename()); // cambiar por dinamica
+//                Path rutaCompleta = Paths.get(rutaAbsoluta + "/" + nombreArchivo);
+//                notificacion.setAdjunto("adjunto/" + nombreArchivo);
+//                log.info("Se intenta guardar imagen " + rutaCompleta.toString());
+//                Files.write(rutaCompleta, byteImg);
+//            } catch (IOException ex) {
+//                Logger.getLogger(ControladorUsuario.class.getName()).log(Level.SEVERE, null, ex);
+//            }
+//
+//        }
+        notificacion.setAdjunto(Tools.saveArchivo(stAdjunto,imagen,stRuta+"/adjunto"));
         log.info("Se crea gestion " + notificacion);
         Notificacion newNoti = notificacionService.guardar(notificacion);
         model.addAttribute("notificacion", newNoti);
@@ -261,8 +281,9 @@ public class ControladorNotificacion {
         notificacion = notificacionService.encontrarNotificacion(notificacion);
         var usuarios = usuarioService.listarUsuariosResidencial(estdoActivoUs, usuarioLogueado.getResidencial().getIdResidential());
 
-        String nombreArchivo = notificacion.getAdjunto();
-        ClassPathResource resource = new ClassPathResource("static/" + nombreArchivo);
+        String nombreArchivo = Tools.obtenerNombreArchivo(notificacion.getAdjunto());
+        
+        ClassPathResource resource = new ClassPathResource(stRuta + nombreArchivo);
         System.out.println("resource = " + resource);
         File file = null;
         try {
@@ -401,24 +422,24 @@ public class ControladorNotificacion {
             notificacion.setUsuarioModifica(usuarioLogueado.getIdUsuario());
         }
 
-        if (!imagen.isEmpty()) {
-            Path directorioImagenes = Paths.get("src//main//resources//static//adjunto");
-
-            String rutaAbsoluta = directorioImagenes.toFile().getAbsolutePath();
-            log.info("Ruta absoluta " + rutaAbsoluta + " " + directorioImagenes.toString());
-            String nombreArchivo = Tools.newName(imagen.getOriginalFilename());//agregar usuario dinamico
-            try {
-                byte[] byteImg = imagen.getBytes();
-                Path rutaCompleta = Paths.get(rutaAbsoluta + "/" + nombreArchivo);
-                notificacion.setAdjunto("adjunto/" + nombreArchivo);
-                log.info("Se intenta guardar imagen " + rutaCompleta.toString());
-                Files.write(rutaCompleta, byteImg);
-            } catch (IOException ex) {
-                Logger.getLogger(ControladorUsuario.class.getName()).log(Level.SEVERE, null, ex);
-            }
-
-        }
-
+//        if (!imagen.isEmpty()) {
+//            Path directorioImagenes = Paths.get("src//main//resources//static//adjunto");
+//
+//            String rutaAbsoluta = directorioImagenes.toFile().getAbsolutePath();
+//            log.info("Ruta absoluta " + rutaAbsoluta + " " + directorioImagenes.toString());
+//            String nombreArchivo = Tools.newName(imagen.getOriginalFilename());//agregar usuario dinamico
+//            try {
+//                byte[] byteImg = imagen.getBytes();
+//                Path rutaCompleta = Paths.get(rutaAbsoluta + "/" + nombreArchivo);
+//                notificacion.setAdjunto("adjunto/" + nombreArchivo);
+//                log.info("Se intenta guardar imagen " + rutaCompleta.toString());
+//                Files.write(rutaCompleta, byteImg);
+//            } catch (IOException ex) {
+//                Logger.getLogger(ControladorUsuario.class.getName()).log(Level.SEVERE, null, ex);
+//            }
+//
+//        }
+        notificacion.setAdjunto(Tools.saveArchivo(stAdjunto,imagen,stRuta+"/adjunto"));
         log.info("Se crea gestion " + notificacion);
         Notificacion newNoti = notificacionService.guardar(notificacion);
         log.info(" --------- \n \n valor de save + " + newNoti);
@@ -499,7 +520,7 @@ public class ControladorNotificacion {
         String nombreArchivo = notificacion.getAdjunto();
         ClassPathResource resource = null;
         if (!"".equals(nombreArchivo)) {
-            resource = new ClassPathResource("static/" + nombreArchivo);
+            resource = new ClassPathResource(stRuta + nombreArchivo);
         }
         System.out.println("resource = " + resource);
         File file = null;

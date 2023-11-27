@@ -50,7 +50,6 @@
                                 <table id="datatablesSimple">
                                     <thead>
                                         <tr >
-                                            <th class="text-center">Logo</th>
                                             <th>Nombre</th>
                                             <th>Direcci&oacute;n</th>
                                             <th>Tel&eacute;fono</th>
@@ -61,7 +60,6 @@
                                     </thead>
                                     <tfoot>
                                         <tr>
-                                            <th class="text-center">Logo</th>
                                             <th>Nombre</th>
                                             <th>Direcci&oacute;n</th>
                                             <th>Tel&eacute;fono</th>
@@ -72,14 +70,6 @@
                                     </tfoot>
                                     <tbody>
                                         <tr th:each="residencial : ${residenciales}" >
-                                            <td >
-                                                <span th:if="${residencial.logo != null and not #strings.isEmpty(residencial.logo)}">
-                                                    <img th:src="${residencial.logo}" alt="Logo de la residencial" class="logo-image" />
-                                                </span>
-                                                <span th:if="${residencial.logo == null or  #strings.isEmpty(residencial.logo)}">
-                                                    <img src="images/sinimagen.jpeg" alt="Logo de la residencial" class="logo-image" />
-                                                </span>
-                                            </td>
                                             <td th:text="${residencial.name}">Mostrar Nombre</td>
                                             <td th:text="${residencial.address}">Mostrar Direccion</td>
                                             <td th:text="${residencial.phone}">Mostrar Telefono</td>

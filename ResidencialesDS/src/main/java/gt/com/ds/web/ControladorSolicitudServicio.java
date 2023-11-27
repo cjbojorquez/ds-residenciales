@@ -136,7 +136,7 @@ public class ControladorSolicitudServicio {
      * @return 
      */
     @PostMapping("/guardarsolicitud")
-    public String guardarSolicitud(@Valid SolicitudServicio solicitudServicio, @RequestParam("file") MultipartFile imagen,
+    public String guardarSolicitud(@Valid SolicitudServicio solicitudServicio,
             @RequestParam("desdeFecha") String desdeFecha, @Valid @RequestParam("desdeHora") String desdeHora,
             BindingResult bindingResult,
             Model model,
@@ -185,23 +185,23 @@ public class ControladorSolicitudServicio {
             }
         }
 
-        if (!imagen.isEmpty()) {
-            Path directorioImagenes = Paths.get("src//main//resources//static//adjunto");
-
-            String rutaAbsoluta = directorioImagenes.toFile().getAbsolutePath();
-            //log.info("Ruta absoluta " + rutaAbsoluta + " " + directorioImagenes.toString());
-            try {
-                byte[] byteImg = imagen.getBytes();
-                String nombreArchivo = Tools.newName(imagen.getOriginalFilename()); // cambiar por dinamica
-                Path rutaCompleta = Paths.get(rutaAbsoluta + "/" + nombreArchivo);
-                //solicitudServicio.setAdjunto("adjunto/" + nombreArchivo);
-                //log.info("Se intenta guardar imagen " + rutaCompleta.toString());
-                Files.write(rutaCompleta, byteImg);
-            } catch (IOException ex) {
-                Logger.getLogger(ControladorUsuario.class.getName()).log(Level.SEVERE, null, ex);
-            }
-
-        }
+//        if (!imagen.isEmpty()) {
+//            Path directorioImagenes = Paths.get("src//main//resources//static//adjunto");
+//
+//            String rutaAbsoluta = directorioImagenes.toFile().getAbsolutePath();
+//            //log.info("Ruta absoluta " + rutaAbsoluta + " " + directorioImagenes.toString());
+//            try {
+//                byte[] byteImg = imagen.getBytes();
+//                String nombreArchivo = Tools.newName(imagen.getOriginalFilename()); // cambiar por dinamica
+//                Path rutaCompleta = Paths.get(rutaAbsoluta + "/" + nombreArchivo);
+//                //solicitudServicio.setAdjunto("adjunto/" + nombreArchivo);
+//                //log.info("Se intenta guardar imagen " + rutaCompleta.toString());
+//                Files.write(rutaCompleta, byteImg);
+//            } catch (IOException ex) {
+//                Logger.getLogger(ControladorUsuario.class.getName()).log(Level.SEVERE, null, ex);
+//            }
+//
+//        }
 
         //log.info("Se crea gestion " + solicitudServicio);
         solicitudServicioService.guardar(solicitudServicio);
@@ -263,12 +263,13 @@ public class ControladorSolicitudServicio {
     @GetMapping("/cerrarsolicitud")
     public String eliminarSolicitud(SolicitudServicio solicitudServicio, Model model) {
         //ticket = notificacionService.encontrarTicket(ticket);
+        var solicitud=solicitudServicioService.encontrarServicio(solicitudServicio);
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
         Date date = new Date();
         //ticket.setEstado(0L);
-        solicitudServicio.setEstado(4L);
+        solicitud.setEstado(4L);
         //log.info("Eliminando gestion " + rol);
-        solicitudServicioService.guardar(solicitudServicio);
+        solicitudServicioService.guardar(solicitud);
         return "redirect:/solicitud";
     }
 

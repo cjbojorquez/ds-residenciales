@@ -53,9 +53,8 @@
                                             <th>Email</th>
                                             <th>Tel&eacute;fono</th>
                                             <th>C&oacute;digo</th>
-                                            <th>Residencial</th>
-                                            <th>Foto</th>
-                                            <th>Estado</th>
+                                            <!--th>Foto</th>
+                                            <th>Estado</th-->
                                             <th></th>
                                             <th></th>
                                             <th></th>
@@ -68,9 +67,7 @@
                                             <th>Email</th>
                                             <th>Tel&eacute;fono</th>
                                             <th>C&oacute;digo</th>
-                                            <th>Residencial</th>
-                                            <th>Foto</th>
-                                            <th>Estado</th>
+                                            <!--th>Residencial</th-->
                                             <th></th>
                                             <th></th>
                                             <th></th>
@@ -83,8 +80,8 @@
                                             <td th:text="${usuario.email}">Mostrar Email</td>
                                             <td th:text="${usuario.telefono}">Mostrar Telefono</td>
                                             <td th:text="${usuario.codigo}">Mostrar C&oacute;digo</td>
-                                            <td th:text="${usuario.residencial.name}"></td>
-                                            <td>
+                                            <!--td th:text="${usuario.residencial.name}"></td-->
+                                            <!--td>
                                                 <span th:if="${usuario.foto != null and not #strings.isEmpty(usuario.foto)}">
                                                     <img th:src="${usuario.foto}" alt="Foto de Perfil" height="100">
                                                 </span>
@@ -92,7 +89,7 @@
                                                     <img src="images/sinimagen.jpeg" alt="Foto de Perfil" height="100" />
                                                 </span>
                                             </td>
-                                            <td th:text="${usuario.estado==1L?'Activo':'Inactivo'}">Mostrar Estado</td>
+                                            <td th:text="${usuario.estado==1L?'Activo':'Inactivo'}">Mostrar Estado</td-->
                                             <td><a class="btn btn-info" role="button"  th:href="@{/editarusres(idUsuario=${usuario.idUsuario})}" th:text="Editar"/></td>
                                             <td><a class="btn btn-danger" role="button"  th:onclick="confirmarEliminacion([[(${usuario.idUsuario})]],'/eliminarusres?idUsuario=');" th:text="Eliminar"/></td>
                                             <td><a class="btn btn-success" role="button"  th:href="@{/invitacion(idUsuario=${usuario.idUsuario})}"  th:text="'Invitar'"/></td>

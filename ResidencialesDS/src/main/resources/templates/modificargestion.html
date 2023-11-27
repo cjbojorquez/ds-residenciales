@@ -66,14 +66,14 @@
                                                         <div th:if="${comment.adjunto}!='' and ${comment.adjunto}!=null" th:class="${comment.usuario.nombreUsuario == #authentication.principal.getUsername() ? 'mensaje pregunta' : 'mensaje respuesta'}" >
                                                             <!-- Verificar si el archivo adjunto es una imagen -->
                                                             <div th:if="${comment.adjunto.endsWith('.jpg') or comment.adjunto.endsWith('.jpeg') or comment.adjunto.endsWith('.png') or comment.adjunto.endsWith('.gif')}">
-                                                                <img th:src="@{/__${comment.adjunto}__}" alt="Vista previa" style="max-width: 100px; max-height: 100px;">
+                                                                <img th:src="@{__${comment.adjunto}__}" alt="Vista previa" style="max-width: 100px; max-height: 100px;">
                                                             </div>
                                                             <!-- Verificar si el archivo adjunto es un documento -->
                                                             <div th:if="${comment.adjunto.endsWith('.pdf') or comment.adjunto.endsWith('.doc') or comment.adjunto.endsWith('.docx')}">
                                                                 <img th:src="@{/images/doc.png}" alt="Vista previa de documento" style="max-width: 100px; max-height: 80px;">
                                                             </div>
                                                             <!-- Enlaces para descargar el archivo -->
-                                                            <a th:href="@{/__${comment.adjunto}__}" download ><i class="fa-solid fa-download"></i></a>
+                                                            <a th:href="@{__${comment.adjunto}__}" download ><i class="fa-solid fa-download"></i></a>
                                                         </div>
                                                     </div>
                                                     </tr>
@@ -132,8 +132,9 @@
                                 <div class="card-header">
 
                                 </div>
+                                <form th:action="@{estadoTicket}" method="post" th:object="${ticket}">
                                 <div class="card-body">
-                                    <form th:action="@{estadoTicket}" enctype="multipart/form-data"  method="post" th:object="${ticket}">
+                                    
                                         <input type="hidden" id="idTicket" th:field="*{idTicket}"/>
                                         <div class="row">
                                             <label>Estado:</label>
@@ -144,13 +145,14 @@
                                                 <option th:each="status : ${estadosTicket}" th:value="${status.idEstado}" th:text="${status.nombre}"></option>
                                             </select>
                                         </div>
-                                    </form>
+                                    
                                 </div>
                                 <div class="card-footer">
                                     <div class="row">
                                         <button type="submit" id="btnGuardar" class="btn btn-outline-primary" >Guardar</button>
                                     </div>
                                 </div>
+                                    </form>
                             </div>
                         </div>
                     </div>

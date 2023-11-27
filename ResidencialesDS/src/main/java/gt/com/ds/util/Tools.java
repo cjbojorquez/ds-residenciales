@@ -1,5 +1,6 @@
 package gt.com.ds.util;
 
+import gt.com.ds.web.ControladorUsuario;
 import io.jsonwebtoken.Claims;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -11,15 +12,23 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  *
@@ -36,6 +45,8 @@ public class Tools {
 
     private static final String SECRET_KEY = "c1@v353CrE74";
 
+    @Value("${static.ruta}")
+    static String stRuta;
 
     @Autowired
     public Tools(EmailService emailService) {
@@ -201,7 +212,48 @@ public class Tools {
             return "errores/401";
         }
     }
+    
+    
+    public static String saveArchivo(String stArchivo,MultipartFile imagen,String ubicacion){
+       
+        if (!imagen.isEmpty()) {
+            String ruta= ubicacion;
+            log.info(ruta);
+            Path directorioImagenes = Paths.get(ruta);
 
+            String rutaAbsoluta = directorioImagenes.toFile().getAbsolutePath();
+            log.info("Ruta absoluta " + rutaAbsoluta + " " + directorioImagenes.toString());
+            try {
+                byte[] byteImg = imagen.getBytes();
+                String nombreArchivo = Tools.newName(imagen.getOriginalFilename()); //cambiar por dinamico
+                Path rutaCompleta = Paths.get(rutaAbsoluta + "/" + nombreArchivo);
+                //Path rutaCompleta = Paths.get("src//main//resources//static//images//perfil//" + nombreArchivo);
+                
+                log.info("Se intenta guardar imagen " + rutaCompleta.toString());
+                //Files.write(rutaCompleta, byteImg);
+                Files.write(rutaCompleta, byteImg);
+                return stArchivo + nombreArchivo;
+            } catch (IOException ex) {
+                Logger.getLogger(ControladorUsuario.class.getName()).log(Level.SEVERE, null, ex);
+                return "";
+            }
+
+        }
+        return"";
+    }
+
+    public static String obtenerNombreArchivo(String ruta) {
+        // Encuentra el índice del último carácter '/' en la ruta
+        int indiceUltimaBarra = ruta.lastIndexOf('/');
+
+        // Si se encuentra la barra, extrae el substring después de la última barra
+        if (indiceUltimaBarra != -1) {
+            return ruta.substring(indiceUltimaBarra + 1);
+        } else {
+            // Si no se encuentra la barra, devuelve la ruta completa
+            return ruta;
+        }
+    }
 //    @Bean
 //    public JavaMailSender getJavaMailSender() {
 //        JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
