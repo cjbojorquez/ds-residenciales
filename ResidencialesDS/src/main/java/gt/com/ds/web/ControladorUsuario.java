@@ -850,6 +850,7 @@ public class ControladorUsuario {
         System.out.println("rolUs = " + rolUs);
         if (!rolUs.isEmpty()) {
             log.info("en invitados se busca al usuario:" + usuario);
+            
             String token = Tools.generarToken(usuario.getIdUsuario().toString(), expiracionMs);
             token = Tools.decodeTokenFromURL(token);
             String url = dominio + "registro?token=" + token;
@@ -859,6 +860,12 @@ public class ControladorUsuario {
                     + "<p>Atte. " + usuario.getResidencial().getName() + "</p>";
             varios.sendEmail(usuario.getEmail(), "Resgitro de usuario", mensaje, usuario.getResidencial().getEmail());
             redirectAttributes.addFlashAttribute("mensajeExito", "La invitación se ha enviado exitosamente.");
+            
+            if(usuario.getPassword()!=""){
+                usuario.setPassword("123");
+                usuarioService.guardar(usuario);
+            }
+                
             return "redirect:/usuariores";
         } else {
             redirectAttributes.addFlashAttribute("mensajeError", "El usuario no tiene rol Asignado, asignele uno, antes de enviar una invitación");

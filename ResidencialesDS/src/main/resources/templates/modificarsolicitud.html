@@ -125,7 +125,17 @@
                                     </form>
                                 </div>
                                 <div class="card-footer text-center py-3">
-                                    <div class="small"></div>
+                                    <table style='width: 100%; text-align: left;'>
+                                        <tr>
+                                            <td><span th:text="'Usuario: ' + ${solicitud.usuario.nombre}"></span></td>
+                                            <td><span th:text="'Direccion:' + ${solicitud.usuario.direccion}"></span></td>
+                                        </tr>
+                                        <tr>
+                                            <td><span th:text="'Codigo:' + ${solicitud.usuario.codigo!= null?solicitud.usuario.codigo:''}"></span></td>
+                                            <td><span th:text="'Telefono:' + ${solicitud.usuario.telefono}"></span></td>
+                                        </tr>
+                                    </table>
+                                    
                                 </div>
                             </div>
                         </div>

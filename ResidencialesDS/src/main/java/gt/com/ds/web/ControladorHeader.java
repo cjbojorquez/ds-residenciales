@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Objects;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -35,7 +36,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 /**
  * En esta clase se administra la informacion del header
  *
@@ -178,19 +185,34 @@ public class ControladorHeader {
         }
     }
     
-    @GetMapping("/mostrar-adjunto/{nombreImagen}")
-    public ResponseEntity<byte[]> mostrarAdjunto(@PathVariable String nombreImagen) throws IOException {
+    @GetMapping("/mostrar-adjunto/{nombreArchivo}")
+    public ResponseEntity<Resource> mostrarAdjunto(@PathVariable String nombreArchivo) throws IOException {
         // Construye la ruta completa de la imagen
-        Path rutaImagen = Paths.get("/home/ubuntu/files/adjunto", nombreImagen);
+        Path filePath  = Paths.get("/home/ubuntu/files/adjunto", nombreArchivo);
         
         // Verifica si la imagen existe
-        if (Files.exists(rutaImagen)) {
+        if (Files.exists(filePath)) {
             // Lee la imagen desde su ubicación y la devuelve en la respuesta HTTP
-            byte[] imagenBytes = Files.readAllBytes(rutaImagen);
+            /*byte[] imagenBytes = Files.readAllBytes(rutaImagen);
 
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.IMAGE_JPEG);
             return new ResponseEntity<>(imagenBytes, headers, HttpStatus.OK);
+            */
+            Resource resource = new org.springframework.core.io.PathResource(filePath);
+
+        // Configurar las cabeceras de la respuesta
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + nombreArchivo);
+        headers.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_OCTET_STREAM_VALUE);
+
+        // Devolver la respuesta con el archivo y las cabeceras configuradas
+        return ResponseEntity.ok()
+                .headers(headers)
+                .contentLength(resource.contentLength())
+                .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                .body(resource);
+    
         } else {
             // Envia una respuesta 404 si la imagen no existe
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);

@@ -92,7 +92,7 @@
                                             <td th:text="${usuario.estado==1L?'Activo':'Inactivo'}">Mostrar Estado</td-->
                                             <td><a class="btn btn-info" role="button"  th:href="@{/editarusres(idUsuario=${usuario.idUsuario})}" th:text="Editar"/></td>
                                             <td><a class="btn btn-danger" role="button"  th:onclick="confirmarEliminacion([[(${usuario.idUsuario})]],'/eliminarusres?idUsuario=');" th:text="Eliminar"/></td>
-                                            <td><a class="btn btn-success" role="button"  th:href="@{/invitacion(idUsuario=${usuario.idUsuario})}"  th:text="'Invitar'"/></td>
+                                            <td><a class="btn btn-success" role="button"  th:href="@{/invitacion(idUsuario=${usuario.idUsuario})}"  th:text="${usuario.password==''?'Invitar':'Re-enviar'}"/></td>
                                         </tr>
 
                                     </tbody>

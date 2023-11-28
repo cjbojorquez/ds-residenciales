@@ -152,6 +152,27 @@
                                     </div>
                                 </div>
                             </div>
+                            <br/>
+                            <div class="card">
+                                <div class="card-header text-center">
+                                    Contacto
+                                </div>
+                                <div class="card-body">
+                                    <span th:if="${ticket.usuario.foto != null and not #strings.isEmpty(ticket.usuario.foto)}">
+                                        <div class="text-center">
+                                            <img th:src="${ticket.usuario.foto}" alt="Foto usuario" class="logo-image" style="width: 30%;"/>
+                                        </div>
+                                    </span>
+                                    <span th:text="'Usuario: ' + ${ticket.usuario.nombre}"></span><br/>
+                                    <span th:text="'Direccion:' + ${ticket.usuario.direccion}"></span><br/>
+                                    <span th:text="'Codigo:' + ${ticket.usuario.codigo!= null?ticket.usuario.codigo:''}"></span><br/>
+                                    <span th:text="'Telefono:' + ${ticket.usuario.telefono}"></span><br/>
+                                </div>
+                                <div class="card-footer">
+                                    <div class="row">
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

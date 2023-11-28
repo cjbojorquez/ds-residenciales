@@ -26,6 +26,15 @@
             #file-preview {
                 max-width: 100%;
             }
+            .fecha {
+                font-size: smaller; /* Tamaño de fuente más pequeño */
+                color: gray;       /* Color gris */
+            }
+            .alinear-derecha {
+                text-align: right; /* Alineación a la derecha */
+                font-size: x-small; /* Tamaño de fuente más pequeño */
+                color: gray;       /* Color gris */
+            }
         </style>
     </head>
     <body class="sb-nav-fixed">
@@ -62,18 +71,23 @@
                                                 <table>
                                                     <tr th:each="comment : ${comentarios}">
                                                     <div class="conversacion">
-                                                        <div th:if="${comment.comentario}!=''" th:class="${comment.usuario.nombreUsuario == #authentication.principal.getUsername() ? 'mensaje pregunta' : 'mensaje respuesta'}" th:text="${comment.comentario}"></div>
+                                                        <div th:if="${comment.comentario}!=''" th:class="${comment.usuario.nombreUsuario == #authentication.principal.getUsername() ? 'mensaje pregunta' : 'mensaje respuesta'}">
+                                                            <span th:text="${comment.comentario}"></span>
+                                                            <p class="fecha alinear-derecha" th:text="${#dates.format(comment.fecha, 'dd/MM/yyyy HH:mm')}"></p>
+                                                        </div> <!-- th:text="${comment.comentario}"></div-->
                                                         <div th:if="${comment.adjunto}!='' and ${comment.adjunto}!=null" th:class="${comment.usuario.nombreUsuario == #authentication.principal.getUsername() ? 'mensaje pregunta' : 'mensaje respuesta'}" >
                                                             <!-- Verificar si el archivo adjunto es una imagen -->
                                                             <div th:if="${comment.adjunto.endsWith('.jpg') or comment.adjunto.endsWith('.jpeg') or comment.adjunto.endsWith('.png') or comment.adjunto.endsWith('.gif')}">
                                                                 <img th:src="@{__${comment.adjunto}__}" alt="Vista previa" style="max-width: 100px; max-height: 100px;">
+                                                                <p class="fecha alinear-derecha" th:text="${#dates.format(comment.fecha, 'dd/MM/yyyy HH:mm')}"></p>
                                                             </div>
                                                             <!-- Verificar si el archivo adjunto es un documento -->
                                                             <div th:if="${comment.adjunto.endsWith('.pdf') or comment.adjunto.endsWith('.doc') or comment.adjunto.endsWith('.docx')}">
                                                                 <img th:src="@{/images/doc.png}" alt="Vista previa de documento" style="max-width: 100px; max-height: 80px;">
+                                                                <p class="fecha alinear-derecha" th:text="${#dates.format(comment.fecha, 'dd/MM/yyyy HH:mm')}"></p>
                                                             </div>
                                                             <!-- Enlaces para descargar el archivo -->
-                                                            <a th:href="@{__${comment.adjunto}__}" download ><i class="fa-solid fa-download"></i></a>
+                                                            <a target='_self' th:href="@{__${comment.adjunto}__}" download ><i class="fa-solid fa-download"></i></a>
                                                         </div>
                                                     </div>
                                                     </tr>
@@ -154,7 +168,29 @@
                                 </div>
                                     </form>
                             </div>
+                            <br/>
+                            <div class="card">
+                                <div class="card-header text-center">
+                                    Contacto
+                                </div>
+                                <div class="card-body">
+                                    <span th:if="${ticket.usuario.foto != null and not #strings.isEmpty(ticket.usuario.foto)}">
+                                        <div class="text-center">
+                                            <img th:src="${ticket.usuario.foto}" alt="Foto usuario" class="logo-image" style="width: 30%;"/>
+                                        </div>
+                                    </span>
+                                    <span th:text="'Usuario: ' + ${ticket.usuario.nombre}"></span><br/>
+                                    <span th:text="'Direccion:' + ${ticket.usuario.direccion}"></span><br/>
+                                    <span th:text="'Codigo:' + ${ticket.usuario.codigo!= null?ticket.usuario.codigo:''}"></span><br/>
+                                    <span th:text="'Telefono:' + ${ticket.usuario.telefono}"></span><br/>
+                                </div>
+                                <div class="card-footer">
+                                    <div class="row">
+                                    </div>
+                                </div>
+                            </div>
                         </div>
+                        
                     </div>
                 </div>
             </main>

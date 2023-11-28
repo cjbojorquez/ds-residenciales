@@ -129,7 +129,7 @@
                             title: "Tickets abiertos: " + total.toString(),
                             label: {
                                 format: function (value, ratio, id) {
-                                    return (ratio * 100) + "%\n(" + value + ")";
+                                    return (ratio * 100).toFixed(1) + "%\n(" + value + ")";
                                 }
                             }
                         },
@@ -164,7 +164,7 @@
                             title: "Mes Actual: " + totalMesActual.toString(),
                             label: {
                                 format: function (value, ratio, id) {
-                                    return (ratio * 100) + "%\n(" + value + ")";
+                                    return (ratio * 100).toFixed(1) + "%\n(" + value + ")";
                                 },
                                 ratio: 1.5
                                 
@@ -201,7 +201,7 @@
                             title: "Mes Anterior: " + totalMesAnterior.toString(),
                             label: {
                                 format: function (value, ratio, id) {
-                                    return (ratio * 100) + "%\n(" + value + ")";
+                                    return (ratio * 100).toFixed(1) + "%\n(" + value + ")";
                                 },
                                 ratio: 1.5
                             }
