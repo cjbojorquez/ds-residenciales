@@ -54,7 +54,7 @@
                                     <select class="form-select" id="estadoSelect" width="90%">
     
                                         <div th:each="estado : ${estadosTicket}">
-                                            <option th:value="${estado.idEstado}" th:text="${estado.nombre}"></option>
+                                            <option th:value="${estado.idEstado}" th:text="${estado.nombre}" ></option>
                                         </div>
                                     </select>
                                 </div>
@@ -116,8 +116,9 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="js/mensajes.js"></script>
 <script>
-    document.getElementById("estadoSelect").addEventListener("change", function () {
-        var selectedEstado = this.value;
+    
+     function mostrarOcultarPaneles() {
+        var selectedEstado = document.getElementById("estadoSelect").value;
         var tabPanes = document.querySelectorAll(".tab-pane");
 
         tabPanes.forEach(function (pane) {
@@ -127,6 +128,25 @@
                 pane.style.display = "none";
             }
         });
+    }
+
+    // Llamar a la función al cargar la página
+    document.addEventListener("DOMContentLoaded", function () {
+        mostrarOcultarPaneles();
+    });
+    
+    document.getElementById("estadoSelect").addEventListener("change", function () {
+        mostrarOcultarPaneles();
+        /*var selectedEstado = this.value;
+        var tabPanes = document.querySelectorAll(".tab-pane");
+
+        tabPanes.forEach(function (pane) {
+            if (pane.id === "id_" + selectedEstado) {
+                pane.style.display = "block";
+            } else {
+                pane.style.display = "none";
+            }
+        });*/
     });
 </script>
 </body>
